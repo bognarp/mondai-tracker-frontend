@@ -27,7 +27,7 @@ function LoginForm() {
       };
 
       const errors = getErrors.reduce(errorReducer, {});
-      console.log('reduced errors', errors);
+
       return (
         <ul>
           {Object.keys(errors).map((errorName, idx) => {
@@ -52,7 +52,7 @@ function LoginForm() {
           <input type="password" name="password" onChange={handleInputChange} />
         </div>
 
-        <input type="submit" />
+        <button type="submit">Login</button>
       </form>
       {renderErrors()}
     </div>
