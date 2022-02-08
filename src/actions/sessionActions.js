@@ -1,8 +1,7 @@
 import { createAction } from '@reduxjs/toolkit';
 import jwtDecode from 'jwt-decode';
-import APIUtil from '../util/sessionAPI';
+import sessionAPI from '../util/sessionAPI';
 
-// ACTION CREATORS
 export const receiveCurrentUser = createAction('session/receiveCurrentUser');
 export const receiveUserSignUp = createAction('session/receiveUserSignUp');
 export const receiveUserLogOut = createAction('session/receiveUserLogOut');
@@ -13,22 +12,49 @@ export const clearSessionErrors = createAction(
   'sessionError/clearSessionErrors'
 );
 
-// THUNK ACTION CREATORS
+const _normalizeError = (errorResponse) => {
+  if (typeof errorResponse.data === 'string') {
+    return { [errorResponse.statusText]: errorResponse.data };
+  }
+  return errorResponse.data;
+};
+
 export const login = (user) => async (dispatch) => {
   try {
-    const response = await APIUtil.login(user);
+    const response = await sessionAPI.login(user);
 
     localStorage.setItem('jwtToken', response.token);
-    APIUtil.setAuthToken(response.token);
+    sessionAPI.setAuthToken(response.token);
     const decodedUser = jwtDecode(response.token);
 
-    console.log('Decoded user', decodedUser);
     dispatch(receiveCurrentUser(decodedUser));
   } catch (error) {
-    dispatch(receiveSessionErrors(error.response.data));
+    const errorResponse = _normalizeError(error.response);
+    dispatch(receiveSessionErrors(errorResponse));
 
     setTimeout(() => {
       dispatch(clearSessionErrors());
     }, 4000);
   }
+};
+
+export const signup = (user) => async (dispatch) => {
+  try {
+    const res = await sessionAPI.signup(user);
+    dispatch(receiveUserSignUp());
+    return res;
+  } catch (error) {
+    const errorResponse = _normalizeError(error.response);
+    dispatch(receiveSessionErrors(errorResponse));
+
+    setTimeout(() => {
+      dispatch(clearSessionErrors());
+    }, 4000);
+  }
+};
+
+export const logout = () => (dispatch) => {
+  localStorage.removeItem('jwtToken');
+  sessionAPI.setAuthToken(false);
+  dispatch(receiveUserLogOut());
 };

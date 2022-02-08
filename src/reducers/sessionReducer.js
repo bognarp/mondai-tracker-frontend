@@ -4,10 +4,12 @@ import {
   receiveUserLogOut,
   receiveUserSignUp,
 } from '../actions/sessionActions';
+import { receiveUserInfo } from '../actions/userActions';
 
 const initialState = {
   isAuthenticated: false,
   user: {},
+  userInfo: {},
 };
 
 const sessionReducer = createReducer(initialState, (builder) => {
@@ -17,12 +19,13 @@ const sessionReducer = createReducer(initialState, (builder) => {
       state.user = action.payload;
     })
     .addCase(receiveUserSignUp, (state, action) => {
-      state.isAuthenticated = false;
-      state.user = undefined;
+      return initialState;
     })
     .addCase(receiveUserLogOut, (state, action) => {
-      state.isAuthenticated = false;
-      state.user = undefined;
+      return initialState;
+    })
+    .addCase(receiveUserInfo, (state, action) => {
+      state.userInfo = action.payload;
     });
 });
 

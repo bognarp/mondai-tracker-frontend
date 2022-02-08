@@ -1,12 +1,10 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import errorsReducer from './reducers/errorsReducer';
-import sessionReducer from './reducers/sessionReducer';
+import { configureStore } from '@reduxjs/toolkit';
 
-const rootReducer = combineReducers({
-  session: sessionReducer,
-  errors: errorsReducer,
-});
+import rootReducer from './reducers/rootReducer';
 
-export default configureStore({
-  reducer: rootReducer,
-});
+export default function configureAppStore(preloadedState = {}) {
+  return configureStore({
+    reducer: rootReducer,
+    preloadedState,
+  });
+}

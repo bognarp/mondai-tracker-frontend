@@ -4,14 +4,15 @@ const baseUrl = '/api/users';
 
 export const setAuthToken = (token) => {
   if (token) {
-    axios.defaults.headers.common['Authorization'] = token;
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   } else {
     delete axios.defaults.headers.common['Authorization'];
   }
 };
 
-const signup = (userData) => {
-  return axios.post(`${baseUrl}/signup`, userData);
+const signup = async (userData) => {
+  const response = await axios.post(`${baseUrl}/signup`, userData);
+  return response;
 };
 
 const login = async (credentials) => {
@@ -19,6 +20,6 @@ const login = async (credentials) => {
   return response.data;
 };
 
-const APIUtil = { setAuthToken, login, signup };
+const sessionAPI = { setAuthToken, login, signup };
 
-export default APIUtil;
+export default sessionAPI;
