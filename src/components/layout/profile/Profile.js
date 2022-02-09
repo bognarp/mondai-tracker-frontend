@@ -1,14 +1,18 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCurrentUser } from '../../../actions/userActions';
+import _ from 'lodash';
+
+import { fetchUserInfo } from '../../../actions/userActions';
+import { selectUserInfo } from '../../../reducers/sessionReducer';
 
 function Profile() {
   const dispatch = useDispatch();
-  const userInfo = useSelector((state) => state.session.userInfo);
+  const userInfo = useSelector(selectUserInfo);
 
   useEffect(() => {
-    if (Object.keys(userInfo).length === 0) {
-      dispatch(getCurrentUser());
+    if (_.isEmpty(userInfo)) {
+      console.log('going to dispatch fetchUserInfo...');
+      dispatch(fetchUserInfo());
     }
   }, [dispatch, userInfo]);
 
@@ -18,7 +22,13 @@ function Profile() {
     <div>
       <h2>{username}</h2>
       <p>email: {email}</p>
-      <p>my projects: {ownProjects}</p>
+      <p>my projects:</p>
+      <ul>
+        {!_.isEmpty(userInfo) &&
+          ownProjects.map((project) => (
+            <li key={project._id}>{project.title}</li>
+          ))}
+      </ul>
       <p>member projects: {memberProjects}</p>
     </div>
   );
