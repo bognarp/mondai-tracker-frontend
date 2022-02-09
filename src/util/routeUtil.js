@@ -1,20 +1,21 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
+import { selectIsAuthenticated } from '../reducers/sessionReducer';
 
 export function AuthRoute({ children }) {
-  const session = useSelector((state) => state.session);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
-  if (session.isAuthenticated) {
+  if (isAuthenticated) {
     return <Navigate to="/" replace />;
   }
   return children;
 }
 
 export function ProtectedRoute({ children }) {
-  const session = useSelector((state) => state.session);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
-  if (!session.isAuthenticated) {
+  if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 

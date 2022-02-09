@@ -1,4 +1,4 @@
-import { createReducer } from '@reduxjs/toolkit';
+import { createReducer, isAnyOf } from '@reduxjs/toolkit';
 import {
   receiveCurrentUser,
   receiveUserLogOut,
@@ -18,21 +18,24 @@ const sessionReducer = createReducer(initialState, (builder) => {
       state.isAuthenticated = Boolean(action.payload);
       state.user = action.payload;
     })
-    .addCase(receiveUserSignUp, (state, action) => {
-      return initialState;
-    })
-    .addCase(receiveUserLogOut, (state, action) => {
-      return initialState;
-    })
     .addCase(receiveUserInfo, (state, action) => {
       state.userInfo = action.payload;
-    });
+    })
+    .addMatcher(
+      isAnyOf(receiveUserSignUp, receiveUserLogOut),
+      (state, action) => {
+        return initialState;
+      }
+    );
 });
 
 // SELECTORS
-export const selectUsername = (state) => {
-  const { session } = state;
-  return session.user.username ? session.user.username : 'Anonymous';
+export const selectUserInfo = (state) => {
+  return state.session.userInfo;
+};
+
+export const selectIsAuthenticated = (state) => {
+  return state.session.isAuthenticated;
 };
 
 export default sessionReducer;

@@ -3,7 +3,7 @@ import userAPI from '../util/userAPI';
 
 export const receiveUserInfo = createAction('session/receiveUserInfo');
 
-export const getCurrentUser = () => async (dispatch) => {
+export const fetchUserInfo = () => async (dispatch) => {
   try {
     const userInfo = await userAPI.fetchCurrentUser();
     dispatch(receiveUserInfo(userInfo));
