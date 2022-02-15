@@ -7,6 +7,11 @@ const fetchCurrentUser = async () => {
   return res.data;
 };
 
-const userAPI = { fetchCurrentUser };
+const fetchProjectsByUserId = async (userId) => {
+  const res = await axios.get(`${baseUrl}/${userId}/projects`);
+  return res.data;
+};
+
+const userAPI = { fetchCurrentUser, fetchProjectsByUserId };
 
 export default userAPI;
