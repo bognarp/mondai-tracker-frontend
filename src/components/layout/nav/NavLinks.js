@@ -12,6 +12,7 @@ function NavLinks() {
   if (isAuthenticated) {
     return (
       <nav>
+        <Link to={'dashboard'}>Dashboard</Link> {'| '}
         <Link to={'profile'}>{user.username}</Link> {'| '}
         <button onClick={() => dispatch(logout())}>Sign Out</button>
       </nav>
