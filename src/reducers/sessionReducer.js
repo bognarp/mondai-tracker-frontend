@@ -34,8 +34,9 @@ export const selectUserInfo = (state) => {
   return state.session.userInfo;
 };
 
-export const selectIsAuthenticated = (state) => {
-  return state.session.isAuthenticated;
+export const selectSessionInfo = (state) => {
+  const { isAuthenticated, user } = state.session;
+  return { isAuthenticated, user };
 };
 
 export default sessionReducer;

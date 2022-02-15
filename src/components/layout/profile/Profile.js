@@ -11,7 +11,6 @@ function Profile() {
 
   useEffect(() => {
     if (_.isEmpty(userInfo)) {
-      console.log('going to dispatch fetchUserInfo...');
       dispatch(fetchUserInfo());
     }
   }, [dispatch, userInfo]);
