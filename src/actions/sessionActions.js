@@ -1,6 +1,8 @@
 import { createAction } from '@reduxjs/toolkit';
 import jwtDecode from 'jwt-decode';
+import { normalizeError } from '../util/normalizeError';
 import sessionAPI from '../util/sessionAPI';
+import { clearProjects } from './projectActions';
 
 export const receiveCurrentUser = createAction('session/receiveCurrentUser');
 export const receiveUserSignUp = createAction('session/receiveUserSignUp');
@@ -12,13 +14,6 @@ export const clearSessionErrors = createAction(
   'sessionError/clearSessionErrors'
 );
 
-const _normalizeError = (errorResponse) => {
-  if (typeof errorResponse.data === 'string') {
-    return { [errorResponse.statusText]: errorResponse.data };
-  }
-  return errorResponse.data;
-};
-
 export const login = (user) => async (dispatch) => {
   try {
     const response = await sessionAPI.login(user);
@@ -29,7 +24,7 @@ export const login = (user) => async (dispatch) => {
 
     dispatch(receiveCurrentUser(decodedUser));
   } catch (error) {
-    const errorResponse = _normalizeError(error.response);
+    const errorResponse = normalizeError(error.response);
     dispatch(receiveSessionErrors(errorResponse));
 
     setTimeout(() => {
@@ -44,7 +39,7 @@ export const signup = (user) => async (dispatch) => {
     dispatch(receiveUserSignUp());
     return res;
   } catch (error) {
-    const errorResponse = _normalizeError(error.response);
+    const errorResponse = normalizeError(error.response);
     dispatch(receiveSessionErrors(errorResponse));
 
     setTimeout(() => {
@@ -57,4 +52,5 @@ export const logout = () => (dispatch) => {
   localStorage.removeItem('jwtToken');
   sessionAPI.setAuthToken(false);
   dispatch(receiveUserLogOut());
+  dispatch(clearProjects());
 };

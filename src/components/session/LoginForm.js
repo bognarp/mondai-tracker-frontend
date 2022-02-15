@@ -2,12 +2,10 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../../actions/sessionActions';
 import { useInputChange } from '../../hooks/useInputChange';
+import Error from '../layout/Error';
 
 function LoginForm() {
   const dispatch = useDispatch();
-  const getErrors = useSelector((state) => {
-    return state.errors.session;
-  });
   const [input, handleInputChange] = useInputChange();
 
   const handleSubmit = (e) => {
@@ -18,26 +16,6 @@ function LoginForm() {
     };
 
     dispatch(login(user));
-  };
-
-  const renderErrors = () => {
-    if (getErrors.length !== 0) {
-      const errorReducer = (state, errors) => {
-        return { ...state, ...errors };
-      };
-
-      const errors = getErrors.reduce(errorReducer, {});
-
-      return (
-        <ul>
-          {Object.keys(errors).map((errorName, idx) => {
-            return <li key={`error-${idx}`}>{errors[errorName]}</li>;
-          })}
-        </ul>
-      );
-    }
-
-    return null;
   };
 
   return (
@@ -54,7 +32,7 @@ function LoginForm() {
 
         <button type="submit">Login</button>
       </form>
-      {renderErrors()}
+      <Error />
     </div>
   );
 }

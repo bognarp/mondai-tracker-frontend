@@ -1,5 +1,6 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import Error from './Error';
 import NavBar from './nav/NavBar';
 
 function Layout() {
@@ -7,9 +8,10 @@ function Layout() {
     <>
       <NavBar />
 
-      <main>This will be the layout</main>
-
-      <Outlet />
+      <main>
+        <Error />
+        <Outlet />
+      </main>
     </>
   );
 }
