@@ -2,22 +2,37 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchProjectById } from '../../../actions/projectActions';
+import {
+  selectProjectById,
+  selectProjectStatus,
+} from '../../../reducers/selector';
+import Sidebar from '../nav/Sidebar';
+import Workspace from './WorkSpace';
 
 function Project() {
   const params = useParams();
   const dispatch = useDispatch();
-
-  const project = useSelector((state) => {
-    return state.entities.projects.byId[params.projectId];
-  });
+  const project = useSelector(selectProjectById(params.projectId));
+  const status = useSelector(selectProjectStatus);
 
   useEffect(() => {
-    if (!project) {
+    if (status === 'idle') {
       dispatch(fetchProjectById(params.projectId));
     }
-  }, [dispatch, project, params.projectId]);
+  }, [status, dispatch, params.projectId]);
 
-  return <>{JSON.stringify(project)}</>;
+  if (status !== 'complete') {
+    return <h3>Loading...</h3>;
+  } else {
+    return (
+      <div style={{ display: 'flex', background: '#F5F5DC' }}>
+        <Sidebar project={project} />
+        <Workspace />
+        <br />
+        <small>project</small>
+      </div>
+    );
+  }
 }
 
 export default Project;
