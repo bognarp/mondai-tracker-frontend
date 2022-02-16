@@ -4,9 +4,11 @@ import projectAPI from '../util/projectAPI';
 import userAPI from '../util/userAPI';
 import { clearSessionErrors, receiveSessionErrors } from './sessionActions';
 
+export const fetchProjects = createAction('projects/fetchProjects');
 export const receiveProjects = createAction('projects/receiveProjects');
 export const receiveProject = createAction('projects/receiveProject');
 export const clearProjects = createAction('projects/clearProjects');
+export const rejectProjects = createAction('projects/rejectProjects');
 
 export const fetchUserProjects = (userId) => async (dispatch) => {
   try {
@@ -19,6 +21,7 @@ export const fetchUserProjects = (userId) => async (dispatch) => {
 
 export const fetchProjectById = (projectId) => async (dispatch) => {
   try {
+    dispatch(fetchProjects());
     const project = await projectAPI.fetchProject(projectId);
     dispatch(receiveProject(project));
   } catch (error) {
