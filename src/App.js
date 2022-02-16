@@ -10,7 +10,6 @@ import SignupForm from './components/session/SignupForm';
 import { AuthRoute, ProtectedRoute } from './util/routeUtil';
 import Project from './components/layout/project/Project';
 
-
 function App() {
   return (
     <Routes>
@@ -31,7 +30,7 @@ function App() {
               <Project />
             </ProtectedRoute>
           }
-        ></Route>
+        />
         <Route
           path="profile"
           element={

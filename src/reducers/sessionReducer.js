@@ -29,14 +29,5 @@ const sessionReducer = createReducer(initialState, (builder) => {
     );
 });
 
-// SELECTORS
-export const selectUserInfo = (state) => {
-  return state.session.userInfo;
-};
-
-export const selectSessionInfo = (state) => {
-  const { isAuthenticated, user } = state.session;
-  return { isAuthenticated, user };
-};
 
 export default sessionReducer;

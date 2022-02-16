@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import _ from 'lodash';
 
 import { fetchUserInfo } from '../../../actions/userActions';
-import { selectUserInfo } from '../../../reducers/sessionReducer';
+import { selectUserInfo } from '../../../reducers/selector';
 
 function Profile() {
   const dispatch = useDispatch();

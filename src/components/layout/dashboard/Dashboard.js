@@ -2,8 +2,7 @@ import React, { useEffect } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchUserProjects } from '../../../actions/projectActions';
-import { selectProjects } from '../../../reducers/projectsReducer';
-import { selectSessionInfo } from '../../../reducers/sessionReducer';
+import { selectProjects, selectSessionInfo } from '../../../reducers/selector';
 
 const ProjectList = ({ projects }) => {
   return (
@@ -11,6 +10,7 @@ const ProjectList = ({ projects }) => {
       {projects.allIds.map((projectId) => (
         <Link to={`/projects/${projectId}`} key={projectId}>
           {projects.byId[projectId].title}
+          <br />
         </Link>
       ))}
     </>

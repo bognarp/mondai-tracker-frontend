@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
-import { selectSessionInfo } from '../reducers/sessionReducer';
+import { selectSessionInfo } from '../reducers/selector';
 
 export function AuthRoute({ children }) {
   const { isAuthenticated } = useSelector(selectSessionInfo);
