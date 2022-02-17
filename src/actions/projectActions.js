@@ -25,6 +25,7 @@ export const fetchProjectById = (projectId) => async (dispatch) => {
     const project = await projectAPI.fetchProject(projectId);
     dispatch(receiveProject(project));
   } catch (error) {
+    dispatch(rejectProjects());
     const errorResponse = normalizeError(error.response);
     dispatch(receiveSessionErrors(errorResponse));
 
