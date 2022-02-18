@@ -3,6 +3,7 @@ import { normalizeError } from '../util/normalizeError';
 import projectAPI from '../util/projectAPI';
 import userAPI from '../util/userAPI';
 import { clearSessionErrors, receiveSessionErrors } from './sessionActions';
+import { clearStories } from './storyActions';
 
 export const fetchProjects = createAction('projects/fetchProjects');
 export const receiveProjects = createAction('projects/receiveProjects');
@@ -14,6 +15,7 @@ export const fetchUserProjects = (userId) => async (dispatch) => {
   try {
     const userProjects = await userAPI.fetchProjectsByUserId(userId);
     dispatch(receiveProjects(userProjects));
+    dispatch(clearStories());
   } catch (error) {
     console.log(error);
   }

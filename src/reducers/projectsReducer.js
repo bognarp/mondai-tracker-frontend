@@ -40,5 +40,4 @@ const projectsReducer = createReducer(initialState, (builder) => {
     });
 });
 
-
 export default projectsReducer;
