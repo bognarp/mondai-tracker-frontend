@@ -1,38 +1,50 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchProjectById } from '../../../actions/projectActions';
 import {
   selectProjectById,
-  selectProjectStatus,
+  selectProjectsStatus,
 } from '../../../reducers/selector';
 import Sidebar from '../nav/Sidebar';
-import Workspace from './WorkSpace';
+import Workspace from './Workspace';
 
 function Project() {
   const params = useParams();
   const dispatch = useDispatch();
+
+  const projectsStatus = useSelector(selectProjectsStatus);
   const project = useSelector(selectProjectById(params.projectId));
-  const status = useSelector(selectProjectStatus);
+
+  const [workspace, setWorkspace] = useState(['current']);
 
   useEffect(() => {
-    if (status === 'idle') {
+    if (projectsStatus === 'idle') {
       dispatch(fetchProjectById(params.projectId));
     }
-  }, [status, dispatch, params.projectId]);
+  }, [projectsStatus, dispatch, params.projectId]);
 
-  if (status !== 'complete') {
+  if (projectsStatus !== 'complete') {
     return <h3>Loading...</h3>;
-  } else {
-    return (
-      <div style={{ display: 'flex', background: '#F5F5DC' }}>
-        <Sidebar project={project} />
-        <Workspace />
-        <br />
-        <small>project</small>
-      </div>
-    );
   }
+  const toggleWorkspace = (key) => (e) => {
+    workspace.some((w) => w === key)
+      ? setWorkspace(workspace.filter((w) => w !== key))
+      : setWorkspace([...workspace, key]);
+  };
+
+  return (
+    <div style={{ display: 'flex', background: '#F5F5DC' }}>
+      <Sidebar title={project.title} navigation={toggleWorkspace} />
+      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+        {workspace.map((w) => (
+          <Workspace key={w} project={project} category={w} />
+        ))}
+      </div>
+      <br />
+      <small>project</small>
+    </div>
+  );
 }
 
 export default Project;

@@ -7,8 +7,14 @@ export const selectProjectById = (id) => (state) => {
   return state.entities.projects.byId[id];
 };
 
-export const selectProjectStatus = (state) => {
+export const selectProjectsStatus = (state) => {
   return state.entities.projects.status;
+};
+
+// STORIES
+export const selectStoriesByCategory = (category) => (state) => {
+  // 'current', 'user', 'backlog', 'archive'
+  return state.entities.stories[category];
 };
 
 // SESSION
