@@ -11,10 +11,12 @@ function NavBar() {
         marginBottom: '1rem',
         padding: '0.5rem',
         borderBottom: 'solid 1px',
+        background: 'paleturquoise',
       }}
     >
       <Link to={'/'}>Mondai Tracker</Link>
       <NavLinks />
+      <small>navbar</small>
     </header>
   );
 }

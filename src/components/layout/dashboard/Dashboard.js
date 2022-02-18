@@ -7,9 +7,9 @@ import { selectProjects, selectSessionInfo } from '../../../reducers/selector';
 const ProjectList = ({ projects }) => {
   return (
     <>
-      {projects.allIds.map((projectId) => (
-        <Link to={`/projects/${projectId}`} key={projectId}>
-          {projects.byId[projectId].title}
+      {projects.map((project) => (
+        <Link to={`/projects/${project._id}`} key={project._id}>
+          {project.title}
           <br />
         </Link>
       ))}
@@ -19,19 +19,21 @@ const ProjectList = ({ projects }) => {
 
 function Dashboard() {
   const dispatch = useDispatch();
-  const projects = useSelector(selectProjects, shallowEqual);
+  const { byId, allIds, status } = useSelector(selectProjects, shallowEqual);
   const sessionInfo = useSelector(selectSessionInfo, shallowEqual);
 
   useEffect(() => {
     dispatch(fetchUserProjects(sessionInfo.user.id));
   }, [dispatch, sessionInfo]);
 
-  if (!projects) return <div>loading...</div>;
+  if (status !== 'complete') return <div>loading...</div>;
 
   return (
     <>
       <h3>My Projects:</h3>
-      <ProjectList projects={projects} />
+      <ProjectList projects={allIds.map((id) => byId[id])} />
+      <br />
+      <small>dashboard</small>
     </>
   );
 }

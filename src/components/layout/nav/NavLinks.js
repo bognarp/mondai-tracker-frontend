@@ -12,15 +12,15 @@ function NavLinks() {
   if (isAuthenticated) {
     return (
       <nav>
-        <Link to={'dashboard'}>Dashboard</Link> {'| '}
-        <Link to={'profile'}>{user.username}</Link> {'| '}
+        <Link to={'/dashboard'}>Dashboard</Link> {'| '}
+        <Link to={'/profile'}>{user.username}</Link> {'| '}
         <button onClick={() => dispatch(logout())}>Sign Out</button>
       </nav>
     );
   } else {
     return (
       <nav>
-        <Link to={'signup'}>Signup</Link> | <Link to={'login'}>Login</Link>
+        <Link to={'/signup'}>Signup</Link> | <Link to={'login'}>Login</Link>
       </nav>
     );
   }

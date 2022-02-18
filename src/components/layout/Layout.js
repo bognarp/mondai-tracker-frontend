@@ -11,6 +11,8 @@ function Layout() {
       <main>
         <Error />
         <Outlet />
+        <br />
+        <small style={{ color: 'red' }}>layout (outlet)</small>
       </main>
     </>
   );
