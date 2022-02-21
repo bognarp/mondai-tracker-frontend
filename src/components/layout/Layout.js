@@ -1,3 +1,4 @@
+import { Box, Container } from '@chakra-ui/react';
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Error from './Error';
@@ -8,12 +9,10 @@ function Layout() {
     <>
       <NavBar />
 
-      <main>
+      <Box minH="94vh" bg="gray.100">
         <Error />
         <Outlet />
-        <br />
-        <small style={{ color: 'red' }}>layout (outlet)</small>
-      </main>
+      </Box>
     </>
   );
 }

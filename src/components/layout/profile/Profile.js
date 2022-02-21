@@ -10,6 +10,7 @@ function Profile() {
   const userInfo = useSelector(selectUserInfo);
 
   useEffect(() => {
+    // TODO: should create user entity with status: isLoading
     if (_.isEmpty(userInfo)) {
       dispatch(fetchUserInfo());
     }

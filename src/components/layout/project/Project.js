@@ -1,3 +1,4 @@
+import { Flex, Spinner } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -25,7 +26,7 @@ function Project() {
   }, [projectsStatus, dispatch, params.projectId]);
 
   if (projectsStatus !== 'complete') {
-    return <h3>Loading...</h3>;
+    return <Spinner />;
   }
   const toggleWorkspace = (key) => (e) => {
     workspace.some((w) => w === key)
@@ -36,13 +37,12 @@ function Project() {
   return (
     <div style={{ display: 'flex', background: '#F5F5DC' }}>
       <Sidebar title={project.title} navigation={toggleWorkspace} />
-      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+
+      <Flex p={5} justifyContent="space-evenly" wrap="wrap">
         {workspace.map((w) => (
           <Workspace key={w} project={project} category={w} />
         ))}
-      </div>
-      <br />
-      <small>project</small>
+      </Flex>
     </div>
   );
 }

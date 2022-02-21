@@ -1,23 +1,15 @@
+import { Box, Center, Flex, Heading } from '@chakra-ui/react';
 import React from 'react';
-import { Link } from 'react-router-dom';
 import NavLinks from './NavLinks';
 
 function NavBar() {
   return (
-    <header
-      style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        marginBottom: '1rem',
-        padding: '0.5rem',
-        borderBottom: 'solid 1px',
-        background: 'paleturquoise',
-      }}
-    >
-      <Link to={'/'}>Mondai Tracker</Link>
+    <Flex as="header" px={6} minH="6vh" justifyContent="space-between" boxShadow="md" position="relative">
+      <Center >
+        <Heading size="md">Mondai Tracker</Heading>
+      </Center>
       <NavLinks />
-      <small>navbar</small>
-    </header>
+    </Flex>
   );
 }
 

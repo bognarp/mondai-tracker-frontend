@@ -1,14 +1,21 @@
+import {
+  Button,
+  Container,
+  FormControl,
+  FormLabel,
+  Heading,
+  Input,
+  VStack,
+} from '@chakra-ui/react';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { signup } from '../../actions/sessionActions';
 import { useInputChange } from '../../hooks/useInputChange';
+import Error from '../layout/Error';
 
 function SignupForm() {
   const dispatch = useDispatch();
-  const getErrors = useSelector((state) => {
-    return state.errors.session;
-  });
   const navigate = useNavigate();
   const [input, handleInputChange] = useInputChange();
 
@@ -27,47 +34,48 @@ function SignupForm() {
     });
   };
 
-  const renderErrors = () => {
-    if (getErrors.length !== 0) {
-      const errorReducer = (state, errors) => {
-        return { ...state, ...errors };
-      };
-
-      const errors = getErrors.reduce(errorReducer, {});
-
-      return (
-        <ul>
-          {Object.keys(errors).map((errorName, idx) => {
-            return <li key={`error-${idx}`}>{errors[errorName]}</li>;
-          })}
-        </ul>
-      );
-    }
-
-    return null;
-  };
-
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Username</label>
-        <input type="text" name="username" onChange={handleInputChange} />
-      </div>
-      <div>
-        <label>Email</label>
-        <input type="text" name="email" onChange={handleInputChange} />
-      </div>
-      <div>
-        <label>Password</label>
-        <input type="password" name="password" onChange={handleInputChange} />
-      </div>
-      <div>
-        <label>Confirm Password</label>
-        <input type="password" name="password2" onChange={handleInputChange} />
-      </div>
-      <input type="submit" />
-      {renderErrors()}
-    </form>
+    <Container maxWidth="container.sm" padding={3}>
+      <VStack>
+        <Heading size="xl">SignUp</Heading>
+        <form onSubmit={handleSubmit}>
+          <VStack spacing={3}>
+            <FormControl>
+              <FormLabel htmlFor="username">Username</FormLabel>
+              <Input
+                id="username"
+                type="username"
+                onChange={handleInputChange}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="email">Email address</FormLabel>
+              <Input id="email" type="email" onChange={handleInputChange} />
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="password">Password</FormLabel>
+              <Input
+                id="password"
+                type="password"
+                onChange={handleInputChange}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="password2">Confirm Password</FormLabel>
+              <Input
+                id="password2"
+                type="password"
+                onChange={handleInputChange}
+              />
+            </FormControl>
+            <Button colorScheme="teal" type="submit">
+              Signup
+            </Button>
+          </VStack>
+        </form>
+        <Error />
+      </VStack>
+    </Container>
   );
 }
 

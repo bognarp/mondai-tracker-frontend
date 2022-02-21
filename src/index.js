@@ -3,11 +3,15 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
+import '@fontsource/montserrat';
+import '@fontsource/raleway';
+import { ChakraProvider } from '@chakra-ui/react';
 
 import App from './App';
 import { setAuthToken } from './util/sessionAPI';
 import configureAppStore from './store';
 import { logout } from './actions/sessionActions';
+import theme from './theme';
 
 document.addEventListener('DOMContentLoaded', () => {
   let store;
@@ -38,7 +42,9 @@ document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
     <Provider store={store}>
       <BrowserRouter>
-        <App />
+        <ChakraProvider theme={theme}>
+          <App />
+        </ChakraProvider>
       </BrowserRouter>
     </Provider>,
     document.getElementById('root')
