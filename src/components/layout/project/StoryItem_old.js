@@ -8,7 +8,7 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 
-function StoryItem({ content }) {
+function StoryItem_old({ content }) {
 
   return (
     <AccordionItem>
@@ -31,4 +31,4 @@ function StoryItem({ content }) {
   );
 }
 
-export default StoryItem;
+export default StoryItem_old;

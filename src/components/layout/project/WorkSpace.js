@@ -1,9 +1,9 @@
-import { Accordion, Center, Heading, Spinner, VStack } from '@chakra-ui/react';
+import { Center, Heading, Spinner, VStack } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProjectStories } from '../../../actions/storyActions';
 import { selectStoriesByCategory } from '../../../reducers/selector';
-import StoryItem from './StoryItem';
+import StoryModal from '../story/StoryModal';
 
 function Workspace({ project, category }) {
   const dispatch = useDispatch();
@@ -39,21 +39,20 @@ function Workspace({ project, category }) {
 
   if (status !== 'complete') {
     return (
-      <Center>
+      <Center w="100%" h="100%">
         <Spinner />
       </Center>
     );
   }
+
   return (
-    <VStack bg="white" spacing={3} p={3} shadow="xl" m={4} borderRadius={10}>
+    <VStack bg="white" spacing={3} p={3} shadow="xl" m={2} borderRadius={10}>
       <Heading as="h3" fontSize="md">
         {workspaceTitle()}
       </Heading>
-      <Accordion allowMultiple>
-        {allIds.map((storyId) => (
-          <StoryItem key={storyId} content={byId[storyId]} />
-        ))}
-      </Accordion>
+      {allIds.map((storyId) => (
+        <StoryModal key={storyId} />
+      ))}
     </VStack>
   );
 }

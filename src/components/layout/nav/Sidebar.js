@@ -3,14 +3,15 @@ import React from 'react';
 
 function Sidebar({ title, navigation }) {
   return (
-  <VStack as="nav" p={4} bg="orange.300">
-      <Heading as="h2" fontSize="lg">
-        {title}</Heading>
+    <VStack as="nav" p={4} h="100%" spacing={2} bg="gray.100">
+      <Heading as="h2" fontSize="lg" textAlign="center">
+        {title}
+      </Heading>
       <button onClick={navigation('user')}>My Work</button>
       <button onClick={navigation('current')}>Current Sprint</button>
       <button onClick={navigation('backlog')}>Backlog</button>
       <button onClick={navigation('archive')}>Done</button>
-  </VStack>
+    </VStack>
   );
 }
 

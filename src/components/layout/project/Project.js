@@ -1,4 +1,4 @@
-import { Flex, Spinner } from '@chakra-ui/react';
+import { Grid, GridItem, Spinner } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -28,6 +28,7 @@ function Project() {
   if (projectsStatus !== 'complete') {
     return <Spinner />;
   }
+
   const toggleWorkspace = (key) => (e) => {
     workspace.some((w) => w === key)
       ? setWorkspace(workspace.filter((w) => w !== key))
@@ -35,15 +36,23 @@ function Project() {
   };
 
   return (
-    <div style={{ display: 'flex', background: '#F5F5DC' }}>
-      <Sidebar title={project.title} navigation={toggleWorkspace} />
-
-      <Flex p={5} justifyContent="space-evenly" wrap="wrap">
-        {workspace.map((w) => (
-          <Workspace key={w} project={project} category={w} />
-        ))}
-      </Flex>
-    </div>
+    <Grid
+      templateRows="repeat(2, 1fr)"
+      templateColumns="repeat(5, 1fr)"
+      gap={0}
+      bg="gray.300"
+      maxHeight="93vh"
+      minHeight="93vh"
+    >
+      <GridItem rowSpan={2} colSpan={1} bg="tomato" maxWidth="90%">
+        <Sidebar title={project.title} navigation={toggleWorkspace} />
+      </GridItem>
+      {workspace.map((w) => (
+        <GridItem colSpan={2} rowSpan={1} key={w}>
+          <Workspace project={project} category={w} />
+        </GridItem>
+      ))}
+    </Grid>
   );
 }
 

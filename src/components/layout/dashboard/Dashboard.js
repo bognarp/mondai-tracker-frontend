@@ -33,8 +33,6 @@ function Dashboard() {
     <>
       <h3>My Projects:</h3>
       <ProjectList projects={allIds.map((id) => byId[id])} />
-      <br />
-      <small>dashboard</small>
     </>
   );
 }
