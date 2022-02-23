@@ -12,6 +12,10 @@ function Workspace({ project, category }) {
   );
   const userId = useSelector((state) => state.session.user.id);
 
+  const sortByPriority = () => {
+    return [...allIds].sort((a, b) => byId[b].priority - byId[a].priority);
+  };
+
   useEffect(() => {
     if (status === 'idle') {
       dispatch(fetchProjectStories(project._id, category, userId));
@@ -40,18 +44,18 @@ function Workspace({ project, category }) {
   if (status !== 'complete') {
     return (
       <Center w="100%" h="100%">
-        <Spinner />
+        <Spinner color="gray.100" size="xl" />
       </Center>
     );
   }
 
   return (
-    <VStack bg="white" spacing={3} p={3} shadow="xl" m={2} borderRadius={10}>
+    <VStack bg="gray.100" spacing={3} p={3} shadow="xl" m={1} borderRadius={5}>
       <Heading as="h3" fontSize="md">
         {workspaceTitle()}
       </Heading>
-      {allIds.map((storyId) => (
-        <StoryModal key={storyId} />
+      {sortByPriority().map((storyId) => (
+        <StoryModal key={storyId} storyContent={byId[storyId]} />
       ))}
     </VStack>
   );
