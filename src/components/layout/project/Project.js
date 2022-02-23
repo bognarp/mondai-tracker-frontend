@@ -1,4 +1,4 @@
-import { Grid, GridItem, Spinner } from '@chakra-ui/react';
+import { Flex, Grid, GridItem, Spinner } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -36,23 +36,24 @@ function Project() {
   };
 
   return (
-    <Grid
-      templateRows="repeat(2, 1fr)"
-      templateColumns="repeat(5, 1fr)"
-      gap={0}
-      bg="gray.300"
-      maxHeight="93vh"
-      minHeight="93vh"
-    >
-      <GridItem rowSpan={2} colSpan={1} bg="tomato" maxWidth="90%">
-        <Sidebar title={project.title} navigation={toggleWorkspace} />
-      </GridItem>
-      {workspace.map((w) => (
-        <GridItem colSpan={2} rowSpan={1} key={w}>
-          <Workspace project={project} category={w} />
-        </GridItem>
-      ))}
-    </Grid>
+    <Flex>
+      <Sidebar title={project.title} navigation={toggleWorkspace} />
+      <Grid
+        templateRows="repeat(2, 1fr)"
+        templateColumns="repeat(2, 1fr)"
+        gap={1}
+        p={2}
+        bg="gray.800"
+        h="93vh"
+        w="100%"
+      >
+        {workspace.map((w) => (
+          <GridItem colSpan={1} rowSpan={1} key={w}>
+            <Workspace project={project} category={w} />
+          </GridItem>
+        ))}
+      </Grid>
+    </Flex>
   );
 }
 
