@@ -1,8 +1,6 @@
 import {
-  Badge,
   Box,
   Button,
-  Divider,
   Flex,
   Heading,
   HStack,
@@ -17,8 +15,10 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import React from 'react';
+import PriorityBadge from './PriorityBadge';
+import StoryDetails from './StoryDetails';
 
-function StoryItem({ open }) {
+function StoryItem({ open, difficulty, priority, title }) {
   const stopEventPropagationTry = (event) => {
     if (event.target === event.currentTarget) {
       event.stopPropagation();
@@ -33,28 +33,28 @@ function StoryItem({ open }) {
   return (
     <Box
       borderWidth="1px"
-      w='100%'
+      w="100%"
       p={3}
       borderRadius="lg"
       boxShadow="md"
-      backgroundColor="gray.100"
+      backgroundColor="white"
       onClick={open}
       cursor="pointer"
     >
-      <HStack spacing={1} wrap='wrap'>
-        <Badge variant="solid" colorScheme="green">
-          Low
-        </Badge>
-        <Divider orientation="vertical" />
-        <Text fontSize="xs">1 Points</Text>
+      <HStack spacing={1} wrap="wrap">
+        <PriorityBadge value={priority} />
+
+        <Text fontSize="xs">
+          {difficulty ? `${difficulty} Points` : `Unestimated`}
+        </Text>
       </HStack>
+
       <Flex
-        marginTop={1}
         direction={['column', 'row']}
         justifyContent="space-between"
         alignItems="center"
       >
-        <Heading fontSize="mdlg">This is the Story's title...</Heading>
+        <Heading fontSize="sm">{title}</Heading>
         <Button
           colorScheme="teal"
           size="xs"
@@ -68,26 +68,25 @@ function StoryItem({ open }) {
   );
 }
 
-function StoryModal() {
+function StoryModal({ storyContent }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const { title, difficulty, priority } = storyContent;
 
   return (
     <>
-      <StoryItem open={onOpen}></StoryItem>
+      <StoryItem
+        open={onOpen}
+        difficulty={difficulty}
+        priority={priority}
+        title={title}
+      />
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} size="xl">
         <ModalOverlay />
-
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
           <ModalCloseButton />
-          <ModalBody></ModalBody>
-
-          <ModalFooter>
-            <Button variant="ghost" onClick={onClose}>
-              Close
-            </Button>
-          </ModalFooter>
+          <StoryDetails storyContent={storyContent} />
         </ModalContent>
       </Modal>
     </>
