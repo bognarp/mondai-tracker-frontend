@@ -6,7 +6,7 @@ import NavBar from './nav/NavBar';
 
 function Layout() {
   return (
-    <Flex direction="column" bg="yellow.100" height="100%">
+    <Flex direction="column" bg="green.300" height="100%">
       <NavBar />
       <Error />
 

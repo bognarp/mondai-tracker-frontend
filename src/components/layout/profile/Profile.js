@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import _ from 'lodash';
+import { isEmpty } from 'lodash-es';
 
 import { fetchUserInfo } from '../../../actions/userActions';
 import { selectUserInfo } from '../../../reducers/selector';
@@ -11,7 +11,7 @@ function Profile() {
 
   useEffect(() => {
     // TODO: should create user entity with status: isLoading
-    if (_.isEmpty(userInfo)) {
+    if (isEmpty(userInfo)) {
       dispatch(fetchUserInfo());
     }
   }, [dispatch, userInfo]);
@@ -24,7 +24,7 @@ function Profile() {
       <p>email: {email}</p>
       <p>my projects:</p>
       <ul>
-        {!_.isEmpty(userInfo) &&
+        {!isEmpty(userInfo) &&
           ownProjects.map((project) => (
             <li key={project._id}>{project.title}</li>
           ))}

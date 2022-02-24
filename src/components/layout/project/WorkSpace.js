@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProjectStories } from '../../../actions/storyActions';
 import { selectStoriesByCategory } from '../../../reducers/selector';
+import { workspaceMap } from '../../../util/workspaceHelpers';
 import StoryModal from '../story/StoryModal';
 
 function Workspace({ project, category }) {
@@ -16,26 +17,15 @@ function Workspace({ project, category }) {
     return [...allIds].sort((a, b) => byId[b].priority - byId[a].priority);
   };
 
+  const workspaceTitle = Object.keys(workspaceMap).find(
+    (key) => workspaceMap[key] === category
+  );
+
   useEffect(() => {
     if (status === 'idle') {
       dispatch(fetchProjectStories(project._id, category, userId));
     }
   }, [status, dispatch, project._id, category, userId]);
-
-  const workspaceTitle = () => {
-    switch (category) {
-      case 'current':
-        return 'Current Sprint';
-      case 'user':
-        return 'My Work';
-      case 'backlog':
-        return 'Backlog';
-      case 'archive':
-        return 'Done';
-      default:
-        break;
-    }
-  };
 
   if (status === 'idle') {
     return null;
@@ -52,7 +42,7 @@ function Workspace({ project, category }) {
   return (
     <VStack bg="gray.100" spacing={3} p={3} shadow="xl" m={1} borderRadius={5}>
       <Heading as="h3" fontSize="md">
-        {workspaceTitle()}
+        {workspaceTitle}
       </Heading>
       {sortByPriority().map((storyId) => (
         <StoryModal key={storyId} storyContent={byId[storyId]} />

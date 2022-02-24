@@ -8,7 +8,7 @@ function NavBar() {
       as="header"
       w="100%"
       px={6}
-      h="7vh"
+      h="6vh"
       justifyContent="space-between"
       boxShadow="md"
       position="relative"
