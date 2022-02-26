@@ -1,22 +1,21 @@
 import {
-  Box,
+  LinkBox,
   Button,
   Flex,
   Heading,
   HStack,
   Modal,
-  ModalBody,
-  ModalCloseButton,
   ModalContent,
-  ModalFooter,
-  ModalHeader,
   ModalOverlay,
   Text,
   useDisclosure,
+  ModalCloseButton,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useState } from 'react';
+import { difficultyValues } from '../../../util/storyHelpers';
 import PriorityBadge from './PriorityBadge';
 import StoryDetails from './StoryDetails';
+import StoryView from './StoryView';
 
 function StoryItem({ open, difficulty, priority, title }) {
   const stopEventPropagationTry = (event) => {
@@ -31,7 +30,7 @@ function StoryItem({ open, difficulty, priority, title }) {
   };
 
   return (
-    <Box
+    <LinkBox
       borderWidth="1px"
       w="100%"
       p={3}
@@ -45,7 +44,7 @@ function StoryItem({ open, difficulty, priority, title }) {
         <PriorityBadge value={priority} />
 
         <Text fontSize="xs">
-          {difficulty ? `${difficulty} Points` : `Unestimated`}
+          {difficulty !== undefined && difficultyValues[difficulty].content}
         </Text>
       </HStack>
 
@@ -55,6 +54,7 @@ function StoryItem({ open, difficulty, priority, title }) {
         alignItems="center"
       >
         <Heading fontSize="sm">{title}</Heading>
+
         <Button
           colorScheme="teal"
           size="xs"
@@ -64,14 +64,14 @@ function StoryItem({ open, difficulty, priority, title }) {
           Start
         </Button>
       </Flex>
-    </Box>
+    </LinkBox>
   );
 }
 
-function StoryModal({ storyContent }) {
+function StoryModal({ storyContent, projectUsers }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
   const { title, difficulty, priority } = storyContent;
+  const [isEditing, setEditing] = useState(false);
 
   return (
     <>
@@ -82,11 +82,19 @@ function StoryModal({ storyContent }) {
         title={title}
       />
 
-      <Modal isOpen={isOpen} onClose={onClose} size="xl">
+      <Modal isOpen={isOpen} onClose={onClose} size="xl" trapFocus={false}>
         <ModalOverlay />
         <ModalContent>
-          <ModalCloseButton />
-          <StoryDetails storyContent={storyContent} />
+        <ModalCloseButton />
+          {isEditing ? (
+            <StoryDetails
+              storyContent={storyContent}
+              projectUsers={projectUsers}
+              toggleEditing={setEditing}
+            />
+          ) : (
+            <StoryView storyContent={storyContent} toggleEditing={setEditing} />
+          )}
         </ModalContent>
       </Modal>
     </>

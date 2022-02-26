@@ -5,6 +5,7 @@ import { fetchProjectStories } from '../../../actions/storyActions';
 import { selectStoriesByCategory } from '../../../reducers/selector';
 import { workspaceMap } from '../../../util/workspaceHelpers';
 import StoryModal from '../story/StoryModal';
+import { union } from 'lodash-es';
 
 function Workspace({ project, category }) {
   const dispatch = useDispatch();
@@ -12,6 +13,7 @@ function Workspace({ project, category }) {
     selectStoriesByCategory(category)
   );
   const userId = useSelector((state) => state.session.user.id);
+  const projectUsers = union(project.owners, project.members);
 
   const sortByPriority = () => {
     return [...allIds].sort((a, b) => byId[b].priority - byId[a].priority);
@@ -45,7 +47,11 @@ function Workspace({ project, category }) {
         {workspaceTitle}
       </Heading>
       {sortByPriority().map((storyId) => (
-        <StoryModal key={storyId} storyContent={byId[storyId]} />
+        <StoryModal
+          key={storyId}
+          storyContent={byId[storyId]}
+          projectUsers={projectUsers}
+        />
       ))}
     </VStack>
   );
