@@ -8,22 +8,19 @@ function Error() {
 
   if (getErrors.length !== 0) {
     const errorReducer = (state, errors) => {
-      return { ...state, ...errors };
+      return { ...state, ...errors.message };
     };
 
     const errors = getErrors.reduce(errorReducer, {});
 
     return (
-      <div>
-        Oops There was an error...
-        <ul>
-          {Object.keys(errors).map((errorName, idx) => {
-            return (
-              <li key={`error-${idx}`}>{`${errorName}: ${errors[errorName]}`}</li>
-            );
-          })}
-        </ul>
-      </div>
+      <ul>
+        {Object.keys(errors).map((errorName, idx) => {
+          return (
+            <li key={`error-${idx}`}>{`${errorName}: ${errors[errorName]}`}</li>
+          );
+        })}
+      </ul>
     );
   }
 

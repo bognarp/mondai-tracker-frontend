@@ -1,3 +1,13 @@
+import {
+  Avatar,
+  Center,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuGroup,
+  MenuItem,
+  MenuList,
+} from '@chakra-ui/react';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -11,11 +21,29 @@ function NavLinks() {
 
   if (isAuthenticated) {
     return (
-      <nav>
-        <Link to={'/dashboard'}>Dashboard</Link> {'| '}
-        <Link to={'/profile'}>{user.username}</Link> {'| '}
-        <button onClick={() => dispatch(logout())}>Sign Out</button>
-      </nav>
+      <Center as="nav" mr={0}>
+        <Menu isLazy>
+          <MenuButton
+            boxShadow="md"
+            w={8}
+            h={8}
+            as={Avatar}
+            cursor="pointer"
+          ></MenuButton>
+          <MenuList>
+            <MenuGroup title={`Hello ${user.username}!`}>
+              <Link to={'/dashboard'}>
+                <MenuItem>Dashboard</MenuItem>
+              </Link>
+              <Link to={'/profile'}>
+                <MenuItem>Profile</MenuItem>
+              </Link>
+            </MenuGroup>
+            <MenuDivider />
+            <MenuItem onClick={() => dispatch(logout())}>Sign Out</MenuItem>
+          </MenuList>
+        </Menu>
+      </Center>
     );
   } else {
     return (

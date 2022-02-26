@@ -1,7 +1,11 @@
+import { Center, Heading, Spinner, VStack } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProjectStories } from '../../../actions/storyActions';
 import { selectStoriesByCategory } from '../../../reducers/selector';
+import { workspaceMap } from '../../../util/workspaceHelpers';
+import StoryModal from '../story/StoryModal';
+import { union } from 'lodash-es';
 
 function Workspace({ project, category }) {
   const dispatch = useDispatch();
@@ -9,6 +13,15 @@ function Workspace({ project, category }) {
     selectStoriesByCategory(category)
   );
   const userId = useSelector((state) => state.session.user.id);
+  const projectUsers = union(project.owners, project.members);
+
+  const sortByPriority = () => {
+    return [...allIds].sort((a, b) => byId[b].priority - byId[a].priority);
+  };
+
+  const workspaceTitle = Object.keys(workspaceMap).find(
+    (key) => workspaceMap[key] === category
+  );
 
   useEffect(() => {
     if (status === 'idle') {
@@ -21,33 +34,26 @@ function Workspace({ project, category }) {
   }
 
   if (status !== 'complete') {
-    return <h3>Loading...</h3>;
+    return (
+      <Center w="100%" h="100%">
+        <Spinner color="gray.100" size="xl" />
+      </Center>
+    );
   }
+
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        border: 'solid 1px',
-        padding: '1rem',
-        background: 'peachpuff',
-      }}
-    >
-      <h3>{category}</h3>
-      <ul>
-        {allIds.map((storyId) => (
-          <li key={storyId}>
-            <div>
-              {byId[storyId].title}
-              <br /> description: {byId[storyId].description}
-              <br /> status: {byId[storyId].state}
-            </div>
-          </li>
-        ))}
-      </ul>
-      <br />
-      <small>workspace</small>
-    </div>
+    <VStack bg="gray.100" spacing={3} p={3} shadow="xl" m={1} borderRadius={5}>
+      <Heading as="h3" fontSize="md">
+        {workspaceTitle}
+      </Heading>
+      {sortByPriority().map((storyId) => (
+        <StoryModal
+          key={storyId}
+          storyContent={byId[storyId]}
+          projectUsers={projectUsers}
+        />
+      ))}
+    </VStack>
   );
 }
 

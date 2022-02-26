@@ -1,23 +1,24 @@
+import { Center, Flex, Heading, Image } from '@chakra-ui/react';
 import React from 'react';
-import { Link } from 'react-router-dom';
 import NavLinks from './NavLinks';
+import logo from './testlogo.png';
 
 function NavBar() {
   return (
-    <header
-      style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        marginBottom: '1rem',
-        padding: '0.5rem',
-        borderBottom: 'solid 1px',
-        background: 'paleturquoise',
-      }}
+    <Flex
+      as="header"
+      w="100%"
+      px={6}
+      h="7vh"
+      justifyContent="space-between"
+      boxShadow="md"
+      position="relative"
     >
-      <Link to={'/'}>Mondai Tracker</Link>
+      <Center ml={12}>
+        <Image src={logo} boxSize='40px'/>
+      </Center>
       <NavLinks />
-      <small>navbar</small>
-    </header>
+    </Flex>
   );
 }
 

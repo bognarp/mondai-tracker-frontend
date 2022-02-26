@@ -1,3 +1,4 @@
+import { Box, Flex } from '@chakra-ui/react';
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Error from './Error';
@@ -5,16 +6,14 @@ import NavBar from './nav/NavBar';
 
 function Layout() {
   return (
-    <>
+    <Flex direction="column" bg="green.100" height="100%">
       <NavBar />
+      <Error />
 
-      <main>
-        <Error />
-        <Outlet />
-        <br />
-        <small style={{ color: 'red' }}>layout (outlet)</small>
-      </main>
-    </>
+      {/* Dashboard | Project | Profile */}
+
+      <Outlet />
+    </Flex>
   );
 }
 

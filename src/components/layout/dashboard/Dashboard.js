@@ -1,3 +1,4 @@
+import { Spinner } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -26,14 +27,12 @@ function Dashboard() {
     dispatch(fetchUserProjects(sessionInfo.user.id));
   }, [dispatch, sessionInfo]);
 
-  if (status !== 'complete') return <div>loading...</div>;
+  if (status !== 'complete') return <Spinner />;
 
   return (
     <>
       <h3>My Projects:</h3>
       <ProjectList projects={allIds.map((id) => byId[id])} />
-      <br />
-      <small>dashboard</small>
     </>
   );
 }
