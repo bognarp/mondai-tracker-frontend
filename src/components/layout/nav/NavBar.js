@@ -1,6 +1,7 @@
-import { Center, Flex, Heading } from '@chakra-ui/react';
+import { Center, Flex, Heading, Image } from '@chakra-ui/react';
 import React from 'react';
 import NavLinks from './NavLinks';
+import logo from './testlogo.png';
 
 function NavBar() {
   return (
@@ -8,13 +9,13 @@ function NavBar() {
       as="header"
       w="100%"
       px={6}
-      h="6vh"
+      h="7vh"
       justifyContent="space-between"
       boxShadow="md"
       position="relative"
     >
-      <Center>
-        <Heading size="md">Mondai Tracker</Heading>
+      <Center ml={12}>
+        <Image src={logo} boxSize='40px'/>
       </Center>
       <NavLinks />
     </Flex>

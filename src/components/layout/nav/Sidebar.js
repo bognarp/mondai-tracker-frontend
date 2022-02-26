@@ -1,35 +1,59 @@
-import { Button, Divider, Heading, VStack } from '@chakra-ui/react';
-import React from 'react';
-import { workspaceMap } from '../../../util/workspaceHelpers';
+import React, { useState } from 'react';
+import { Button, Divider, IconButton, Text, VStack } from '@chakra-ui/react';
+import { workspaceIconMap, workspaceMap } from '../../../util/workspaceHelpers';
+import { FaAngleDoubleLeft, FaAngleDoubleRight } from 'react-icons/fa';
 
 function Sidebar({ title, navigation, selectedWorkspaces }) {
+  const [collapsed, setCollapsed] = useState(false);
+
   const createButtons = () => {
     return Object.keys(workspaceMap).map((item) => {
       const variant = selectedWorkspaces.includes(workspaceMap[item])
         ? 'solid'
-        : 'outline';
+        : 'ghost';
 
       return (
         <Button
           key={item}
-          colorScheme='teal'
+          iconSpacing={collapsed ? 0 : 3}
+          size={collapsed ? 'md' : 'md'}
+          leftIcon={workspaceIconMap[item]}
           onClick={navigation(workspaceMap[item])}
           variant={variant}
         >
-          {item}
+          {collapsed ? null : item}
         </Button>
       );
     });
   };
 
   return (
-    <VStack p={4} h="100%" spacing={4} bg="white">
-      <Heading as="h2" fontSize="lg" textAlign="center">
-        {title}
-      </Heading>
-      <Divider />
-      <VStack as="nav">{createButtons()}</VStack>
-    </VStack>
+    <>
+      <VStack px={collapsed ? 2 : 4} h="100%" spacing={collapsed ? 12 : 4} bg="white" position="relative">
+        <IconButton
+          aria-label="Collapse sidebar"
+          icon={collapsed ? <FaAngleDoubleRight /> : <FaAngleDoubleLeft />}
+          size="xs"
+          isRound={true}
+          onClick={() => setCollapsed(!collapsed)}
+          position="absolute"
+          top={2}
+          right={-2.5}
+        />
+        {!collapsed && (
+          <>
+            <Text as="h2" fontSize="lg" fontWeight="extrabold">
+              {title}
+            </Text>
+            <Divider />
+          </>
+        )}
+
+        <VStack as="nav" align="baseline">
+          {createButtons()}
+        </VStack>
+      </VStack>
+    </>
   );
 }
 
