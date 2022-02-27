@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchProjectStories } from '../../../actions/storyActions';
 import { selectStoriesByCategory } from '../../../reducers/selector';
 import { workspaceMap } from '../../../util/workspaceHelpers';
-import StoryModal from '../story/StoryModal';
+import Story from '../story/Story';
 import { union } from 'lodash-es';
 
 function Workspace({ project, category }) {
@@ -47,7 +47,7 @@ function Workspace({ project, category }) {
         {workspaceTitle}
       </Heading>
       {sortByPriority().map((storyId) => (
-        <StoryModal
+        <Story
           key={storyId}
           storyContent={byId[storyId]}
           projectUsers={projectUsers}

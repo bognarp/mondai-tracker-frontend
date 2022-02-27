@@ -14,10 +14,10 @@ import {
 import React, { useState } from 'react';
 import { difficultyValues } from '../../../util/storyHelpers';
 import PriorityBadge from './PriorityBadge';
+import StoryForm from './StoryForm';
 import StoryDetails from './StoryDetails';
-import StoryView from './StoryView';
 
-function StoryItem({ open, difficulty, priority, title }) {
+function StoryPreview({ open, difficulty, priority, title }) {
   const stopEventPropagationTry = (event) => {
     if (event.target === event.currentTarget) {
       event.stopPropagation();
@@ -68,14 +68,14 @@ function StoryItem({ open, difficulty, priority, title }) {
   );
 }
 
-function StoryModal({ storyContent, projectUsers }) {
+function Story({ storyContent, projectUsers }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { title, difficulty, priority } = storyContent;
   const [isEditing, setEditing] = useState(false);
 
   return (
     <>
-      <StoryItem
+      <StoryPreview
         open={onOpen}
         difficulty={difficulty}
         priority={priority}
@@ -85,15 +85,15 @@ function StoryModal({ storyContent, projectUsers }) {
       <Modal isOpen={isOpen} onClose={onClose} size="xl" trapFocus={false}>
         <ModalOverlay />
         <ModalContent>
-        <ModalCloseButton />
+          <ModalCloseButton />
           {isEditing ? (
-            <StoryDetails
+            <StoryForm
               storyContent={storyContent}
               projectUsers={projectUsers}
               toggleEditing={setEditing}
             />
           ) : (
-            <StoryView storyContent={storyContent} toggleEditing={setEditing} />
+            <StoryDetails storyContent={storyContent} toggleEditing={setEditing} />
           )}
         </ModalContent>
       </Modal>
@@ -101,4 +101,4 @@ function StoryModal({ storyContent, projectUsers }) {
   );
 }
 
-export default StoryModal;
+export default Story;

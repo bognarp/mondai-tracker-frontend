@@ -8,7 +8,7 @@ import {
   selectProjectsStatus,
 } from '../../../reducers/selector';
 import Sidebar from '../nav/Sidebar';
-import Workspace from './Workspace';
+import WorkSpace from './Workspace';
 
 function Project() {
   const params = useParams();
@@ -58,7 +58,7 @@ function Project() {
       >
         {workspace.map((w) => (
           <GridItem colSpan={1} rowSpan={1} key={w}>
-            <Workspace project={project} category={w} />
+            <WorkSpace project={project} category={w} />
           </GridItem>
         ))}
       </Grid>
