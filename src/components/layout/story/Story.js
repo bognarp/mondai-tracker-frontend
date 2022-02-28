@@ -14,8 +14,12 @@ import {
 import React, { useState } from 'react';
 import { difficultyValues } from '../../../util/storyHelpers';
 import PriorityBadge from './PriorityBadge';
-import StoryForm from './StoryForm';
+import StoryUpdateForm from './StoryUpdateForm';
 import StoryDetails from './StoryDetails';
+import { MdDelete } from 'react-icons/md';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { deleteProjectStory } from '../../../actions/storyActions';
 
 function StoryPreview({ open, difficulty, priority, title }) {
   const stopEventPropagationTry = (event) => {
@@ -68,10 +72,17 @@ function StoryPreview({ open, difficulty, priority, title }) {
   );
 }
 
-function Story({ storyContent, projectUsers }) {
+function Story({ storyContent, projectUsers, category }) {
+  const params = useParams();
+  const dispatch = useDispatch();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { title, difficulty, priority } = storyContent;
   const [isEditing, setEditing] = useState(false);
+
+  const deleteStory = () => {
+    dispatch(deleteProjectStory(params.projectId, storyContent._id, category));
+  };
 
   return (
     <>
@@ -87,14 +98,26 @@ function Story({ storyContent, projectUsers }) {
         <ModalContent>
           <ModalCloseButton />
           {isEditing ? (
-            <StoryForm
+            <StoryUpdateForm
               storyContent={storyContent}
               projectUsers={projectUsers}
+              category={category}
               toggleEditing={setEditing}
             />
           ) : (
-            <StoryDetails storyContent={storyContent} toggleEditing={setEditing} />
+            <StoryDetails
+              storyContent={storyContent}
+              toggleEditing={setEditing}
+            />
           )}
+          <Button
+            size="sm"
+            leftIcon={<MdDelete />}
+            variant="outline"
+            onClick={deleteStory}
+          >
+            Delete
+          </Button>
         </ModalContent>
       </Modal>
     </>

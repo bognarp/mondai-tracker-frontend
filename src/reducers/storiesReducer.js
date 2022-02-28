@@ -1,15 +1,12 @@
 import { createReducer } from '@reduxjs/toolkit';
 import {
   clearStories,
-  fetchArchiveStories,
-  fetchBacklogStories,
-  fetchCurrentStories,
-  fetchUserStories,
-  receiveArchiveStories,
-  receiveBacklogStories,
-  receiveCurrentStories,
-  receiveUserStories,
+  createStory,
+  fetchStories,
+  receiveStories,
   rejectStories,
+  removeStory,
+  updateStory,
 } from '../actions/storyActions';
 
 const initialState = {
@@ -37,56 +34,44 @@ const initialState = {
 
 const storiesReducer = createReducer(initialState, (builder) => {
   builder
+    .addCase(fetchStories, (state, action) => {
+      const category = action.payload;
+      state[category].status = 'loading';
+    })
+    .addCase(receiveStories, (state, action) => {
+      const category = action.payload.category;
+      const stories = action.payload.stories;
+
+      const byId = stories.reduce((byId, story) => {
+        byId[story._id] = story;
+        return byId;
+      }, {});
+      state[category].byId = byId;
+      state[category].allIds = Object.keys(byId);
+      state[category].status = 'complete';
+    })
     .addCase(rejectStories, (state, action) => {
-      state.status = 'failed';
+      const category = action.payload;
+      state[category].status = 'failed';
     })
-    .addCase(fetchUserStories, (state, action) => {
-      state.user.status = 'loading';
+    .addCase(createStory, (state, action) => {
+      const { newStory, category } = action.payload;
+      state[category].byId[newStory._id] = newStory;
+      state[category].allIds.push(newStory._id);
+      state[category].status = 'complete';
     })
-    .addCase(fetchCurrentStories, (state, action) => {
-      state.current.status = 'loading';
+    .addCase(updateStory, (state, action) => {
+      const { updatedStory, category } = action.payload;
+      state[category].byId[updatedStory._id] = updatedStory;
+      state[category].status = 'complete';
     })
-    .addCase(fetchBacklogStories, (state, action) => {
-      state.backlog.status = 'loading';
-    })
-    .addCase(fetchArchiveStories, (state, action) => {
-      state.archive.status = 'loading';
-    })
-    .addCase(receiveUserStories, (state, action) => {
-      const byId = action.payload.reduce((byId, story) => {
-        byId[story._id] = story;
-        return byId;
-      }, {});
-      state.user.byId = byId;
-      state.user.allIds = Object.keys(byId);
-      state.user.status = 'complete';
-    })
-    .addCase(receiveCurrentStories, (state, action) => {
-      const byId = action.payload.reduce((byId, story) => {
-        byId[story._id] = story;
-        return byId;
-      }, {});
-      state.current.byId = byId;
-      state.current.allIds = Object.keys(byId);
-      state.current.status = 'complete';
-    })
-    .addCase(receiveBacklogStories, (state, action) => {
-      const byId = action.payload.reduce((byId, story) => {
-        byId[story._id] = story;
-        return byId;
-      }, {});
-      state.backlog.byId = byId;
-      state.backlog.allIds = Object.keys(byId);
-      state.backlog.status = 'complete';
-    })
-    .addCase(receiveArchiveStories, (state, action) => {
-      const byId = action.payload.reduce((byId, story) => {
-        byId[story._id] = story;
-        return byId;
-      }, {});
-      state.archive.byId = byId;
-      state.archive.allIds = Object.keys(byId);
-      state.archive.status = 'complete';
+    .addCase(removeStory, (state, action) => {
+      const { id, category } = action.payload;
+      const allIds = state[category].allIds.filter((oldId) => oldId !== id);
+
+      delete state[category].byId[id];
+      state[category].allIds = allIds;
+      state[category].status = 'complete';
     })
     .addCase(clearStories, (state, action) => {
       return initialState;

@@ -13,6 +13,8 @@ import React, { useEffect, useState } from 'react';
 import { isEqual, isEmpty } from 'lodash-es';
 import { difficultyValues, priorityValues } from '../../../util/storyHelpers';
 import { MdEditOff, MdSave } from 'react-icons/md';
+import { useDispatch } from 'react-redux';
+import { updateProjectStory } from '../../../actions/storyActions';
 
 const StoryFormHeader = ({ value, category, patch }) => {
   const [newTitle, setNewTitle] = useState(value);
@@ -128,7 +130,7 @@ const StoryFormState = ({ value }) => {
 };
 
 const StoryFormUsers = ({ requester, owner, projectUsers, patch }) => {
-  const checkValue = (value) => (value === '0' ? undefined : value);
+  const checkValue = (value) => (value === '0' ? null : value);
 
   return (
     <>
@@ -178,7 +180,13 @@ const StoryFormUsers = ({ requester, owner, projectUsers, patch }) => {
   );
 };
 
-function StoryForm({ storyContent, projectUsers, toggleEditing }) {
+function StoryUpdateForm({
+  storyContent,
+  projectUsers,
+  toggleEditing,
+  category,
+}) {
+  const dispatch = useDispatch();
   const [editedProps, setEditedProps] = useState({});
   const [changedKeys, setChangedKeys] = useState([]);
   const [isEdited, setEdited] = useState(false);
@@ -203,6 +211,25 @@ function StoryForm({ storyContent, projectUsers, toggleEditing }) {
     } else {
       setEditedProps({ ...editedProps, ...patch });
     }
+  };
+
+  const updateStory = (e) => {
+    const patchObj = {};
+
+    changedKeys.forEach((key) => {
+      patchObj[key] = editedProps[key];
+    });
+
+    console.log('Story patchOBJ ->', patchObj);
+
+    dispatch(
+      updateProjectStory(
+        patchObj,
+        storyContent.project,
+        storyContent._id,
+        category
+      )
+    );
   };
 
   const {
@@ -253,6 +280,7 @@ function StoryForm({ storyContent, projectUsers, toggleEditing }) {
             leftIcon={<MdSave />}
             size="sm"
             variant="outline"
+            onClick={updateStory}
           >
             Save
           </Button>
@@ -262,4 +290,4 @@ function StoryForm({ storyContent, projectUsers, toggleEditing }) {
   );
 }
 
-export default StoryForm;
+export default StoryUpdateForm;

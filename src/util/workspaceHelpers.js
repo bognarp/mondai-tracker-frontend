@@ -1,4 +1,9 @@
-import { MdList, MdWorkOutline, MdDoneOutline, MdLoop } from 'react-icons/md';
+import {
+  MdStorage,
+  MdWorkOutline,
+  MdDoneOutline,
+  MdLoop,
+} from 'react-icons/md';
 
 export const workspaceMap = {
   'Current Sprint': 'current',
@@ -10,6 +15,6 @@ export const workspaceMap = {
 export const workspaceIconMap = {
   'Current Sprint': <MdLoop />,
   'My Work': <MdWorkOutline />,
-  Backlog: <MdList />,
+  Backlog: <MdStorage />,
   Done: <MdDoneOutline />,
 };
