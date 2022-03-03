@@ -18,20 +18,11 @@ import StoryUpdateForm from './StoryUpdateForm';
 import StoryDetails from './StoryDetails';
 import { MdDelete } from 'react-icons/md';
 import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import { deleteProjectStory } from '../../../actions/storyActions';
+import StoryPreviewButton from './StoryPreviewButton';
 
-function StoryPreview({ open, difficulty, priority, title }) {
-  const stopEventPropagationTry = (event) => {
-    if (event.target === event.currentTarget) {
-      event.stopPropagation();
-    }
-  };
-
-  const handleButtonClick = (event) => {
-    stopEventPropagationTry(event);
-    console.log('STOPPED EVENT PROPAGATION...WOW');
-  };
+function StoryPreview({ open, storyContent, category }) {
+  const { _id: storyId, state, project, title, difficulty, priority } = storyContent;
 
   return (
     <LinkBox
@@ -58,39 +49,34 @@ function StoryPreview({ open, difficulty, priority, title }) {
         alignItems="center"
       >
         <Heading fontSize="sm">{title}</Heading>
-
-        <Button
-          colorScheme="teal"
-          size="xs"
-          variant="outline"
-          onClick={handleButtonClick}
-        >
-          Start
-        </Button>
+        <StoryPreviewButton
+          project={project}
+          storyId={storyId}
+          category={category}
+          state={state}
+        />
       </Flex>
     </LinkBox>
   );
 }
 
 function Story({ storyContent, projectUsers, category }) {
-  const params = useParams();
   const dispatch = useDispatch();
-
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { title, difficulty, priority } = storyContent;
   const [isEditing, setEditing] = useState(false);
 
   const deleteStory = () => {
-    dispatch(deleteProjectStory(params.projectId, storyContent._id, category));
+    dispatch(
+      deleteProjectStory(storyContent.project, storyContent._id, category)
+    );
   };
 
   return (
     <>
       <StoryPreview
         open={onOpen}
-        difficulty={difficulty}
-        priority={priority}
-        title={title}
+        storyContent={storyContent}
+        category={category}
       />
 
       <Modal isOpen={isOpen} onClose={onClose} size="xl" trapFocus={false}>

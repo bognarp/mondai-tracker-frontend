@@ -6,7 +6,6 @@ export const receiveStories = createAction('stories/receiveStories');
 export const removeStory = createAction('stories/removeStory');
 export const updateStory = createAction('stories/updateStory');
 export const createStory = createAction('stories/createStory');
-export const copyStoryToCategory = createAction('stories/copyStoryToCategory');
 export const clearStories = createAction('stories/clearStories');
 export const rejectStories = createAction('stories/rejectStories');
 
