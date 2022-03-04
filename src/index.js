@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
-import '@fontsource/montserrat';
-import '@fontsource/raleway';
+import '@fontsource/inter';
+import '@fontsource/lato';
 import { ChakraProvider } from '@chakra-ui/react';
 
 import App from './App';
@@ -12,6 +12,10 @@ import { setAuthToken } from './util/sessionAPI';
 import configureAppStore from './store';
 import { logout } from './actions/sessionActions';
 import theme from './theme';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
+
+const queryClient = new QueryClient();
 
 document.addEventListener('DOMContentLoaded', () => {
   let store;
@@ -24,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
       session: {
         isAuthenticated: true,
         user: decodedUser,
-        userInfo: {},
       },
     };
 
@@ -40,13 +43,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   ReactDOM.render(
-    <Provider store={store}>
-      <BrowserRouter>
-        <ChakraProvider theme={theme}>
-          <App />
-        </ChakraProvider>
-      </BrowserRouter>
-    </Provider>,
+    <QueryClientProvider client={queryClient}>
+      <Provider store={store}>
+        <BrowserRouter>
+          <ChakraProvider theme={theme}>
+            <App />
+          </ChakraProvider>
+        </BrowserRouter>
+      </Provider>
+      <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+    </QueryClientProvider>,
     document.getElementById('root')
   );
 });

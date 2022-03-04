@@ -4,12 +4,10 @@ import {
   receiveUserLogOut,
   receiveUserSignUp,
 } from '../actions/sessionActions';
-import { receiveUserInfo } from '../actions/userActions';
 
 const initialState = {
   isAuthenticated: false,
   user: {},
-  userInfo: {},
 };
 
 const sessionReducer = createReducer(initialState, (builder) => {
@@ -18,9 +16,6 @@ const sessionReducer = createReducer(initialState, (builder) => {
       state.isAuthenticated = Boolean(action.payload);
       state.user = action.payload;
     })
-    .addCase(receiveUserInfo, (state, action) => {
-      state.userInfo = action.payload;
-    })
     .addMatcher(
       isAnyOf(receiveUserSignUp, receiveUserLogOut),
       (state, action) => {
@@ -28,6 +23,5 @@ const sessionReducer = createReducer(initialState, (builder) => {
       }
     );
 });
-
 
 export default sessionReducer;

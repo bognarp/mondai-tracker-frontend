@@ -2,23 +2,26 @@ import axios from 'axios';
 
 const baseUrl = '/api/projects';
 
-const fetchStories = async (url) => {
-  const res = await axios.get(`${baseUrl}/${url}`);
+const fetchStories = async (projectId, category) => {
+  const res = await axios.get(`${baseUrl}/${projectId}/stories/${category}`);
   return res.data;
 };
 
-const removeStory = async (url) => {
-  const res = await axios.delete(`${baseUrl}/${url}`);
+const removeStory = async ({ projectId, storyId }) => {
+  const res = await axios.delete(`${baseUrl}/${projectId}/stories/${storyId}`);
   return res.data;
 };
 
-const updateStory = async (url, body) => {
-  const res = await axios.patch(`${baseUrl}/${url}`, body);
+const updateStory = async ({ projectId, storyId, patchObj }) => {
+  const res = await axios.patch(
+    `${baseUrl}/${projectId}/stories/${storyId}`,
+    patchObj
+  );
   return res.data;
 };
 
-const createStory = async (url, body) => {
-  const res = await axios.post(`${baseUrl}/${url}`, body);
+const createStory = async ({ projectId, newStory }) => {
+  const res = await axios.post(`${baseUrl}/${projectId}/stories`, newStory);
   return res.data;
 };
 

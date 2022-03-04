@@ -1,37 +1,34 @@
 import { Center, Flex, Grid, GridItem, Spinner } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { fetchProjectById } from '../../../actions/projectActions';
-import {
-  selectProjectById,
-  selectProjectsStatus,
-} from '../../../reducers/selector';
+import projectAPI from '../../../util/projectAPI';
 import Sidebar from '../nav/Sidebar';
 import WorkSpace from './Workspace';
 
 function Project() {
   const params = useParams();
-  const dispatch = useDispatch();
-
-  const projectsStatus = useSelector(selectProjectsStatus);
-  const project = useSelector(selectProjectById(params.projectId));
 
   const [workspace, setWorkspace] = useState(['current']);
 
-  useEffect(() => {
-    if (projectsStatus === 'idle') {
-      dispatch(fetchProjectById(params.projectId));
-    }
-  }, [projectsStatus, dispatch, params.projectId]);
+  const {
+    isLoading,
+    data: project,
+    isError,
+    error,
+  } = useQuery('project', () => {
+    return projectAPI.fetchProject(params.projectId);
+  });
 
-  if (projectsStatus !== 'complete') {
+  if (isLoading) {
     return (
       <Center w="100%" h="100%">
         <Spinner color="gray.100" size="xl" />
       </Center>
     );
   }
+
+  if (isError) return <h3>{error.message}</h3>;
 
   const toggleWorkspace = (key) => () => {
     workspace.some((ws) => ws === key)

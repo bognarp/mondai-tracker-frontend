@@ -13,8 +13,8 @@ import React, { useEffect, useState } from 'react';
 import { isEqual, isEmpty } from 'lodash-es';
 import { difficultyValues, priorityValues } from '../../../util/storyHelpers';
 import { MdEditOff, MdSave } from 'react-icons/md';
-import { useDispatch } from 'react-redux';
-import { updateProjectStory } from '../../../actions/storyActions';
+import { useMutation, useQueryClient } from 'react-query';
+import storyAPI from '../../../util/storyAPI';
 
 const StoryFormHeader = ({ value, category, patch }) => {
   const [newTitle, setNewTitle] = useState(value);
@@ -186,10 +186,10 @@ function StoryUpdateForm({
   toggleEditing,
   category,
 }) {
-  const dispatch = useDispatch();
   const [editedProps, setEditedProps] = useState({});
   const [changedKeys, setChangedKeys] = useState([]);
   const [isEdited, setEdited] = useState(false);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (!isEmpty(editedProps)) {
@@ -202,6 +202,13 @@ function StoryUpdateForm({
       setChangedKeys(keys);
     }
   }, [editedProps, storyContent]);
+
+  const { mutate } = useMutation(storyAPI.updateStory, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['stories', storyContent.project]);
+      toggleEditing(false);
+    },
+  });
 
   const storyPatcher = (patch) => {
     if (patch['owner'] || patch['requester']) {
@@ -220,16 +227,11 @@ function StoryUpdateForm({
       patchObj[key] = editedProps[key];
     });
 
-    console.log('Story patchOBJ ->', patchObj);
-
-    dispatch(
-      updateProjectStory(
-        patchObj,
-        storyContent.project,
-        storyContent._id,
-        category
-      )
-    );
+    mutate({
+      projectId: storyContent.project,
+      storyId: storyContent._id,
+      patchObj,
+    });
   };
 
   const {

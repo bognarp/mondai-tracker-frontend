@@ -1,9 +1,9 @@
 import { Spinner } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { useQuery } from 'react-query';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { fetchUserProjects } from '../../../actions/projectActions';
-import { selectProjects, selectSessionInfo } from '../../../reducers/selector';
+import { selectSessionInfo } from '../../../reducers/selector';
+import userAPI from '../../../util/userAPI';
 
 const ProjectList = ({ projects }) => {
   return (
@@ -19,20 +19,19 @@ const ProjectList = ({ projects }) => {
 };
 
 function Dashboard() {
-  const dispatch = useDispatch();
-  const { byId, allIds, status } = useSelector(selectProjects, shallowEqual);
-  const sessionInfo = useSelector(selectSessionInfo, shallowEqual);
+  const sessionInfo = useSelector(selectSessionInfo);
 
-  useEffect(() => {
-    dispatch(fetchUserProjects(sessionInfo.user.id));
-  }, [dispatch, sessionInfo]);
+  const { isLoading, data, isError, error } = useQuery('projects', () => {
+    return userAPI.fetchProjectsByUserId(sessionInfo.user.id);
+  });
 
-  if (status !== 'complete') return <Spinner />;
+  if (isLoading) return <Spinner />;
+  if (isError) return <h3>{error.message}</h3>;
 
   return (
     <>
       <h3>My Projects:</h3>
-      <ProjectList projects={allIds.map((id) => byId[id])} />
+      <ProjectList projects={data} />
     </>
   );
 }

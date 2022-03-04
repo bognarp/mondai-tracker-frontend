@@ -17,12 +17,19 @@ import PriorityBadge from './PriorityBadge';
 import StoryUpdateForm from './StoryUpdateForm';
 import StoryDetails from './StoryDetails';
 import { MdDelete } from 'react-icons/md';
-import { useDispatch } from 'react-redux';
-import { deleteProjectStory } from '../../../actions/storyActions';
 import StoryPreviewButton from './StoryPreviewButton';
+import { useMutation, useQueryClient } from 'react-query';
+import storyAPI from '../../../util/storyAPI';
 
 function StoryPreview({ open, storyContent, category }) {
-  const { _id: storyId, state, project, title, difficulty, priority } = storyContent;
+  const {
+    _id: storyId,
+    state,
+    project,
+    title,
+    difficulty,
+    priority,
+  } = storyContent;
 
   return (
     <LinkBox
@@ -50,7 +57,7 @@ function StoryPreview({ open, storyContent, category }) {
       >
         <Heading fontSize="sm">{title}</Heading>
         <StoryPreviewButton
-          project={project}
+          projectId={project}
           storyId={storyId}
           category={category}
           state={state}
@@ -61,14 +68,19 @@ function StoryPreview({ open, storyContent, category }) {
 }
 
 function Story({ storyContent, projectUsers, category }) {
-  const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isEditing, setEditing] = useState(false);
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation(storyAPI.removeStory, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['stories', storyContent.project]);
+      onClose();
+    },
+  });
 
   const deleteStory = () => {
-    dispatch(
-      deleteProjectStory(storyContent.project, storyContent._id, category)
-    );
+    mutate({ projectId: storyContent.project, storyId: storyContent._id });
   };
 
   return (

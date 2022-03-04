@@ -2,12 +2,11 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import {
   FormControl,
-  FormLabel,
   Input,
   Button,
-  Container,
   Heading,
   VStack,
+  Center,
 } from '@chakra-ui/react';
 
 import { login } from '../../actions/sessionActions';
@@ -29,31 +28,39 @@ function LoginForm() {
   };
 
   return (
-    <Container maxWidth="container.sm" padding={3}>
-      <VStack>
-        <Heading size="xl">Login</Heading>
+    <Center w="100%" h="60%">
+      <VStack bg="gray.100" padding={8} borderRadius={8} boxShadow="md">
+        <Heading size="lg" mb={4}>
+          Log in
+        </Heading>
         <form onSubmit={handleSubmit}>
-          <VStack spacing={3}>
+          <VStack spacing={4}>
             <FormControl>
-              <FormLabel htmlFor="email">Email address</FormLabel>
-              <Input id="email" type="email" onChange={handleInputChange} />
+              <Input
+                id="email"
+                type="email"
+                placeholder="Enter email"
+                onChange={handleInputChange}
+                bg="white"
+              />
             </FormControl>
             <FormControl>
-              <FormLabel htmlFor="password">Password</FormLabel>
               <Input
                 id="password"
                 type="password"
+                placeholder="Enter password"
                 onChange={handleInputChange}
+                bg="white"
               />
             </FormControl>
-            <Button colorScheme="teal" type="submit">
+            <Button colorScheme="blue" type="submit">
               Login
             </Button>
           </VStack>
         </form>
         <Error />
       </VStack>
-    </Container>
+    </Center>
   );
 }
 

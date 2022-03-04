@@ -28,32 +28,36 @@ function Sidebar({ title, navigation, selectedWorkspaces }) {
   };
 
   return (
-    <>
-      <VStack px={collapsed ? 2 : 4} h="100%" spacing={collapsed ? 12 : 4} bg="white" position="relative">
-        <IconButton
-          aria-label="Collapse sidebar"
-          icon={collapsed ? <FaAngleDoubleRight /> : <FaAngleDoubleLeft />}
-          size="xs"
-          isRound={true}
-          onClick={() => setCollapsed(!collapsed)}
-          position="absolute"
-          top={2}
-          right={-2.5}
-        />
-        {!collapsed && (
-          <>
-            <Text as="h2" fontSize="lg" fontWeight="extrabold">
-              {title}
-            </Text>
-            <Divider />
-          </>
-        )}
+    <VStack
+      px={collapsed ? 2 : 4}
+      h="100%"
+      spacing={collapsed ? 12 : 4}
+      bg="white"
+      position="relative"
+    >
+      <IconButton
+        aria-label="Collapse sidebar"
+        icon={collapsed ? <FaAngleDoubleRight /> : <FaAngleDoubleLeft />}
+        size="xs"
+        isRound={true}
+        onClick={() => setCollapsed(!collapsed)}
+        position="absolute"
+        top={2}
+        right={-2.5}
+      />
+      {!collapsed && (
+        <>
+          <Text as="h2" fontSize="lg" fontWeight="extrabold">
+            {title}
+          </Text>
+          <Divider />
+        </>
+      )}
 
-        <VStack as="nav" align="baseline">
-          {createButtons()}
-        </VStack>
+      <VStack as="nav" align="baseline">
+        {createButtons()}
       </VStack>
-    </>
+    </VStack>
   );
 }
 
