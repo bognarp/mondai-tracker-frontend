@@ -5,15 +5,16 @@ const theme = extendTheme({
     global: {
       'html, body, #root': {
         height: '100vh',
+        backgroundColor: 'gray.300'
       },
       a: {
-        color: 'teal.500',
+        color: 'blue',
       },
     },
   },
   fonts: {
-    heading: 'Montserrat',
-    body: 'Raleway',
+    heading: 'Inter',
+    body: 'Lato',
   },
 });
 

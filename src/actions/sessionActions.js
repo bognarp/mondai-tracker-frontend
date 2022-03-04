@@ -2,7 +2,6 @@ import { createAction } from '@reduxjs/toolkit';
 import jwtDecode from 'jwt-decode';
 import { normalizeError } from '../util/normalizeError';
 import sessionAPI from '../util/sessionAPI';
-import { clearProjects } from './projectActions';
 
 export const receiveCurrentUser = createAction('session/receiveCurrentUser');
 export const receiveUserSignUp = createAction('session/receiveUserSignUp');
@@ -52,5 +51,4 @@ export const logout = () => (dispatch) => {
   localStorage.removeItem('jwtToken');
   sessionAPI.setAuthToken(false);
   dispatch(receiveUserLogOut());
-  dispatch(clearProjects());
 };

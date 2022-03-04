@@ -1,11 +1,12 @@
 import { Button } from '@chakra-ui/react';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateProjectStory } from '../../../actions/storyActions';
+import { useMutation, useQueryClient } from 'react-query';
+import { useSelector } from 'react-redux';
+import storyAPI from '../../../util/storyAPI';
 
-function StoryPreviewButton({ project, storyId, category, state }) {
-  const dispatch = useDispatch();
+function StoryPreviewButton({ projectId, storyId, category, state }) {
   const userId = useSelector((state) => state.session.user.id);
+  const queryClient = useQueryClient();
 
   const stopEventPropagation = (event) => {
     if (event.target === event.currentTarget) {
@@ -13,14 +14,23 @@ function StoryPreviewButton({ project, storyId, category, state }) {
     }
   };
 
+  const { mutate } = useMutation(storyAPI.updateStory, {
+    onSuccess: (newStory) => {
+      queryClient.invalidateQueries(['stories', projectId]);
+    },
+  });
+
   const handleButtonClick = (state) => (event) => {
     stopEventPropagation(event);
-    dispatch(
-      updateProjectStory({ state, owner: userId }, project, storyId, category)
-    );
+    const patchObj = { state };
+
+    if (state === 'STARTED' || state === 'RESTARTED') patchObj.owner = userId;
+
+    mutate({ projectId, storyId, patchObj });
   };
 
   const buttonSwitch = () => {
+    // No owner -> set owner
     switch (state) {
       case 'UNSTARTED':
       case 'UNSCHEDULED':
@@ -67,6 +77,7 @@ function StoryPreviewButton({ project, storyId, category, state }) {
             </Button>
           </>
         );
+      // set new owner
       case 'REJECTED':
         return (
           <Button

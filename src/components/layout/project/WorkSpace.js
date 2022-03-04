@@ -11,67 +11,43 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  createProjectStory,
-  fetchProjectStories,
-} from '../../../actions/storyActions';
-import { selectStoriesByCategory } from '../../../reducers/selector';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { workspaceIconMap, workspaceMap } from '../../../util/workspaceHelpers';
 import Story from '../story/Story';
 import { union } from 'lodash-es';
 import { MdAdd } from 'react-icons/md';
 import StoryCreateForm from '../story/StoryCreateForm';
+import { useQuery } from 'react-query';
+import storyAPI from '../../../util/storyAPI';
 
 function Workspace({ project, category }) {
-  const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { status, allIds, byId } = useSelector(
-    selectStoriesByCategory(category)
-  );
   const userId = useSelector((state) => state.session.user.id);
   const projectUsers = union(project.owners, project.members);
 
-  const sortByPriority = () => {
-    return [...allIds].sort((a, b) => byId[b].priority - byId[a].priority);
-  };
+  const { isLoading, data, isError, error } = useQuery(
+    ['stories', project._id, category],
+    () => {
+      const categoryUrl =
+        category === 'user' ? `current?owner=${userId}` : category;
+      return storyAPI.fetchStories(project._id, categoryUrl);
+    }
+  );
 
   const workspaceTitle = Object.keys(workspaceMap).find(
     (key) => workspaceMap[key] === category
   );
 
-  useEffect(() => {
-    if (status === 'idle') {
-      dispatch(fetchProjectStories(project._id, category, userId));
-    }
-  }, [status, dispatch, project._id, category, userId]);
-
-  const createNewStory = (payload) => (e) => {
-    e.preventDefault();
-    let state;
-
-    if (category === 'current') state = 'UNSTARTED';
-    if (category === 'backlog') state = 'UNSCHEDULED';
-
-    const newStory = { ...payload, state };
-
-    if (newStory.owner === '0') delete newStory.owner;
-
-    dispatch(createProjectStory(newStory, project._id, category));
-  };
-
-  if (status === 'idle') {
-    return null;
-  }
-
-  if (status !== 'complete') {
+  if (isLoading) {
     return (
       <Center w="100%" h="100%">
         <Spinner color="gray.100" size="xl" />
       </Center>
     );
   }
+
+  if (isError) return <h3>{error.message}</h3>;
 
   return (
     <>
@@ -90,10 +66,10 @@ function Workspace({ project, category }) {
           </Heading>
         </HStack>
 
-        {sortByPriority().map((storyId) => (
+        {data.map((story) => (
           <Story
-            key={storyId}
-            storyContent={byId[storyId]}
+            key={story._id}
+            storyContent={story}
             projectUsers={projectUsers}
             category={category}
           />
@@ -110,8 +86,10 @@ function Workspace({ project, category }) {
         <ModalContent p={5}>
           <ModalCloseButton />
           <StoryCreateForm
+            projectId={project._id}
             projectUsers={projectUsers}
-            onSubmit={createNewStory}
+            category={category}
+            onClose={onClose}
           />
         </ModalContent>
       </Modal>

@@ -1,6 +1,8 @@
 import {
   Avatar,
+  Button,
   Center,
+  HStack,
   Menu,
   MenuButton,
   MenuDivider,
@@ -10,12 +12,13 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../../../actions/sessionActions';
 
 function NavLinks() {
   const session = useSelector((state) => state.session);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { isAuthenticated, user } = session;
 
@@ -47,9 +50,28 @@ function NavLinks() {
     );
   } else {
     return (
-      <nav>
-        <Link to={'/signup'}>Signup</Link> | <Link to={'login'}>Login</Link>
-      </nav>
+      <HStack as="nav" spacing={4}>
+        <Button
+          _hover={{ textDecoration: 'underline', textColor: 'blue.800' }}
+          color="blue.600"
+          size="sm"
+          onClick={() => {
+            navigate('/login');
+          }}
+          variant="unstyled"
+        >
+          Log in
+        </Button>
+        <Button
+          colorScheme="blue"
+          size="sm"
+          onClick={() => {
+            navigate('/signup');
+          }}
+        >
+          Sign up
+        </Button>
+      </HStack>
     );
   }
 }

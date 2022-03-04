@@ -9,13 +9,35 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React from 'react';
+import { useMutation, useQueryClient } from 'react-query';
 import { useInputChange } from '../../../hooks/useInputChange';
+import storyAPI from '../../../util/storyAPI';
 import { difficultyValues, priorityValues } from '../../../util/storyHelpers';
 
-function StoryCreateForm({ projectUsers, onSubmit }) {
+function StoryCreateForm({ projectId, projectUsers, category, onClose }) {
   const [input, handleInputChange] = useInputChange();
+  const queryClient = useQueryClient();
 
-  console.log('input', input);
+  const { mutate } = useMutation(storyAPI.createStory, {
+    onSuccess: (newStory) => {
+      queryClient.invalidateQueries(['stories', projectId]);
+      onClose();
+    },
+  });
+
+  const createNewStory = (e) => {
+    e.preventDefault();
+    let state;
+
+    if (category === 'current') state = 'UNSTARTED';
+    if (category === 'backlog') state = 'UNSCHEDULED';
+
+    const newStory = { ...input, state };
+
+    if (newStory.owner === '0') delete newStory.owner;
+
+    mutate({ projectId, newStory });
+  };
 
   return (
     <Box
@@ -24,7 +46,7 @@ function StoryCreateForm({ projectUsers, onSubmit }) {
       mt={6}
       mb={3}
       as="form"
-      onSubmit={onSubmit(input)}
+      onSubmit={createNewStory}
     >
       <VStack spacing={4}>
         <FormControl>
