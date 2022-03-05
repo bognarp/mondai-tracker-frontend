@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentTime = Date.now() / 1000;
 
     if (decodedUser.exp < currentTime) {
-      store.dispatch(logout);
+      store.dispatch(logout());
     }
   } else {
     store = configureAppStore();
@@ -45,11 +45,11 @@ document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
-        <BrowserRouter>
-          <ChakraProvider theme={theme}>
+        <ChakraProvider theme={theme}>
+          <BrowserRouter>
             <App />
-          </ChakraProvider>
-        </BrowserRouter>
+          </BrowserRouter>
+        </ChakraProvider>
       </Provider>
       <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
     </QueryClientProvider>,
