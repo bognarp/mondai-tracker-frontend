@@ -33,6 +33,7 @@ function LoginForm() {
         <Heading size="lg" mb={4}>
           Log in
         </Heading>
+
         <form onSubmit={handleSubmit}>
           <VStack spacing={4}>
             <FormControl>
@@ -58,6 +59,7 @@ function LoginForm() {
             </Button>
           </VStack>
         </form>
+
         <Error />
       </VStack>
     </Center>
