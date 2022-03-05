@@ -8,7 +8,6 @@ import WorkSpace from './Workspace';
 
 function Project() {
   const params = useParams();
-
   const [workspace, setWorkspace] = useState(['current']);
 
   const {
@@ -16,7 +15,7 @@ function Project() {
     data: project,
     isError,
     error,
-  } = useQuery('project', () => {
+  } = useQuery(['project', params.projectId], () => {
     return projectAPI.fetchProject(params.projectId);
   });
 
@@ -37,7 +36,7 @@ function Project() {
   };
 
   return (
-    <Flex h="93vh">
+    <Flex h="100%">
       <Sidebar
         title={project.title}
         navigation={toggleWorkspace}
