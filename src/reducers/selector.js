@@ -1,4 +1,1 @@
-export const selectSessionInfo = (state) => {
-  const { isAuthenticated, user } = state.session;
-  return { isAuthenticated, user };
-};
+export const selectSessionInfo = (state) => state.session;

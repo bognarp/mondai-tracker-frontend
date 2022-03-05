@@ -9,14 +9,63 @@ import {
   MenuGroup,
   MenuItem,
   MenuList,
+  Spinner,
 } from '@chakra-ui/react';
+import { MdAdd, MdArrowDropDown } from 'react-icons/md';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useQuery } from 'react-query';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../../../actions/sessionActions';
+import userAPI from '../../../util/userAPI';
 
-function NavLinks() {
-  const session = useSelector((state) => state.session);
+const ProjectsMenu = ({ user }) => {
+  const { isLoading, data, isError, error } = useQuery('projects', () => {
+    return userAPI.fetchProjectsByUserId(user.id);
+  });
+
+  return (
+    <Menu>
+      <MenuButton
+        as={Button}
+        display="flex"
+        variant="unstyled"
+        rightIcon={<MdArrowDropDown />}
+        p={2}
+      >
+        Projects
+      </MenuButton>
+      <MenuList>
+        <MenuGroup
+          title="Projects"
+          fontWeight="normal"
+          fontSize="xs"
+          textAlign="center"
+          m={0}
+        >
+          <MenuDivider />
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            data.map((project) => (
+              <Link to={`/projects/${project._id}`} key={project._id}>
+                <MenuItem>{project.title}</MenuItem>
+              </Link>
+            ))
+          )}
+        </MenuGroup>
+        <MenuDivider />
+        <Center>
+          <Button leftIcon={<MdAdd />} size="sm" variant="ghost">
+            Create project
+          </Button>
+        </Center>
+      </MenuList>
+    </Menu>
+  );
+};
+
+function NavLinks({ session }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -24,7 +73,8 @@ function NavLinks() {
 
   if (isAuthenticated) {
     return (
-      <Center as="nav" mr={0}>
+      <Center as="nav" mr={0} justifyContent="space-between" w="100%">
+        <ProjectsMenu user={user} />
         <Menu isLazy>
           <MenuButton
             boxShadow="md"
@@ -34,7 +84,8 @@ function NavLinks() {
             cursor="pointer"
           ></MenuButton>
           <MenuList>
-            <MenuGroup title={`Hello ${user.username}!`}>
+            <MenuGroup title={`Signed in as ${user.username}`}>
+              <MenuDivider />
               <Link to={'/dashboard'}>
                 <MenuItem>Dashboard</MenuItem>
               </Link>
@@ -43,7 +94,7 @@ function NavLinks() {
               </Link>
             </MenuGroup>
             <MenuDivider />
-            <MenuItem onClick={() => dispatch(logout())}>Sign Out</MenuItem>
+            <MenuItem onClick={() => dispatch(logout())}>Log out</MenuItem>
           </MenuList>
         </Menu>
       </Center>
