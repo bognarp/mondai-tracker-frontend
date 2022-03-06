@@ -6,16 +6,14 @@ import jwtDecode from 'jwt-decode';
 import '@fontsource/inter';
 import '@fontsource/lato';
 import { ChakraProvider } from '@chakra-ui/react';
+import { QueryCache, QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 import App from './App';
 import { setAuthToken } from './util/sessionAPI';
 import configureAppStore from './store';
 import { logout } from './actions/sessionActions';
 import theme from './theme';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { ReactQueryDevtools } from 'react-query/devtools';
-
-const queryClient = new QueryClient();
 
 document.addEventListener('DOMContentLoaded', () => {
   let store;
@@ -41,6 +39,14 @@ document.addEventListener('DOMContentLoaded', () => {
   } else {
     store = configureAppStore();
   }
+
+  const queryClient = new QueryClient({
+    queryCache: new QueryCache({
+      onError: (error) => {
+        if (error.response.status === 401) store.dispatch(logout());
+      },
+    }),
+  });
 
   ReactDOM.render(
     <QueryClientProvider client={queryClient}>

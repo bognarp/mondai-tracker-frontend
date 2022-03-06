@@ -20,7 +20,7 @@ import { logout } from '../../../actions/sessionActions';
 import userAPI from '../../../util/userAPI';
 
 const ProjectsMenu = ({ user }) => {
-  const { isLoading, data, isError, error } = useQuery('projects', () => {
+  const { isLoading, data } = useQuery('projects', () => {
     return userAPI.fetchProjectsByUserId(user.id);
   });
 

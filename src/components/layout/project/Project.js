@@ -4,7 +4,7 @@ import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import projectAPI from '../../../util/projectAPI';
 import Sidebar from '../nav/Sidebar';
-import WorkSpace from './Workspace';
+import WorkSpace from './WorkSpace';
 
 function Project() {
   const params = useParams();
