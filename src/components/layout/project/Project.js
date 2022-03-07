@@ -36,7 +36,7 @@ function Project() {
   };
 
   return (
-    <Flex h="100%">
+    <Flex h="94vh">
       <Sidebar
         title={project.title}
         navigation={toggleWorkspace}
@@ -45,8 +45,7 @@ function Project() {
       <Grid
         templateRows="repeat(2, 1fr)"
         templateColumns="repeat(2, 1fr)"
-        gap={1}
-        pl={4}
+        pl={3}
         pr={3}
         py={2}
         bg="gray.800"

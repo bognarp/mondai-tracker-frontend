@@ -1,8 +1,8 @@
-import { Flex, Image } from '@chakra-ui/react';
+import { Flex, Image, Text } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import { selectSessionInfo } from '../../../reducers/selector';
 import NavLinks from './NavLinks';
-import logo from './testlogo.png';
+import logo from './mondai-circle.svg';
 
 function NavBar() {
   const session = useSelector(selectSessionInfo);
@@ -11,16 +11,17 @@ function NavBar() {
     <Flex
       as="header"
       w="100%"
-      px={7}
       h="6vh"
+      px={7}
+      py={1}
       justifyContent="space-between"
       alignItems="center"
       boxShadow="md"
       position="relative"
-      bg="white"
+      bg="blue.600"
       zIndex="1"
     >
-      <Image src={logo} boxSize="40px" mr={4} />
+      <Image src={logo} boxSize="35px" mx={4} />
       <NavLinks session={session} />
     </Flex>
   );

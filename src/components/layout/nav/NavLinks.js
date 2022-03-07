@@ -30,8 +30,17 @@ const ProjectsMenu = ({ user }) => {
         as={Button}
         display="flex"
         variant="unstyled"
+        color="white"
+        fontWeight="500"
+        fontFamily="heading"
+        _hover={{
+          background: 'whiteAlpha.400',
+        }}
+        _active={{
+          background: 'whiteAlpha.400',
+        }}
         rightIcon={<MdArrowDropDown />}
-        p={2}
+        p={3}
       >
         Projects
       </MenuButton>
@@ -76,13 +85,9 @@ function NavLinks({ session }) {
       <Center as="nav" mr={0} justifyContent="space-between" w="100%">
         <ProjectsMenu user={user} />
         <Menu isLazy>
-          <MenuButton
-            boxShadow="md"
-            w={8}
-            h={8}
-            as={Avatar}
-            cursor="pointer"
-          ></MenuButton>
+          <MenuButton>
+            <Avatar name={user.username} size="sm" bg="red.500" />
+          </MenuButton>
           <MenuList>
             <MenuGroup title={`Signed in as ${user.username}`}>
               <MenuDivider />

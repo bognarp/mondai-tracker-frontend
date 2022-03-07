@@ -43,6 +43,7 @@ function Sidebar({ title, navigation, selectedWorkspaces }) {
     <VStack
       px={collapsed ? 2 : 3}
       h="100%"
+      pt={3}
       spacing={collapsed ? 12 : 4}
       bg="white"
       position="relative"

@@ -4,11 +4,8 @@ const theme = extendTheme({
   styles: {
     global: {
       'html, body, #root': {
-        height: '100vh',
-        backgroundColor: 'gray.300'
-      },
-      a: {
-        color: 'blue',
+        height: '100%',
+        backgroundColor: 'gray.200',
       },
     },
   },

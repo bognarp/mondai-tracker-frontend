@@ -53,7 +53,7 @@ function Workspace({ project, category }) {
     <>
       <VStack
         bg="gray.100"
-        spacing={3}
+        spacing={2}
         p={3}
         shadow="xl"
         m={1}
