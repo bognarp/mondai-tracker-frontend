@@ -35,6 +35,8 @@ function Project() {
       : setWorkspace([...workspace, key]);
   };
 
+  // TODO: toggleSettings
+
   return (
     <Flex h="94vh">
       <Sidebar
@@ -45,9 +47,9 @@ function Project() {
       <Grid
         templateRows="repeat(2, 1fr)"
         templateColumns="repeat(2, 1fr)"
-        pl={3}
-        pr={3}
+        px={3}
         py={2}
+        gap={2}
         bg="gray.800"
         w="100%"
       >
@@ -56,6 +58,7 @@ function Project() {
             <WorkSpace project={project} category={w} />
           </GridItem>
         ))}
+        {/* TODO: GridItem colspan 2 rowspan 2 Settings View */}
       </Grid>
     </Flex>
   );

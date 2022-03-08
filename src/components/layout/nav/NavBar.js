@@ -1,4 +1,4 @@
-import { Flex, Image, Text } from '@chakra-ui/react';
+import { Flex, Image } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import { selectSessionInfo } from '../../../reducers/selector';
 import NavLinks from './NavLinks';
@@ -16,12 +16,12 @@ function NavBar() {
       py={1}
       justifyContent="space-between"
       alignItems="center"
-      boxShadow="md"
+      boxShadow={session.isAuthenticated ? 'md' : null}
       position="relative"
-      bg="blue.600"
+      bg={session.isAuthenticated ? 'blue.600' : 'transparent'}
       zIndex="1"
     >
-      <Image src={logo} boxSize="35px" mx={4} />
+      <Image src={logo} boxSize="35px" mx={4} boxSizing="border-box" />
       <NavLinks session={session} />
     </Flex>
   );

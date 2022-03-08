@@ -55,7 +55,7 @@ function LoginForm() {
               />
             </FormControl>
             <Button colorScheme="blue" type="submit">
-              Login
+              Log in
             </Button>
           </VStack>
         </form>

@@ -1,7 +1,6 @@
 import {
   LinkBox,
   Button,
-  Flex,
   Heading,
   HStack,
   Modal,
@@ -10,6 +9,7 @@ import {
   Text,
   useDisclosure,
   ModalCloseButton,
+  Stack,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { difficultyValues } from '../../../util/storyHelpers';
@@ -33,6 +33,9 @@ function StoryPreview({ open, storyContent, category }) {
 
   return (
     <LinkBox
+      as={Stack}
+      direction="column"
+      spacing={1}
       borderWidth="1px"
       w="100%"
       p={3}
@@ -50,19 +53,21 @@ function StoryPreview({ open, storyContent, category }) {
         </Text>
       </HStack>
 
-      <Flex
+      <Stack
         direction={['column', 'row']}
         justifyContent="space-between"
         alignItems="center"
       >
         <Heading fontSize="sm">{title}</Heading>
-        <StoryPreviewButton
-          projectId={project}
-          storyId={storyId}
-          category={category}
-          state={state}
-        />
-      </Flex>
+        <Stack direction={['column', 'row']} spacing={1}>
+          <StoryPreviewButton
+            projectId={project}
+            storyId={storyId}
+            category={category}
+            state={state}
+          />
+        </Stack>
+      </Stack>
     </LinkBox>
   );
 }

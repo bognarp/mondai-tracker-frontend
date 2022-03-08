@@ -30,7 +30,6 @@ function StoryPreviewButton({ projectId, storyId, category, state }) {
   };
 
   const buttonSwitch = () => {
-    // No owner -> set owner
     switch (state) {
       case 'UNSTARTED':
       case 'UNSCHEDULED':
@@ -77,7 +76,6 @@ function StoryPreviewButton({ projectId, storyId, category, state }) {
             </Button>
           </>
         );
-      // set new owner
       case 'REJECTED':
         return (
           <Button

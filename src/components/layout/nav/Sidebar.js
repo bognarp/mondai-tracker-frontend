@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import {
   Button,
   Divider,
+  Heading,
   IconButton,
-  Text,
   useMediaQuery,
   VStack,
 } from '@chakra-ui/react';
 import { workspaceIconMap, workspaceMap } from '../../../util/workspaceHelpers';
 import { FaAngleDoubleLeft, FaAngleDoubleRight } from 'react-icons/fa';
+import { MdOutlineSettings } from 'react-icons/md';
 
 function Sidebar({ title, navigation, selectedWorkspaces }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -44,7 +45,7 @@ function Sidebar({ title, navigation, selectedWorkspaces }) {
       px={collapsed ? 2 : 3}
       h="100%"
       pt={3}
-      spacing={collapsed ? 12 : 4}
+      spacing={collapsed ? 12 : 6}
       bg="white"
       position="relative"
     >
@@ -59,17 +60,29 @@ function Sidebar({ title, navigation, selectedWorkspaces }) {
         right={-2.5}
       />
       {!collapsed && (
-        <>
-          <Text as="h2" fontSize="lg" fontWeight="extrabold">
-            {title}
-          </Text>
-          <Divider />
-        </>
+        <Heading
+          as="h2"
+          fontSize="large"
+          textAlign="center"
+          verticalAlign="center"
+        >
+          {title}
+        </Heading>
       )}
-
+      <Divider />
       <VStack as="nav" align="baseline">
         {createButtons()}
       </VStack>
+      <Divider />
+      <Button
+        iconSpacing={collapsed ? 0 : 3}
+        size="sm"
+        leftIcon={<MdOutlineSettings />}
+        variant="ghost"
+        alignSelf="baseline"
+      >
+        {collapsed ? null : 'Settings'}
+      </Button>
     </VStack>
   );
 }

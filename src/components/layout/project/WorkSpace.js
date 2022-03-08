@@ -51,34 +51,51 @@ function Workspace({ project, category }) {
 
   return (
     <>
-      <VStack
-        bg="gray.100"
-        spacing={2}
-        p={3}
-        shadow="xl"
-        m={1}
-        borderRadius={5}
-      >
-        <HStack>
+      <VStack spacing={0}>
+        <HStack
+          bg="gray.300"
+          w="100%"
+          h="100%"
+          justifyContent="center"
+          py={2}
+          borderTopRadius={5}
+        >
           {workspaceIconMap[workspaceTitle]}
           <Heading as="h3" fontSize="md">
             {workspaceTitle}
           </Heading>
         </HStack>
-
-        {data.map((story) => (
-          <Story
-            key={story._id}
-            storyContent={story}
-            projectUsers={projectUsers}
-            category={category}
-          />
-        ))}
-        {(category === 'current' || category === 'backlog') && (
-          <Button leftIcon={<MdAdd />} size="sm" onClick={onOpen}>
-            Add Story
-          </Button>
-        )}
+        <VStack
+          bg="gray.100"
+          spacing={2}
+          p={3}
+          shadow="xl"
+          w="100%"
+          borderBottomRadius={5}
+        >
+          {data.map((story) => (
+            <Story
+              key={story._id}
+              storyContent={story}
+              projectUsers={projectUsers}
+              category={category}
+            />
+          ))}
+          {(category === 'current' || category === 'backlog') && (
+            <Button
+              leftIcon={<MdAdd />}
+              size="sm"
+              onClick={onOpen}
+              variant="ghost"
+              colorScheme="gray"
+              _hover={{
+                background: 'gray.200',
+              }}
+            >
+              Add Story
+            </Button>
+          )}
+        </VStack>
       </VStack>
 
       <Modal isOpen={isOpen} onClose={onClose} trapFocus={false}>

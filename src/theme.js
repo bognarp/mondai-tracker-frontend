@@ -5,7 +5,11 @@ const theme = extendTheme({
     global: {
       'html, body, #root': {
         height: '100%',
-        backgroundColor: 'gray.200',
+        // bgGradient: 'linear(to-b, #dfe9f3, #ffffff)',
+        bgGradient: 'linear(to-b, #ace0f9, #fff1eb)',
+      },
+      button: {
+        fontFamily: 'heading',
       },
     },
   },
