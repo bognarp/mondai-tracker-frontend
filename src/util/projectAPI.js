@@ -7,6 +7,11 @@ const fetchProject = async (projectId) => {
   return res.data;
 };
 
-const projectAPI = { fetchProject };
+const createProject = async (project) => {
+  const res = await axios.post(baseUrl, project);
+  return res.data;
+};
+
+const projectAPI = { fetchProject, createProject };
 
 export default projectAPI;

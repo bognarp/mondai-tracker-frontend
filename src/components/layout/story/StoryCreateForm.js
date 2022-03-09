@@ -19,7 +19,7 @@ function StoryCreateForm({ projectId, projectUsers, category, onClose }) {
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation(storyAPI.createStory, {
-    onSuccess: (newStory) => {
+    onSuccess: () => {
       queryClient.invalidateQueries(['stories', projectId]);
       onClose();
     },
@@ -44,7 +44,6 @@ function StoryCreateForm({ projectId, projectUsers, category, onClose }) {
       display="flex"
       flexDirection="column"
       mt={6}
-      mb={3}
       as="form"
       onSubmit={createNewStory}
     >
@@ -92,7 +91,7 @@ function StoryCreateForm({ projectId, projectUsers, category, onClose }) {
             ))}
           </Select>
         </FormControl>
-        <Button type="submit">Submit</Button>
+        <Button type="submit">Save</Button>
       </VStack>
     </Box>
   );

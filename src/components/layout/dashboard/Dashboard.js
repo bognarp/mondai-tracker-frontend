@@ -1,4 +1,13 @@
-import { Divider, Flex, Heading, Spinner, Stack, Text } from '@chakra-ui/react';
+import {
+  Button,
+  Divider,
+  Flex,
+  Heading,
+  Spinner,
+  Stack,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react';
 import { useQuery } from 'react-query';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -6,6 +15,8 @@ import { selectSessionInfo } from '../../../reducers/selector';
 import userAPI from '../../../util/userAPI';
 import { BsViewStacked } from 'react-icons/bs';
 import { FiUsers } from 'react-icons/fi';
+import { MdAdd } from 'react-icons/md';
+import ProjectCreateModal from '../project/ProjectCreateModal';
 
 const ProjectCard = ({ project }) => {
   return (
@@ -49,6 +60,7 @@ const ProjectList = ({ projects }) => {
 
 function Dashboard() {
   const sessionInfo = useSelector(selectSessionInfo);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { isLoading, data, isError, error } = useQuery('projects', () => {
     return userAPI.fetchProjectsByUserId(sessionInfo.user.id);
@@ -60,17 +72,29 @@ function Dashboard() {
   return (
     <Flex direction="column" mt={12} alignItems="center">
       <Stack direction="column" spacing={4} w="80%">
-        <Stack direction="row" alignItems="center">
-          <BsViewStacked />
-          <Heading as="h2" size="md">
-            My Projects
-          </Heading>
-          <Divider orientation="vertical" borderColor="black" h="18px" />
-          <Text> {data.length}</Text>
-        </Stack>
+        <Flex direction="row" justifyContent="space-between">
+          <Stack direction="row" alignItems="center">
+            <BsViewStacked />
+            <Heading as="h2" size="md">
+              My Projects
+            </Heading>
+            <Divider orientation="vertical" borderColor="black" h="18px" />
+            <Text>{data.length}</Text>
+          </Stack>
+          <Button
+            leftIcon={<MdAdd />}
+            onClick={onOpen}
+            size="sm"
+            variant="solid"
+            colorScheme="green"
+          >
+            Create project
+          </Button>
+        </Flex>
 
         <ProjectList projects={data} />
       </Stack>
+      <ProjectCreateModal isOpen={isOpen} onClose={onClose} />
     </Flex>
   );
 }

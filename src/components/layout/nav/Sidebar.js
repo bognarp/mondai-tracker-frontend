@@ -44,8 +44,8 @@ function Sidebar({ title, navigation, selectedWorkspaces }) {
     <VStack
       px={collapsed ? 2 : 3}
       h="100%"
-      pt={3}
-      spacing={collapsed ? 12 : 6}
+      pt={2}
+      spacing={collapsed ? 12 : 5}
       bg="white"
       position="relative"
     >
@@ -58,6 +58,7 @@ function Sidebar({ title, navigation, selectedWorkspaces }) {
         position="absolute"
         top={2}
         right={-2.5}
+        boxShadow='md'
       />
       {!collapsed && (
         <Heading

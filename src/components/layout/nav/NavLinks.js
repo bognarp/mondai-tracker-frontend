@@ -9,70 +9,17 @@ import {
   MenuGroup,
   MenuItem,
   MenuList,
-  Spinner,
+  Text,
 } from '@chakra-ui/react';
-import { MdAdd, MdArrowDropDown } from 'react-icons/md';
-import React from 'react';
-import { useQuery } from 'react-query';
+import {
+  MdOutlineSpaceDashboard,
+  MdLogout,
+  MdOutlineAccountCircle,
+} from 'react-icons/md';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../../../actions/sessionActions';
-import userAPI from '../../../util/userAPI';
-
-const ProjectsMenu = ({ user }) => {
-  const { isLoading, data } = useQuery('projects', () => {
-    return userAPI.fetchProjectsByUserId(user.id);
-  });
-
-  return (
-    <Menu>
-      <MenuButton
-        as={Button}
-        display="flex"
-        variant="unstyled"
-        color="white"
-        fontWeight="500"
-        fontFamily="heading"
-        _hover={{
-          background: 'whiteAlpha.400',
-        }}
-        _active={{
-          background: 'whiteAlpha.400',
-        }}
-        rightIcon={<MdArrowDropDown />}
-        p={3}
-      >
-        Projects
-      </MenuButton>
-      <MenuList>
-        <MenuGroup
-          title="Projects"
-          fontWeight="normal"
-          fontSize="xs"
-          textAlign="center"
-          m={0}
-        >
-          <MenuDivider />
-          {isLoading ? (
-            <Spinner />
-          ) : (
-            data.map((project) => (
-              <Link to={`/projects/${project._id}`} key={project._id}>
-                <MenuItem>{project.title}</MenuItem>
-              </Link>
-            ))
-          )}
-        </MenuGroup>
-        <MenuDivider />
-        <Center>
-          <Button leftIcon={<MdAdd />} size="sm" variant="ghost">
-            Create project
-          </Button>
-        </Center>
-      </MenuList>
-    </Menu>
-  );
-};
+import ProjectsMenu from './ProjectsMenu';
 
 function NavLinks({ session }) {
   const dispatch = useDispatch();
@@ -92,14 +39,30 @@ function NavLinks({ session }) {
             <MenuGroup title={`Signed in as ${user.username}`}>
               <MenuDivider />
               <Link to={'/dashboard'}>
-                <MenuItem>Dashboard</MenuItem>
+                <MenuItem>
+                  <HStack>
+                    <MdOutlineSpaceDashboard />
+                    <Text>Dashboard</Text>
+                  </HStack>
+                </MenuItem>
               </Link>
               <Link to={'/profile'}>
-                <MenuItem>Profile</MenuItem>
+                <MenuItem>
+                  <HStack>
+                    <MdOutlineAccountCircle />
+                    <Text>Profile</Text>
+                  </HStack>
+                </MenuItem>
               </Link>
             </MenuGroup>
             <MenuDivider />
-            <MenuItem onClick={() => dispatch(logout())}>Log out</MenuItem>
+
+            <MenuItem onClick={() => dispatch(logout())}>
+              <HStack>
+                <MdLogout />
+                <Text fontWeight="thin">Log out</Text>
+              </HStack>
+            </MenuItem>
           </MenuList>
         </Menu>
       </Center>
