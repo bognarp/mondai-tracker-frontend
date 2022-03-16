@@ -1,5 +1,6 @@
-import React from 'react';
+import { Alert, AlertIcon, Center, List, ListItem } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
+import { isObject } from 'lodash-es';
 
 function Error() {
   const getErrors = useSelector((state) => {
@@ -7,20 +8,27 @@ function Error() {
   });
 
   if (getErrors.length !== 0) {
-    const errorReducer = (state, errors) => {
-      return { ...state, ...errors.message };
-    };
+    let message = getErrors[0].message;
 
-    const errors = getErrors.reduce(errorReducer, {});
+    if (isObject(message)) {
+      message = Object.keys(message).reduce((prev, curr) => {
+        return [...prev, message[curr]];
+      }, []);
+    } else {
+      message = [message];
+    }
 
     return (
-      <ul>
-        {Object.keys(errors).map((errorName, idx) => {
-          return (
-            <li key={`error-${idx}`}>{`${errorName}: ${errors[errorName]}`}</li>
-          );
-        })}
-      </ul>
+      <Center m={4} position="fixed" top={6}>
+        <Alert status="error" borderRadius={8} boxShadow="md">
+          <AlertIcon />
+          <List>
+            {message.map((msg) => (
+              <ListItem key={msg}>{msg}</ListItem>
+            ))}
+          </List>
+        </Alert>
+      </Center>
     );
   }
 
