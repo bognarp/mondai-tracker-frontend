@@ -14,6 +14,7 @@ import { setAuthToken } from './util/sessionAPI';
 import configureAppStore from './store';
 import { logout } from './actions/sessionActions';
 import theme from './theme';
+import { alertUserError, receiveErrors } from './actions/errorActions';
 
 document.addEventListener('DOMContentLoaded', () => {
   let store;
@@ -44,6 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
     queryCache: new QueryCache({
       onError: (error) => {
         if (error.response.status === 401) store.dispatch(logout());
+        store.dispatch(alertUserError(error));
       },
     }),
   });

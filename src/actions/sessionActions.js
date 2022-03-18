@@ -1,17 +1,11 @@
 import { createAction } from '@reduxjs/toolkit';
 import jwtDecode from 'jwt-decode';
-import { normalizeError } from '../util/normalizeError';
 import sessionAPI from '../util/sessionAPI';
+import { alertUserError } from './errorActions';
 
 export const receiveCurrentUser = createAction('session/receiveCurrentUser');
 export const receiveUserSignUp = createAction('session/receiveUserSignUp');
 export const receiveUserLogOut = createAction('session/receiveUserLogOut');
-export const receiveSessionErrors = createAction(
-  'sessionError/receiveSessionErrors'
-);
-export const clearSessionErrors = createAction(
-  'sessionError/clearSessionErrors'
-);
 
 export const login = (user) => async (dispatch) => {
   try {
@@ -23,12 +17,7 @@ export const login = (user) => async (dispatch) => {
 
     dispatch(receiveCurrentUser(decodedUser));
   } catch (error) {
-    const errorResponse = normalizeError(error.response);
-    dispatch(receiveSessionErrors(errorResponse));
-
-    setTimeout(() => {
-      dispatch(clearSessionErrors());
-    }, 4000);
+    alertUserError(error);
   }
 };
 
@@ -38,12 +27,7 @@ export const signup = (user) => async (dispatch) => {
     dispatch(receiveUserSignUp());
     return res;
   } catch (error) {
-    const errorResponse = normalizeError(error.response);
-    dispatch(receiveSessionErrors(errorResponse));
-
-    setTimeout(() => {
-      dispatch(clearSessionErrors());
-    }, 4000);
+    alertUserError(error);
   }
 };
 

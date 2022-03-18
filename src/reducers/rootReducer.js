@@ -1,10 +1,10 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import errorsReducer from './errorsReducer';
+import errorReducer from './errorReducer';
 import sessionReducer from './sessionReducer';
 
 const rootReducer = combineReducers({
   session: sessionReducer,
-  errors: errorsReducer,
+  errors: errorReducer,
 });
 
 export default rootReducer;
