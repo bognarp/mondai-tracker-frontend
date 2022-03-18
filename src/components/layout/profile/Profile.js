@@ -1,29 +1,124 @@
 import userAPI from '../../../util/userAPI';
-import { Spinner } from '@chakra-ui/react';
+import {
+  Spinner,
+  Center,
+  Avatar,
+  Text,
+  Stack,
+  Heading,
+  FormControl,
+  FormLabel,
+  Input,
+  Button,
+  Divider,
+} from '@chakra-ui/react';
 import { useQuery } from 'react-query';
+import { useInputChange } from '../../../hooks/useInputChange';
 
 function Profile() {
-  const { isLoading, data, isError, error } = useQuery('userInfo', () => {
+  const [input, handleInputChange] = useInputChange();
+  const { isLoading, data, isError } = useQuery('userInfo', () => {
     return userAPI.fetchCurrentUser();
   });
 
-  if (isLoading) return <Spinner />;
-  if (isError) return <h3>{error.message}</h3>;
+  if (isError) return null;
 
-  const { username, email, ownProjects, memberProjects } = data;
+  if (isLoading) {
+    return (
+      <Center w="100%" h="100%">
+        <Spinner color="gray.100" size="xl" />
+      </Center>
+    );
+  }
+
+  const { username, name, email } = data;
 
   return (
-    <div>
-      <h2>{username}</h2>
-      <p>email: {email}</p>
-      <p>my projects:</p>
-      <ul>
-        {ownProjects.map((project) => (
-          <li key={project._id}>{project.title}</li>
-        ))}
-      </ul>
-      <p>member projects: {memberProjects}</p>
-    </div>
+    <>
+      <Center bg="whiteAlpha.400" h="160px">
+        <Stack direction="row" alignItems="center" spacing={4}>
+          <Avatar name={username} bg="red.500" />
+          {name}
+          <Text fontSize="sm">{'@' + username}</Text>
+        </Stack>
+      </Center>
+      <Center
+        bg="whiteAlpha.700"
+        h="100%"
+        borderTop="1px"
+        borderColor="gray.300"
+        flexDirection="column"
+      >
+        <Stack direction="column" w="60%" h="80%" spacing={5}>
+          <Heading size="lg" borderBottom="1px" borderColor="gray.200" pb={1}>
+            About
+          </Heading>
+          <FormControl>
+            <FormLabel htmlFor="name">Full name</FormLabel>
+            <Input
+              id="name"
+              defaultValue={name}
+              type="text"
+              maxW={{
+                base: '100%',
+                md: '50%',
+              }}
+              bg="gray.100"
+              border="1px"
+              borderColor="gray.200"
+              _focus={{ bg: 'white' }}
+              onChange={handleInputChange}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel htmlFor="username">Username</FormLabel>
+            <Input
+              id="username"
+              defaultValue={username}
+              type="text"
+              maxW={{
+                base: '100%',
+                md: '50%',
+              }}
+              bg="gray.100"
+              border="1px"
+              borderColor="gray.200"
+              _focus={{ bg: 'white' }}
+              onChange={handleInputChange}
+            />
+          </FormControl>
+          <Heading size="md" borderBottom="1px" borderColor="gray.200" pb={1}>
+            Contact
+          </Heading>
+          <FormControl>
+            <FormLabel htmlFor="email">Email</FormLabel>
+            <Input
+              id="email"
+              defaultValue={email}
+              type="email"
+              maxW={{
+                base: '100%',
+                md: '50%',
+              }}
+              bg="gray.100"
+              border="1px"
+              borderColor="gray.200"
+              _focus={{ bg: 'white' }}
+              onChange={handleInputChange}
+            />
+          </FormControl>
+          <Divider borderColor="transparent" />
+          <Button
+            type="submit"
+            colorScheme="green"
+            w="100px"
+            alignSelf="center"
+          >
+            Save
+          </Button>
+        </Stack>
+      </Center>
+    </>
   );
 }
 
