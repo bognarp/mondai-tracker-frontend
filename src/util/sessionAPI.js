@@ -12,7 +12,7 @@ export const setAuthToken = (token) => {
 
 const signup = async (userData) => {
   const response = await axios.post(`${baseUrl}/signup`, userData);
-  return response;
+  return response.data;
 };
 
 const login = async (credentials) => {

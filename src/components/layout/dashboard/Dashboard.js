@@ -1,5 +1,6 @@
 import {
   Button,
+  Center,
   Divider,
   Flex,
   Heading,
@@ -11,50 +12,55 @@ import {
 import { useQuery } from 'react-query';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { selectSessionInfo } from '../../../reducers/selector';
-import userAPI from '../../../util/userAPI';
 import { BsViewStacked } from 'react-icons/bs';
 import { FiUsers } from 'react-icons/fi';
 import { MdAdd } from 'react-icons/md';
+import { MdOutlineSettings } from 'react-icons/md';
+import { selectSessionInfo } from '../../../reducers/selector';
+import userAPI from '../../../util/userAPI';
 import ProjectCreateModal from '../project/ProjectCreateModal';
 
 const ProjectCard = ({ project }) => {
   return (
     <Flex
-      direction="column"
+      direction={['row', 'row', 'column']}
+      gap={3}
+      justifyContent="space-between"
       bg="white"
       rounded="lg"
       p={4}
       w="100%"
       boxShadow="xl"
     >
-      <Flex
-        direction="row"
-        pb={2}
-        alignItems="center"
-        justifyContent="space-between"
-      >
+      <Stack direction="column" spacing={1}>
         <Heading size="md">{project.title}</Heading>
-        <Stack direction="row" spacing={1} alignItems="center">
+        <Link to={`/projects/${project._id}`} key={project._id}>
+          {project.title}
+        </Link>
+      </Stack>
+      <Stack
+        direction={['column', 'column', 'row']}
+        spacing={3}
+        alignItems="center"
+      >
+        <Stack direction="row" spacing={1}>
           <FiUsers />
           <Text fontSize="sm">{project.members.length}</Text>
         </Stack>
-      </Flex>
 
-      <Link to={`/projects/${project._id}`} key={project._id}>
-        {project.title}
-      </Link>
+        <MdOutlineSettings />
+      </Stack>
     </Flex>
   );
 };
 
 const ProjectList = ({ projects }) => {
   return (
-    <Stack direction={['column', 'row']} spacing={3} w="100%">
+    <>
       {projects.map((project) => (
         <ProjectCard key={project._id} project={project} />
       ))}
-    </Stack>
+    </>
   );
 };
 
@@ -66,13 +72,25 @@ function Dashboard() {
     return userAPI.fetchProjectsByUserId(sessionInfo.user.id);
   });
 
-  if (isLoading) return <Spinner />;
-  if (isError) return <h3>{error.message}</h3>;
+  if (isError) return null;
+
+  if (isLoading) {
+    return (
+      <Center w="100%" h="100%">
+        <Spinner color="gray.100" size="xl" />
+      </Center>
+    );
+  }
 
   return (
     <Flex direction="column" mt={12} alignItems="center">
       <Stack direction="column" spacing={4} w="80%">
-        <Flex direction="row" justifyContent="space-between">
+        <Flex
+          direction="row"
+          wrap="wrap"
+          gap={3}
+          justifyContent="space-between"
+        >
           <Stack direction="row" alignItems="center">
             <BsViewStacked />
             <Heading as="h2" size="md">
@@ -81,6 +99,7 @@ function Dashboard() {
             <Divider orientation="vertical" borderColor="black" h="18px" />
             <Text>{data.length}</Text>
           </Stack>
+
           <Button
             leftIcon={<MdAdd />}
             onClick={onOpen}
@@ -91,8 +110,9 @@ function Dashboard() {
             Create project
           </Button>
         </Flex>
-
-        <ProjectList projects={data} />
+        <Flex direction={['column', 'column', 'row']} gap={2}>
+          <ProjectList projects={data} />
+        </Flex>
       </Stack>
       <ProjectCreateModal isOpen={isOpen} onClose={onClose} />
     </Flex>

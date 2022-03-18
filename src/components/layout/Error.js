@@ -4,7 +4,7 @@ import { isObject } from 'lodash-es';
 
 function Error() {
   const getErrors = useSelector((state) => {
-    return state.errors.session;
+    return state.errors;
   });
 
   if (getErrors.length !== 0) {
@@ -19,7 +19,7 @@ function Error() {
     }
 
     return (
-      <Center m={4} position="fixed" top={6}>
+      <Center m={4} position="fixed" top={6} zIndex='1'>
         <Alert status="error" borderRadius={8} boxShadow="md">
           <AlertIcon />
           <List>

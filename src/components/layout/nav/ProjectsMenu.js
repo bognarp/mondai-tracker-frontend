@@ -16,6 +16,31 @@ import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import ProjectCreateModal from '../project/ProjectCreateModal';
 
+const ProjectsMenuList = ({ isLoading, data }) => {
+  return (
+    <MenuGroup
+      title="Projects"
+      fontWeight="normal"
+      fontSize="xs"
+      textAlign="center"
+      m={0}
+    >
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <>
+          {data && data.length > 0 && <MenuDivider />}
+          {data && data.map((project) => (
+            <Link to={`/projects/${project._id}`} key={project._id}>
+              <MenuItem>{project.title}</MenuItem>
+            </Link>
+          ))}
+        </>
+      )}
+    </MenuGroup>
+  );
+};
+
 function ProjectsMenu({ user }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -45,24 +70,7 @@ function ProjectsMenu({ user }) {
           Projects
         </MenuButton>
         <MenuList>
-          <MenuGroup
-            title="Projects"
-            fontWeight="normal"
-            fontSize="xs"
-            textAlign="center"
-            m={0}
-          >
-            <MenuDivider />
-            {isLoading ? (
-              <Spinner />
-            ) : (
-              data.map((project) => (
-                <Link to={`/projects/${project._id}`} key={project._id}>
-                  <MenuItem>{project.title}</MenuItem>
-                </Link>
-              ))
-            )}
-          </MenuGroup>
+          <ProjectsMenuList isLoading={isLoading} data={data} />
           <MenuDivider />
           <Center>
             <Button leftIcon={<MdAdd />} size="sm" onClick={onOpen}>

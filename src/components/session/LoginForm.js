@@ -17,9 +17,11 @@ import { login } from '../../actions/sessionActions';
 import { useInputChange } from '../../hooks/useInputChange';
 import Error from '../layout/Error';
 import logo from '../layout/nav/logowname.png';
+import { useNavigate } from 'react-router-dom';
 
 function LoginForm() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [input, handleInputChange] = useInputChange();
 
   const handleSubmit = (e) => {
@@ -41,7 +43,7 @@ function LoginForm() {
           <Heading size="md">Log in to your account</Heading>
         </Stack>
       </Stack>
-      <VStack bg="gray.200" padding={8} borderRadius={8} boxShadow="lg">
+      <VStack bg="gray.100" padding={8} borderRadius={8} boxShadow="lg">
         <form onSubmit={handleSubmit}>
           <VStack spacing={4}>
             <FormControl>
@@ -68,11 +70,18 @@ function LoginForm() {
           </VStack>
         </form>
       </VStack>
+
       <Flex gap={2} wrap="wrap" justify="center">
         <Text color="muted" textAlign="center">
           Don't have an account?
         </Text>
-        <Button variant="link" colorScheme="blue">
+        <Button
+          variant="link"
+          colorScheme="blue"
+          onClick={() => {
+            navigate('/signup');
+          }}
+        >
           Sign up
         </Button>
       </Flex>
