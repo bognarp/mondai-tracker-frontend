@@ -12,14 +12,42 @@ import {
   Button,
   Divider,
 } from '@chakra-ui/react';
-import { useQuery } from 'react-query';
+import { useDispatch } from 'react-redux';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useInputChange } from '../../../hooks/useInputChange';
+import usePropertyUpdate from '../../../hooks/usePropertyChange';
+import { alertUserError } from '../../../actions/errorActions';
 
 function Profile() {
+  const queryClient = useQueryClient();
+  const dispatch = useDispatch();
   const [input, handleInputChange] = useInputChange();
-  const { isLoading, data, isError } = useQuery('userInfo', () => {
-    return userAPI.fetchCurrentUser();
-  });
+  const [isChanged, changedProps, initialValues, setInitialValues] =
+    usePropertyUpdate(input);
+
+  const { data, isLoading, isError } = useQuery(
+    'userInfo',
+    () => {
+      return userAPI.fetchCurrentUser();
+    },
+    {
+      onSuccess: (data) => {
+        setInitialValues(data);
+      },
+    }
+  );
+
+  const { mutate, isLoading: mutationIsLoading } = useMutation(
+    userAPI.updateUser,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['userInfo']);
+      },
+      onError: (error) => {
+        dispatch(alertUserError(error));
+      },
+    }
+  );
 
   if (isError) return null;
 
@@ -31,15 +59,28 @@ function Profile() {
     );
   }
 
-  const { username, name, email } = data;
+  const { _id: userId, username, name } = data;
+
+  const updateProfile = (e) => {
+    const patchObj = {};
+
+    changedProps.forEach((key) => {
+      patchObj[key] = input[key];
+    });
+
+    mutate({
+      userId,
+      patchObj,
+    });
+  };
 
   return (
     <>
       <Center bg="whiteAlpha.400" h="160px">
         <Stack direction="row" alignItems="center" spacing={4}>
-          <Avatar name={username} bg="red.500" />
-          {name}
-          <Text fontSize="sm">{'@' + username}</Text>
+          <Avatar name={name || username} bg="red.500" textColor="white" />
+          {name && <Text fontSize="lg">{`${name}`}</Text>}
+          <Text fontSize="sm">{`@${username}`}</Text>
         </Stack>
       </Center>
       <Center
@@ -57,7 +98,7 @@ function Profile() {
             <FormLabel htmlFor="name">Full name</FormLabel>
             <Input
               id="name"
-              defaultValue={name}
+              defaultValue={initialValues.name}
               type="text"
               maxW={{
                 base: '100%',
@@ -74,7 +115,7 @@ function Profile() {
             <FormLabel htmlFor="username">Username</FormLabel>
             <Input
               id="username"
-              defaultValue={username}
+              defaultValue={initialValues.username}
               type="text"
               maxW={{
                 base: '100%',
@@ -94,7 +135,7 @@ function Profile() {
             <FormLabel htmlFor="email">Email</FormLabel>
             <Input
               id="email"
-              defaultValue={email}
+              defaultValue={initialValues.email}
               type="email"
               maxW={{
                 base: '100%',
@@ -108,14 +149,19 @@ function Profile() {
             />
           </FormControl>
           <Divider borderColor="transparent" />
-          <Button
-            type="submit"
-            colorScheme="green"
-            w="100px"
-            alignSelf="center"
-          >
-            Save
-          </Button>
+          {isChanged && (
+            <Button
+              isLoading={mutationIsLoading}
+              loadingText="Saving"
+              type="submit"
+              colorScheme="green"
+              w="100px"
+              alignSelf="center"
+              onClick={updateProfile}
+            >
+              Save
+            </Button>
+          )}
         </Stack>
       </Center>
     </>
