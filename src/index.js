@@ -14,7 +14,7 @@ import { setAuthToken } from './util/sessionAPI';
 import configureAppStore from './store';
 import { logout } from './actions/sessionActions';
 import theme from './theme';
-import { alertUserError, receiveErrors } from './actions/errorActions';
+import { alertUserError } from './actions/errorActions';
 
 document.addEventListener('DOMContentLoaded', () => {
   let store;

@@ -19,8 +19,8 @@ function Error() {
     }
 
     return (
-      <Center m={4} position="fixed" top={6} zIndex='1'>
-        <Alert status="error" borderRadius={8} boxShadow="md">
+      <Center position="fixed" top={50} zIndex="1" w="100%">
+        <Alert status="error" borderRadius={8} boxShadow="md" w="45%">
           <AlertIcon />
           <List>
             {message.map((msg) => (

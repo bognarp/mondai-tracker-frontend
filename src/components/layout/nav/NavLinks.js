@@ -16,6 +16,7 @@ import {
   MdLogout,
   MdOutlineAccountCircle,
 } from 'react-icons/md';
+import { useQueryClient } from 'react-query';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../../../actions/sessionActions';
@@ -24,8 +25,14 @@ import ProjectsMenu from './ProjectsMenu';
 function NavLinks({ session }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const { isAuthenticated, user } = session;
+
+  const handleLogout = (e) => {
+    queryClient.invalidateQueries();
+    dispatch(logout());
+  };
 
   if (isAuthenticated) {
     return (
@@ -33,7 +40,12 @@ function NavLinks({ session }) {
         <ProjectsMenu user={user} />
         <Menu isLazy>
           <MenuButton>
-            <Avatar name={user.username} size="sm" bg="red.500" />
+            <Avatar
+              name={user.name || user.username}
+              size="sm"
+              bg="red.500"
+              textColor="white"
+            />
           </MenuButton>
           <MenuList>
             <MenuGroup title={`Signed in as ${user.username}`}>
@@ -57,7 +69,7 @@ function NavLinks({ session }) {
             </MenuGroup>
             <MenuDivider />
 
-            <MenuItem onClick={() => dispatch(logout())}>
+            <MenuItem onClick={handleLogout}>
               <HStack>
                 <MdLogout />
                 <Text fontWeight="thin">Log out</Text>

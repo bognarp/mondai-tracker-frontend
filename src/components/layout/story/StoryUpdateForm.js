@@ -190,14 +190,14 @@ function StoryUpdateForm({
   const [changedKeys, setChangedKeys] = useState([]);
   const [isEdited, setEdited] = useState(false);
   const queryClient = useQueryClient();
-
+  // TODO: refactor with custom hook
   useEffect(() => {
     if (!isEmpty(editedProps)) {
       const keys = Object.keys(editedProps).filter((key) => {
         return !isEqual(storyContent[key], editedProps[key]);
       });
 
-      !isEmpty(keys) ? setEdited(true) : setEdited(false);
+      isEmpty(keys) ? setEdited(false) : setEdited(true);
 
       setChangedKeys(keys);
     }

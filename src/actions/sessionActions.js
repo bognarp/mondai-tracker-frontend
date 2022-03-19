@@ -17,7 +17,7 @@ export const login = (user) => async (dispatch) => {
 
     dispatch(receiveCurrentUser(decodedUser));
   } catch (error) {
-    alertUserError(error);
+    dispatch(alertUserError(error));
   }
 };
 
@@ -27,7 +27,7 @@ export const signup = (user) => async (dispatch) => {
     dispatch(receiveUserSignUp());
     return res;
   } catch (error) {
-    alertUserError(error);
+    dispatch(alertUserError(error));
   }
 };
 
