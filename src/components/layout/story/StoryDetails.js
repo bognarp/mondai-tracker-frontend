@@ -1,7 +1,6 @@
-import { Box, Button, Divider, Heading, HStack, Text } from '@chakra-ui/react';
+import { Box, Heading, HStack, Text } from '@chakra-ui/react';
 import React from 'react';
 import { difficultyValues, priorityValues } from '../../../util/storyHelpers';
-import { MdEdit } from 'react-icons/md';
 
 function StoryDetails({ storyContent, toggleEditing }) {
   const {
@@ -16,7 +15,7 @@ function StoryDetails({ storyContent, toggleEditing }) {
   } = storyContent;
 
   return (
-    <Box display="flex" flexDirection="column" mx={5} mt={6} mb={3}>
+    <Box display="flex" flexDirection="column" px={5} pt={6} pb={3} w="100%">
       <Heading as="h1" size="lg" fontSize="24px" maxWidth="100%">
         {title}
       </Heading>
@@ -56,19 +55,6 @@ function StoryDetails({ storyContent, toggleEditing }) {
         <Text fontWeight="normal" fontSize="sm">
           {owner ? owner.username : 'None'}
         </Text>
-      </HStack>
-      <Divider my={4} />
-      <HStack spacing={5}>
-        <Button
-          size="sm"
-          leftIcon={<MdEdit />}
-          variant="outline"
-          onClick={() => {
-            toggleEditing(true);
-          }}
-        >
-          Edit
-        </Button>
       </HStack>
     </Box>
   );
