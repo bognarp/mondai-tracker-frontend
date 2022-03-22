@@ -10,13 +10,23 @@ import {
   useDisclosure,
   ModalCloseButton,
   Stack,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverFooter,
+  ButtonGroup,
+  PopoverCloseButton,
+  PopoverArrow,
+  Flex,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { difficultyValues } from '../../../util/storyHelpers';
 import PriorityBadge from './PriorityBadge';
 import StoryUpdateForm from './StoryUpdateForm';
 import StoryDetails from './StoryDetails';
-import { MdDelete } from 'react-icons/md';
+import { MdDelete, MdEdit, MdEditOff } from 'react-icons/md';
 import StoryPreviewButton from './StoryPreviewButton';
 import { useMutation, useQueryClient } from 'react-query';
 import storyAPI from '../../../util/storyAPI';
@@ -41,7 +51,7 @@ function StoryPreview({ open, storyContent, category }) {
       p={3}
       borderRadius="lg"
       boxShadow="md"
-      backgroundColor="white"
+      bg="white"
       onClick={open}
       cursor="pointer"
     >
@@ -72,6 +82,58 @@ function StoryPreview({ open, storyContent, category }) {
   );
 }
 
+const DeleteButton = ({ deleteStory }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <Popover
+      isLazy
+      returnFocusOnClose={false}
+      isOpen={isOpen}
+      onClose={() => setIsOpen(false)}
+      placement="top"
+      closeOnBlur={true}
+    >
+      <PopoverTrigger>
+        <Button
+          mr={5}
+          onClick={() => setIsOpen(!isOpen)}
+          size="xs"
+          w="100%"
+          leftIcon={<MdDelete />}
+        >
+          Delete
+        </Button>
+      </PopoverTrigger>
+
+      <PopoverContent bg="gray.200" borderColor="gray.200" boxShadow="dark-lg">
+        <PopoverHeader fontWeight="semibold" border="0">
+          Delete story?
+        </PopoverHeader>
+        <PopoverArrow bg="gray.200" />
+        <PopoverCloseButton />
+        <PopoverBody>
+          Story will be removed from the project and you won't be able to access
+          it again.
+        </PopoverBody>
+        <PopoverFooter
+          border="0"
+          d="flex"
+          alignItems="center"
+          justifyContent="center"
+          pb={4}
+        >
+          <ButtonGroup size="sm">
+            <Button colorScheme="red" onClick={deleteStory}>
+              Delete
+            </Button>
+          </ButtonGroup>
+        </PopoverFooter>
+      </PopoverContent>
+    </Popover>
+  );
+};
+
 function Story({ storyContent, projectUsers, category }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isEditing, setEditing] = useState(false);
@@ -84,7 +146,7 @@ function Story({ storyContent, projectUsers, category }) {
     },
   });
 
-  const deleteStory = () => {
+  const handleDelete = () => {
     mutate({ projectId: storyContent.project, storyId: storyContent._id });
   };
 
@@ -96,31 +158,51 @@ function Story({ storyContent, projectUsers, category }) {
         category={category}
       />
 
-      <Modal isOpen={isOpen} onClose={onClose} size="xl" trapFocus={false}>
+      <Modal isOpen={isOpen} onClose={onClose} size="3xl">
         <ModalOverlay />
         <ModalContent>
           <ModalCloseButton />
-          {isEditing ? (
-            <StoryUpdateForm
-              storyContent={storyContent}
-              projectUsers={projectUsers}
-              category={category}
-              toggleEditing={setEditing}
-            />
-          ) : (
-            <StoryDetails
-              storyContent={storyContent}
-              toggleEditing={setEditing}
-            />
-          )}
-          <Button
-            size="sm"
-            leftIcon={<MdDelete />}
-            variant="outline"
-            onClick={deleteStory}
-          >
-            Delete
-          </Button>
+          <Flex direction={['column', 'row']} justifyContent="space-between">
+            {isEditing ? (
+              <StoryUpdateForm
+                storyContent={storyContent}
+                projectUsers={projectUsers}
+                category={category}
+                toggleEditing={setEditing}
+              />
+            ) : (
+              <StoryDetails
+                storyContent={storyContent}
+                toggleEditing={setEditing}
+              />
+            )}
+
+            <Flex
+              direction="column"
+              justifyContent="flex-end"
+              alignItems="baseline"
+              gap={1}
+              p={3}
+            >
+              <Text fontSize="xs" fontWeight="semibold">
+                Actions
+              </Text>
+              <Button
+                w="100%"
+                size="xs"
+                leftIcon={<MdEdit />}
+                isLoading={isEditing}
+                loadingText="Editing"
+                onClick={() => {
+                  setEditing(true);
+                }}
+              >
+                Edit
+              </Button>
+              <DeleteButton deleteStory={handleDelete} />
+            </Flex>
+
+          </Flex>
         </ModalContent>
       </Modal>
     </>
