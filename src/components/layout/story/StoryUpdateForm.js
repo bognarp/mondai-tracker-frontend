@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Divider,
   Heading,
   HStack,
   Input,
@@ -9,12 +8,12 @@ import {
   Text,
   Textarea,
 } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
-import { isEqual, isEmpty } from 'lodash-es';
+import React, { useState } from 'react';
 import { difficultyValues, priorityValues } from '../../../util/storyHelpers';
 import { MdEditOff, MdSave } from 'react-icons/md';
 import { useMutation, useQueryClient } from 'react-query';
 import storyAPI from '../../../util/storyAPI';
+import usePropertyUpdate from '../../../hooks/usePropertyChange';
 
 const StoryFormHeader = ({ value, category, patch }) => {
   const [newTitle, setNewTitle] = useState(value);
@@ -186,22 +185,12 @@ function StoryUpdateForm({
   toggleEditing,
   category,
 }) {
-  const [editedProps, setEditedProps] = useState({});
-  const [changedKeys, setChangedKeys] = useState([]);
-  const [isEdited, setEdited] = useState(false);
+  const [changedInput, setChangedInput] = useState({});
+  const [isChanged, changedProps] = usePropertyUpdate(
+    changedInput,
+    storyContent
+  );
   const queryClient = useQueryClient();
-  // TODO: refactor with custom hook
-  useEffect(() => {
-    if (!isEmpty(editedProps)) {
-      const keys = Object.keys(editedProps).filter((key) => {
-        return !isEqual(storyContent[key], editedProps[key]);
-      });
-
-      isEmpty(keys) ? setEdited(false) : setEdited(true);
-
-      setChangedKeys(keys);
-    }
-  }, [editedProps, storyContent]);
 
   const { mutate } = useMutation(storyAPI.updateStory, {
     onSuccess: () => {
@@ -210,21 +199,21 @@ function StoryUpdateForm({
     },
   });
 
-  const storyPatcher = (patch) => {
+  const handleInputChange = (patch) => {
     if (patch['owner'] || patch['requester']) {
       const userKey = Object.keys(patch)[0];
       const user = projectUsers.find((user) => user._id === patch[userKey]);
-      setEditedProps({ ...editedProps, ...{ [userKey]: user } });
+      setChangedInput({ ...changedInput, ...{ [userKey]: user } });
     } else {
-      setEditedProps({ ...editedProps, ...patch });
+      setChangedInput({ ...changedInput, ...patch });
     }
   };
 
-  const updateStory = (e) => {
+  const updateStory = () => {
     const patchObj = {};
 
-    changedKeys.forEach((key) => {
-      patchObj[key] = editedProps[key];
+    changedProps.forEach((key) => {
+      patchObj[key] = changedInput[key];
     });
 
     mutate({
@@ -246,25 +235,23 @@ function StoryUpdateForm({
   } = storyContent;
 
   return (
-    <Box display="flex" flexDirection="column" mx={5} mt={6} mb={3}>
+    <Box display="flex" flexDirection="column" mx={5} mt={6} mb={3} w="100%">
       <StoryFormHeader
         value={title}
         category={stateCategory}
-        patch={storyPatcher}
+        patch={handleInputChange}
       />
-
-      <StoryFormDescription value={description} patch={storyPatcher} />
-      <StoryFormPriority value={priority} patch={storyPatcher} />
-      <StoryFormDifficulty value={difficulty} patch={storyPatcher} />
+      <StoryFormDescription value={description} patch={handleInputChange} />
+      <StoryFormPriority value={priority} patch={handleInputChange} />
+      <StoryFormDifficulty value={difficulty} patch={handleInputChange} />
       <StoryFormState value={state} />
       <StoryFormUsers
         requester={requester}
         owner={owner}
         projectUsers={projectUsers}
-        patch={storyPatcher}
+        patch={handleInputChange}
       />
-      <Divider my={4} />
-      <HStack spacing={4}>
+      <HStack spacing={4} mt={4}>
         <Button
           colorScheme="red"
           leftIcon={<MdEditOff />}
@@ -276,7 +263,7 @@ function StoryUpdateForm({
         >
           Cancel
         </Button>
-        {isEdited && (
+        {isChanged && (
           <Button
             colorScheme="green"
             leftIcon={<MdSave />}

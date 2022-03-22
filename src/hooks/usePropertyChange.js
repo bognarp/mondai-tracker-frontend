@@ -1,8 +1,8 @@
 import { isEqual, isEmpty } from 'lodash-es';
 import { useEffect, useState } from 'react';
 
-function usePropertyUpdate(changedInput) {
-  const [initialValues, setInitialValues] = useState({});
+function usePropertyUpdate(changedInput, defaultValues = {}) {
+  const [initialValues, setInitialValues] = useState(defaultValues);
   const [changedProps, setChangedProps] = useState([]);
   const [isChanged, setChanged] = useState(false);
 
