@@ -9,9 +9,9 @@ import {
 } from '@chakra-ui/react';
 import { workspaceIconMap, workspaceMap } from '../../../util/workspaceHelpers';
 import { FaAngleDoubleLeft, FaAngleDoubleRight } from 'react-icons/fa';
-import { MdOutlineSettings } from 'react-icons/md';
+import ProjectSettingsDrawer from '../project/ProjectSettingsDrawer';
 
-function Sidebar({ title, navigation, selectedWorkspaces }) {
+function Sidebar({ project, navigation, selectedWorkspaces }) {
   const [collapsed, setCollapsed] = useState(false);
   const [isLargerThanMd] = useMediaQuery('(min-width: 768px)');
 
@@ -58,7 +58,7 @@ function Sidebar({ title, navigation, selectedWorkspaces }) {
         position="absolute"
         top={2}
         right={-2.5}
-        boxShadow='md'
+        boxShadow="md"
       />
       {!collapsed && (
         <Heading
@@ -67,7 +67,7 @@ function Sidebar({ title, navigation, selectedWorkspaces }) {
           textAlign="center"
           verticalAlign="center"
         >
-          {title}
+          {project.title}
         </Heading>
       )}
       <Divider />
@@ -75,15 +75,7 @@ function Sidebar({ title, navigation, selectedWorkspaces }) {
         {createButtons()}
       </VStack>
       <Divider />
-      <Button
-        iconSpacing={collapsed ? 0 : 3}
-        size="sm"
-        leftIcon={<MdOutlineSettings />}
-        variant="ghost"
-        alignSelf="baseline"
-      >
-        {collapsed ? null : 'Settings'}
-      </Button>
+      <ProjectSettingsDrawer collapsed={collapsed} project={project} />
     </VStack>
   );
 }

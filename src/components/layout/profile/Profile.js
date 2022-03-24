@@ -21,9 +21,9 @@ import { alertUserError } from '../../../actions/errorActions';
 function Profile() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  const [input, handleInputChange] = useInputChange();
+  const [inputChange, handleInputChange] = useInputChange();
   const [isChanged, changedProps, initialValues, setInitialValues] =
-    usePropertyUpdate(input);
+    usePropertyUpdate(inputChange);
 
   const { data, isLoading, isError } = useQuery(
     'userInfo',
@@ -65,7 +65,7 @@ function Profile() {
     const patchObj = {};
 
     changedProps.forEach((key) => {
-      patchObj[key] = input[key];
+      patchObj[key] = inputChange[key];
     });
 
     mutate({

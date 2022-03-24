@@ -35,12 +35,10 @@ function Project() {
       : setWorkspace([...workspace, key]);
   };
 
-  // TODO: toggleSettings
-
   return (
     <Flex h="94vh">
       <Sidebar
-        title={project.title}
+        project={project}
         navigation={toggleWorkspace}
         selectedWorkspaces={workspace}
       />
@@ -58,7 +56,6 @@ function Project() {
             <WorkSpace project={project} category={w} />
           </GridItem>
         ))}
-        {/* TODO: GridItem colspan 2 rowspan 2 Settings View */}
       </Grid>
     </Flex>
   );
