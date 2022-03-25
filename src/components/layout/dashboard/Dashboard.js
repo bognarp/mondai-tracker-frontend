@@ -4,6 +4,7 @@ import {
   Divider,
   Flex,
   Heading,
+  Image,
   Spinner,
   Stack,
   Text,
@@ -13,44 +14,31 @@ import { useQuery } from 'react-query';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { BsViewStacked } from 'react-icons/bs';
-import { FiUsers } from 'react-icons/fi';
 import { MdAdd } from 'react-icons/md';
-import { MdOutlineSettings } from 'react-icons/md';
 import { selectSessionInfo } from '../../../reducers/selector';
 import userAPI from '../../../util/userAPI';
 import ProjectCreateModal from '../project/ProjectCreateModal';
 
 const ProjectCard = ({ project }) => {
   return (
-    <Flex
-      direction={['row', 'row', 'column']}
-      gap={3}
-      justifyContent="space-between"
-      bg="white"
-      rounded="lg"
-      p={4}
-      w="100%"
-      boxShadow="xl"
-    >
-      <Stack direction="column" spacing={1}>
-        <Heading size="md">{project.title}</Heading>
-        <Link to={`/projects/${project._id}`} key={project._id}>
-          {project.title}
-        </Link>
-      </Stack>
-      <Stack
-        direction={['column', 'column', 'row']}
-        spacing={3}
-        alignItems="center"
+    <Link to={`/projects/${project._id}`} key={project._id}>
+      <Flex
+        direction={['row', 'row', 'column']}
+        gap={3}
+        bgGradient="linear(to-t, white 65%, gray.100 65%)"
+        rounded="lg"
+        p={4}
+        w="100%"
+        boxShadow="xl"
       >
-        <Stack direction="row" spacing={1}>
-          <FiUsers />
-          <Text fontSize="sm">{project.members.length}</Text>
-        </Stack>
-
-        <MdOutlineSettings />
-      </Stack>
-    </Flex>
+        <Flex direction="column" gap={2}>
+          <Image src={`/img/avatar/${project.avatar}`} boxSize="32px" />
+          <Heading size="sm" textAlign="center">
+            {project.title}
+          </Heading>
+        </Flex>
+      </Flex>
+    </Link>
   );
 };
 
@@ -68,7 +56,7 @@ function Dashboard() {
   const sessionInfo = useSelector(selectSessionInfo);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { isLoading, data, isError, error } = useQuery('projects', () => {
+  const { isLoading, data, isError } = useQuery('projects', () => {
     return userAPI.fetchProjectsByUserId(sessionInfo.user.id);
   });
 
