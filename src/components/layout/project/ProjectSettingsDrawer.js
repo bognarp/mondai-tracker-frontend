@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import {
   Button,
+  Center,
   Divider,
   Drawer,
   DrawerBody,
@@ -9,9 +10,11 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
+  Flex,
   FormControl,
   FormLabel,
   Heading,
+  Image,
   Input,
   Stack,
   Textarea,
@@ -20,6 +23,7 @@ import {
 import { MdOutlineSettings } from 'react-icons/md';
 import usePropertyUpdate from '../../../hooks/usePropertyChange';
 import { useInputChange } from '../../../hooks/useInputChange';
+import ProjectUsers from './ProjectUsers';
 
 function ProjectSettingsDrawer({ collapsed, project }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -53,7 +57,19 @@ function ProjectSettingsDrawer({ collapsed, project }) {
           <DrawerHeader>Project Settings</DrawerHeader>
 
           <DrawerBody>
-            <Stack direction="column" w="60%" h="80%" spacing={5}>
+            <Stack direction="column" w="100%" h="80%" spacing={5}>
+              <Center>
+                <Flex direction="column" gap={3} alignItems="center">
+                  <Image
+                    src={`/img/avatar/${project.avatar}`}
+                    boxSize="64px"
+                    fit="contain"
+                  ></Image>
+                  <Button size="xs" variant="outline">
+                    Change icon
+                  </Button>
+                </Flex>
+              </Center>
               <Heading
                 size="sm"
                 borderBottom="1px"
@@ -62,6 +78,7 @@ function ProjectSettingsDrawer({ collapsed, project }) {
               >
                 Details
               </Heading>
+
               <FormControl>
                 <FormLabel htmlFor="name">Title</FormLabel>
                 <Input
@@ -70,7 +87,7 @@ function ProjectSettingsDrawer({ collapsed, project }) {
                   type="text"
                   maxW={{
                     base: '100%',
-                    md: '50%',
+                    md: '60%',
                   }}
                   bg="gray.100"
                   border="1px"
@@ -86,7 +103,7 @@ function ProjectSettingsDrawer({ collapsed, project }) {
                   defaultValue={project.description}
                   maxW={{
                     base: '100%',
-                    md: '50%',
+                    md: '60%',
                   }}
                   bg="gray.100"
                   border="1px"
@@ -103,16 +120,16 @@ function ProjectSettingsDrawer({ collapsed, project }) {
               >
                 Access
               </Heading>
-              <Divider borderColor="transparent" />
-
+              <ProjectUsers members={project.members} owners={project.owners} />
+              {/* <Divider borderColor="transparent" /> */}
             </Stack>
           </DrawerBody>
 
           <DrawerFooter>
-            <Button variant="outline" mr={3} onClick={onClose}>
+            {/* <Button variant="outline" mr={3} onClick={onClose}>
               Cancel
             </Button>
-            <Button colorScheme="blue">Save</Button>
+            <Button colorScheme="blue">Save</Button> */}
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
