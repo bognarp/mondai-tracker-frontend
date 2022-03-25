@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import {
   Button,
   Divider,
+  Flex,
   Heading,
   IconButton,
+  Image,
   useMediaQuery,
   VStack,
 } from '@chakra-ui/react';
@@ -42,10 +44,9 @@ function Sidebar({ project, navigation, selectedWorkspaces }) {
 
   return (
     <VStack
-      px={collapsed ? 2 : 3}
+      px={2}
       h="100%"
-      pt={2}
-      spacing={collapsed ? 12 : 5}
+      spacing={collapsed ? 14 : 5}
       bg="white"
       position="relative"
     >
@@ -61,16 +62,15 @@ function Sidebar({ project, navigation, selectedWorkspaces }) {
         boxShadow="md"
       />
       {!collapsed && (
-        <Heading
-          as="h2"
-          fontSize="large"
-          textAlign="center"
-          verticalAlign="center"
-        >
-          {project.title}
-        </Heading>
+        <Flex direction="column" alignItems="center" gap={3}>
+          <Image src={`/img/avatar/${project.avatar}`} boxSize="28px" />
+          <Heading as="h2" fontSize="lg">
+            {project.title}
+          </Heading>
+          <Divider />
+        </Flex>
       )}
-      <Divider />
+
       <VStack as="nav" align="baseline">
         {createButtons()}
       </VStack>
