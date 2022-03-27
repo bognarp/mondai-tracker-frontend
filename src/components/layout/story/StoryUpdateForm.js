@@ -25,7 +25,6 @@ const StoryFormHeader = ({ value, category, patch }) => {
         px={1}
         fontSize="24"
         fontWeight="bold"
-        maxW="65%"
         onChange={(e) => {
           setNewTitle(e.target.value);
           patch({ title: e.target.value });
@@ -57,7 +56,7 @@ const StoryFormDescription = ({ value, patch }) => {
         value={newDescription}
         placeholder="Add some description..."
         size="sm"
-        maxW="65%"
+        // maxW="80%"
         onChange={(e) => {
           setNewDescription(e.target.value);
           patch({ description: checkValue(e.target.value) });

@@ -62,8 +62,8 @@ function Sidebar({ project, navigation, selectedWorkspaces }) {
         boxShadow="md"
       />
       {!collapsed && (
-        <Flex direction="column" alignItems="center" gap={3}>
-          <Image src={`/img/avatar/${project.avatar}`} boxSize="28px" />
+        <Flex direction="column" alignItems="center" gap={2}>
+          <Image src={`/img/icon/${project.avatar}.svg`} boxSize="32px" />
           <Heading as="h2" fontSize="lg">
             {project.title}
           </Heading>

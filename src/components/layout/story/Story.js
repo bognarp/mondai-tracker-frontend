@@ -26,7 +26,7 @@ import { difficultyValues } from '../../../util/storyHelpers';
 import PriorityBadge from './PriorityBadge';
 import StoryUpdateForm from './StoryUpdateForm';
 import StoryDetails from './StoryDetails';
-import { MdDelete, MdEdit, MdEditOff } from 'react-icons/md';
+import { MdDelete, MdEdit } from 'react-icons/md';
 import StoryPreviewButton from './StoryPreviewButton';
 import { useMutation, useQueryClient } from 'react-query';
 import storyAPI from '../../../util/storyAPI';
@@ -99,6 +99,7 @@ const DeleteButton = ({ deleteStory }) => {
           mr={5}
           onClick={() => setIsOpen(!isOpen)}
           size="xs"
+          borderRadius="sm"
           w="100%"
           leftIcon={<MdDelete />}
         >
@@ -158,9 +159,9 @@ function Story({ storyContent, projectUsers, category }) {
         category={category}
       />
 
-      <Modal isOpen={isOpen} onClose={onClose} size="3xl">
+      <Modal isOpen={isOpen} onClose={onClose} size="2xl">
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent p={2}>
           <ModalCloseButton />
           <Flex direction={['column', 'row']} justifyContent="space-between">
             {isEditing ? (
@@ -193,6 +194,7 @@ function Story({ storyContent, projectUsers, category }) {
                 leftIcon={<MdEdit />}
                 isLoading={isEditing}
                 loadingText="Editing"
+                borderRadius="sm"
                 onClick={() => {
                   setEditing(true);
                 }}
@@ -201,7 +203,6 @@ function Story({ storyContent, projectUsers, category }) {
               </Button>
               <DeleteButton deleteStory={handleDelete} />
             </Flex>
-
           </Flex>
         </ModalContent>
       </Modal>

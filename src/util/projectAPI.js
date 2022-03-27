@@ -12,6 +12,11 @@ const createProject = async (project) => {
   return res.data;
 };
 
-const projectAPI = { fetchProject, createProject };
+const removeProject = async (projectId) => {
+  const res = await axios.delete(`${baseUrl}/${projectId}`);
+  return res.data;
+};
+
+const projectAPI = { fetchProject, createProject, removeProject };
 
 export default projectAPI;

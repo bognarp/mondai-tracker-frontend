@@ -24,15 +24,14 @@ const ProjectCard = ({ project }) => {
     <Link to={`/projects/${project._id}`} key={project._id}>
       <Flex
         direction={['row', 'row', 'column']}
+        p={4}
         gap={3}
         bgGradient="linear(to-t, white 65%, gray.100 65%)"
-        rounded="lg"
-        p={4}
-        w="100%"
+        rounded="md"
         boxShadow="xl"
       >
         <Flex direction="column" gap={2}>
-          <Image src={`/img/avatar/${project.avatar}`} boxSize="32px" />
+          <Image src={`/img/icon/${project.avatar}.svg`} boxSize="32px" />
           <Heading size="sm" textAlign="center">
             {project.title}
           </Heading>
@@ -98,7 +97,10 @@ function Dashboard() {
             Create project
           </Button>
         </Flex>
-        <Flex direction={['column', 'column', 'row']} gap={2}>
+        <Flex
+          direction={['column', 'column', 'row']}
+          gap={2}
+        >
           <ProjectList projects={data} />
         </Flex>
       </Stack>
