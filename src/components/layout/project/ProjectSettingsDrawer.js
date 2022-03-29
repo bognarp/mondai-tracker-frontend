@@ -70,15 +70,15 @@ const RadioImage = (props) => {
   );
 };
 
-const IconRadioGroup = ({ close, setIcon }) => {
+const IconRadioGroup = ({ close, changeIcon, setIconpreview }) => {
   const options = [...Array(19).keys(), 'default'].slice(1);
 
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: 'avatar',
     defaultValue: 'default',
-    onChange: (val) => {
-      console.log(val);
-      setIcon(val);
+    onChange: (value) => {
+      setIconpreview(value);
+      changeIcon({ currentTarget: { id: 'avatar', value } });
       close();
     },
   });
@@ -95,14 +95,14 @@ const IconRadioGroup = ({ close, setIcon }) => {
   );
 };
 
-const ProjectIconSelection = ({ project }) => {
+const ProjectIconSelection = ({ defaultIcon, changeIcon }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [projectIcon, setIcon] = useState(project.avatar);
+  const [iconpreview, setIconpreview] = useState(defaultIcon);
 
   return (
     <Flex direction="column" gap={2} alignItems="center" w="100%">
       <Image
-        src={`/img/icon/${projectIcon}.svg`}
+        src={`/img/icon/${iconpreview}.svg`}
         boxSize="64px"
         fit="contain"
       />
@@ -124,7 +124,8 @@ const ProjectIconSelection = ({ project }) => {
           close={() => {
             setIsOpen(!isOpen);
           }}
-          setIcon={setIcon}
+          changeIcon={changeIcon}
+          setIconpreview={setIconpreview}
         />
       </Collapse>
     </Flex>
@@ -232,7 +233,11 @@ function ProjectSettingsDrawer({ collapsed, project }) {
           <DrawerBody>
             <Flex direction="column" w="100%" h="80%" gap={5}>
               <Center>
-                <ProjectIconSelection project={project} />
+                <ProjectIconSelection
+                  project={project}
+                  defaultIcon={project.avatar}
+                  changeIcon={handleInputChange}
+                />
               </Center>
               <Heading
                 size="sm"
@@ -293,6 +298,7 @@ function ProjectSettingsDrawer({ collapsed, project }) {
               >
                 Other
               </Heading>
+              {/* FIXME: show this section for the project owners only */}
               <ProjectDeleteButton deleteProject={handleDelete} />
             </Flex>
           </DrawerBody>
