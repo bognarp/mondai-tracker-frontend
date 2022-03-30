@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Box,
   Button,
@@ -38,6 +38,8 @@ import ProjectUsers from './ProjectUsers';
 import { useMutation, useQueryClient } from 'react-query';
 import projectAPI from '../../../util/projectAPI';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { alertUserError } from '../../../actions/errorActions';
 
 const RadioImage = (props) => {
   const { getInputProps, getCheckboxProps } = useRadio(props);
@@ -70,12 +72,12 @@ const RadioImage = (props) => {
   );
 };
 
-const IconRadioGroup = ({ close, changeIcon, setIconpreview }) => {
+const IconRadioGroup = ({ close, changeIcon, iconpreview, setIconpreview }) => {
   const options = [...Array(19).keys(), 'default'].slice(1);
 
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: 'avatar',
-    defaultValue: 'default',
+    defaultValue: iconpreview,
     onChange: (value) => {
       setIconpreview(value);
       changeIcon({ currentTarget: { id: 'avatar', value } });
@@ -125,6 +127,7 @@ const ProjectIconSelection = ({ defaultIcon, changeIcon }) => {
             setIsOpen(!isOpen);
           }}
           changeIcon={changeIcon}
+          iconpreview={iconpreview}
           setIconpreview={setIconpreview}
         />
       </Collapse>
@@ -188,21 +191,51 @@ const ProjectDeleteButton = ({ deleteProject }) => {
 
 function ProjectSettingsDrawer({ collapsed, project }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const dispatch = useDispatch();
   const btnRef = useRef();
   const [inputChange, handleInputChange] = useInputChange();
-  const [isChanged, changedProps] = usePropertyUpdate(inputChange, project);
+  const [isChanged, changedProps, _, setInitialValues] =
+    usePropertyUpdate(inputChange);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const { mutate } = useMutation(projectAPI.removeProject, {
+  useEffect(() => {
+    setInitialValues(project);
+  }, [setInitialValues, project]);
+
+  const { mutate: removeProject } = useMutation(projectAPI.removeProject, {
     onSuccess: () => {
       navigate('/dashboard');
       queryClient.invalidateQueries('project');
+      queryClient.invalidateQueries('projects');
     },
   });
 
+  const { mutate: updateProject, isLoading: updateIsLoading } = useMutation(
+    projectAPI.updateProject,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('project');
+        queryClient.invalidateQueries('projects');
+      },
+      onError: (error) => {
+        dispatch(alertUserError(error));
+      },
+    }
+  );
+
   const handleDelete = () => {
-    mutate(project._id);
+    removeProject(project._id);
+  };
+
+  const handleUpdate = () => {
+    const patchObj = {};
+
+    changedProps.forEach((key) => {
+      patchObj[key] = inputChange[key];
+    });
+
+    updateProject({ projectId: project._id, patchObj });
   };
 
   return (
@@ -303,11 +336,17 @@ function ProjectSettingsDrawer({ collapsed, project }) {
             </Flex>
           </DrawerBody>
 
-          <DrawerFooter>
-            {/* <Button variant="outline" mr={3} onClick={onClose}>
-              Cancel
-            </Button>
-            <Button colorScheme="blue">Save</Button> */}
+          <DrawerFooter justifyContent="center">
+            {isChanged && (
+              <Button
+                colorScheme="green"
+                isLoading={updateIsLoading}
+                loadingText="Saving"
+                onClick={handleUpdate}
+              >
+                Save
+              </Button>
+            )}
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

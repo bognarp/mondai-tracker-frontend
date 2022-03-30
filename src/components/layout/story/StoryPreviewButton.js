@@ -15,7 +15,7 @@ function StoryPreviewButton({ projectId, storyId, category, state }) {
   };
 
   const { mutate } = useMutation(storyAPI.updateStory, {
-    onSuccess: (newStory) => {
+    onSuccess: () => {
       queryClient.invalidateQueries(['stories', projectId]);
     },
   });

@@ -37,7 +37,9 @@ function NavLinks({ session }) {
   if (isAuthenticated) {
     return (
       <Center as="nav" mr={0} justifyContent="space-between" w="100%">
+        
         <ProjectsMenu user={user} />
+
         <Menu isLazy>
           <MenuButton>
             <Avatar

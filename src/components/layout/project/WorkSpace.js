@@ -55,7 +55,6 @@ function Workspace({ project, category }) {
         <HStack
           bg="gray.300"
           w="100%"
-          h="100%"
           justifyContent="center"
           py={2}
           borderTopRadius={5}
@@ -70,9 +69,24 @@ function Workspace({ project, category }) {
           spacing={2}
           p={3}
           shadow="xl"
-          w="100%"
           borderBottomRadius={5}
         >
+          {/* <Box
+            overflowY="auto"
+            css={{
+              '&::-webkit-scrollbar': {
+                width: '10px',
+              },
+              '&::-webkit-scrollbar-track': {
+                background: 'white',
+                width: '10px',
+              },
+              '&::-webkit-scrollbar-thumb': {
+                background: 'black',
+                borderRadius: '24px',
+              },
+            }}
+          > */}
           {data.map((story) => (
             <Story
               key={story._id}
@@ -81,6 +95,7 @@ function Workspace({ project, category }) {
               category={category}
             />
           ))}
+          {/* </Box> */}
           {(category === 'current' || category === 'backlog') && (
             <Button
               leftIcon={<MdAdd />}

@@ -43,9 +43,9 @@ function StoryPreview({ open, storyContent, category }) {
 
   return (
     <LinkBox
-      as={Stack}
+      as={Flex}
       direction="column"
-      spacing={1}
+      gap={2}
       borderWidth="1px"
       w="100%"
       p={3}

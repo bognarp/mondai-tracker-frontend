@@ -1,6 +1,8 @@
 import {
   Button,
   Center,
+  Flex,
+  Image,
   Menu,
   MenuButton,
   MenuDivider,
@@ -30,11 +32,18 @@ const ProjectsMenuList = ({ isLoading, data }) => {
       ) : (
         <>
           {data && data.length > 0 && <MenuDivider />}
-          {data && data.map((project) => (
-            <Link to={`/projects/${project._id}`} key={project._id}>
-              <MenuItem>{project.title}</MenuItem>
-            </Link>
-          ))}
+          {data &&
+            data.map((project) => (
+              <Link to={`/projects/${project._id}`} key={project._id}>
+                <MenuItem gap={2}>
+                  <Image
+                    src={`/img/icon/${project.avatar}.svg`}
+                    boxSize="26px"
+                  />
+                  {project.title}
+                </MenuItem>
+              </Link>
+            ))}
         </>
       )}
     </MenuGroup>
@@ -71,6 +80,7 @@ function ProjectsMenu({ user }) {
         </MenuButton>
         <MenuList>
           <ProjectsMenuList isLoading={isLoading} data={data} />
+
           <MenuDivider />
           <Center>
             <Button leftIcon={<MdAdd />} size="sm" onClick={onOpen}>

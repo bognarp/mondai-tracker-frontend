@@ -22,6 +22,7 @@ function NavBar() {
       zIndex="1"
     >
       <Image src={logo} boxSize="40px" mr={4} boxSizing="border-box" />
+
       <NavLinks session={session} />
     </Flex>
   );
