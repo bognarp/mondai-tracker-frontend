@@ -8,12 +8,15 @@ import {
   Text,
   Textarea,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { difficultyValues, priorityValues } from '../../../util/storyHelpers';
 import { MdEditOff, MdSave } from 'react-icons/md';
 import { useMutation, useQueryClient } from 'react-query';
 import storyAPI from '../../../util/storyAPI';
 import usePropertyUpdate from '../../../hooks/usePropertyChange';
+import { useDispatch } from 'react-redux';
+import { alertUserError } from '../../../actions/errorActions';
+import { debounce } from 'lodash-es';
 
 const StoryFormHeader = ({ value, category, patch }) => {
   const [newTitle, setNewTitle] = useState(value);
@@ -56,7 +59,6 @@ const StoryFormDescription = ({ value, patch }) => {
         value={newDescription}
         placeholder="Add some description..."
         size="sm"
-        // maxW="80%"
         onChange={(e) => {
           setNewDescription(e.target.value);
           patch({ description: checkValue(e.target.value) });
@@ -190,13 +192,20 @@ function StoryUpdateForm({
     storyContent
   );
   const queryClient = useQueryClient();
+  const dispatch = useDispatch();
 
-  const { mutate } = useMutation(storyAPI.updateStory, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['stories', storyContent.project]);
-      toggleEditing(false);
-    },
-  });
+  const { mutate, isLoading: updateIsLoading } = useMutation(
+    storyAPI.updateStory,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['stories', storyContent.project]);
+        toggleEditing(false);
+      },
+      onError: (error) => {
+        dispatch(alertUserError(error));
+      },
+    }
+  );
 
   const handleInputChange = (patch) => {
     if (patch['owner'] || patch['requester']) {
@@ -207,20 +216,28 @@ function StoryUpdateForm({
       setChangedInput({ ...changedInput, ...patch });
     }
   };
+  const updateStory = useMemo(() => {
+    return debounce(
+      () => {
+        const patchObj = {};
 
-  const updateStory = () => {
-    const patchObj = {};
+        changedProps.forEach((key) => {
+          patchObj[key] = changedInput[key];
+        });
 
-    changedProps.forEach((key) => {
-      patchObj[key] = changedInput[key];
-    });
-
-    mutate({
-      projectId: storyContent.project,
-      storyId: storyContent._id,
-      patchObj,
-    });
-  };
+        mutate({
+          projectId: storyContent.project,
+          storyId: storyContent._id,
+          patchObj,
+        });
+      },
+      1000,
+      {
+        leading: true,
+        trailing: false,
+      }
+    );
+  }, [changedInput, changedProps, storyContent, mutate]);
 
   const {
     title,
@@ -265,6 +282,8 @@ function StoryUpdateForm({
         {isChanged && (
           <Button
             colorScheme="green"
+            isLoading={updateIsLoading}
+            loadingText="Saving"
             leftIcon={<MdSave />}
             size="sm"
             variant="outline"

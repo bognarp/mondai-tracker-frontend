@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Box,
   Button,
@@ -40,6 +40,7 @@ import projectAPI from '../../../util/projectAPI';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { alertUserError } from '../../../actions/errorActions';
+import { debounce } from 'lodash-es';
 
 const RadioImage = (props) => {
   const { getInputProps, getCheckboxProps } = useRadio(props);
@@ -135,7 +136,7 @@ const ProjectIconSelection = ({ defaultIcon, changeIcon }) => {
   );
 };
 
-const ProjectDeleteButton = ({ deleteProject }) => {
+const ProjectDeleteButton = ({ deleteProject, isLoading }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -179,7 +180,12 @@ const ProjectDeleteButton = ({ deleteProject }) => {
           pb={4}
         >
           <ButtonGroup size="sm">
-            <Button colorScheme="red" onClick={deleteProject}>
+            <Button
+              isLoading={isLoading}
+              loadingText="Deleting"
+              colorScheme="red"
+              onClick={deleteProject}
+            >
               Delete
             </Button>
           </ButtonGroup>
@@ -203,13 +209,16 @@ function ProjectSettingsDrawer({ collapsed, project }) {
     setInitialValues(project);
   }, [setInitialValues, project]);
 
-  const { mutate: removeProject } = useMutation(projectAPI.removeProject, {
-    onSuccess: () => {
-      navigate('/dashboard');
-      queryClient.invalidateQueries('project');
-      queryClient.invalidateQueries('projects');
-    },
-  });
+  const { mutate: removeProject, isLoading: deleteIsLoading } = useMutation(
+    projectAPI.removeProject,
+    {
+      onSuccess: () => {
+        navigate('/dashboard');
+        queryClient.invalidateQueries('project');
+        queryClient.invalidateQueries('projects');
+      },
+    }
+  );
 
   const { mutate: updateProject, isLoading: updateIsLoading } = useMutation(
     projectAPI.updateProject,
@@ -223,20 +232,26 @@ function ProjectSettingsDrawer({ collapsed, project }) {
       },
     }
   );
+  const handleDelete = () => removeProject(project._id);
 
-  const handleDelete = () => {
-    removeProject(project._id);
-  };
+  const handleUpdate = useMemo(() => {
+    return debounce(
+      () => {
+        const patchObj = {};
 
-  const handleUpdate = () => {
-    const patchObj = {};
+        changedProps.forEach((key) => {
+          patchObj[key] = inputChange[key];
+        });
 
-    changedProps.forEach((key) => {
-      patchObj[key] = inputChange[key];
-    });
-
-    updateProject({ projectId: project._id, patchObj });
-  };
+        updateProject({ projectId: project._id, patchObj });
+      },
+      1000,
+      {
+        leading: true,
+        trailing: false,
+      }
+    );
+  }, [changedProps, inputChange, updateProject, project._id]);
 
   return (
     <>
@@ -332,7 +347,10 @@ function ProjectSettingsDrawer({ collapsed, project }) {
                 Other
               </Heading>
               {/* FIXME: show this section for the project owners only */}
-              <ProjectDeleteButton deleteProject={handleDelete} />
+              <ProjectDeleteButton
+                deleteProject={handleDelete}
+                isLoading={deleteIsLoading}
+              />
             </Flex>
           </DrawerBody>
 

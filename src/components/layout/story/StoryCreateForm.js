@@ -12,43 +12,56 @@ import React from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { useInputChange } from '../../../hooks/useInputChange';
 import storyAPI from '../../../util/storyAPI';
+import { alertUserError } from '../../../actions/errorActions';
 import { difficultyValues, priorityValues } from '../../../util/storyHelpers';
+import { debounce } from 'lodash-es';
+import { useMemo } from 'react';
+import { useDispatch } from 'react-redux';
 
 function StoryCreateForm({ projectId, projectUsers, category, onClose }) {
   const [input, handleInputChange] = useInputChange();
   const queryClient = useQueryClient();
+  const dispatch = useDispatch();
 
-  const { mutate } = useMutation(storyAPI.createStory, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['stories', projectId]);
-      onClose();
-    },
-  });
+  const { mutate, isLoading: createIsLoading } = useMutation(
+    storyAPI.createStory,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['stories', projectId]);
+        onClose();
+      },
+      onError: (error) => {
+        dispatch(alertUserError(error));
+      },
+    }
+  );
 
-  const createNewStory = (e) => {
-    e.preventDefault();
-    let state;
+  const createNewStory = useMemo(() => {
+    return debounce(
+      () => {
+        let state;
 
-    if (category === 'current') state = 'UNSTARTED';
-    if (category === 'backlog') state = 'UNSCHEDULED';
+        if (category === 'current') state = 'UNSTARTED';
+        if (category === 'backlog') state = 'UNSCHEDULED';
 
-    const newStory = { ...input, state };
+        const newStory = { ...input, state };
 
-    if (newStory.owner === '0') delete newStory.owner;
+        if (newStory.owner === '0') delete newStory.owner;
 
-    mutate({ projectId, newStory });
-  };
+        mutate({ projectId, newStory });
+      },
+      1000,
+      {
+        leading: true,
+        trailing: false,
+      }
+    );
+  }, [category, input, projectId, mutate]);
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      mt={6}
-      as="form"
-      onSubmit={createNewStory}
-    >
+    <Box display="flex" flexDirection="column" mt={6}>
       <VStack spacing={4}>
-        <FormControl>
+        <FormControl isRequired>
           <FormLabel fontWeight="bold" htmlFor="title">
             Title
           </FormLabel>
@@ -91,7 +104,13 @@ function StoryCreateForm({ projectId, projectUsers, category, onClose }) {
             ))}
           </Select>
         </FormControl>
-        <Button type="submit">Save</Button>
+        <Button
+          isLoading={createIsLoading}
+          loadingText="Saving"
+          onClick={createNewStory}
+        >
+          Save
+        </Button>
       </VStack>
     </Box>
   );
