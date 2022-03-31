@@ -45,10 +45,10 @@ function StoryPreview({ open, storyContent, category }) {
     <LinkBox
       as={Flex}
       direction="column"
-      gap={2}
+      gap={1}
       borderWidth="1px"
-      w="100%"
       p={3}
+      mr={1}
       borderRadius="lg"
       boxShadow="md"
       bg="white"
@@ -82,7 +82,7 @@ function StoryPreview({ open, storyContent, category }) {
   );
 }
 
-const DeleteButton = ({ deleteStory }) => {
+const DeleteButton = ({ deleteStory, isLoading }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -125,7 +125,12 @@ const DeleteButton = ({ deleteStory }) => {
           pb={4}
         >
           <ButtonGroup size="sm">
-            <Button colorScheme="red" onClick={deleteStory}>
+            <Button
+              colorScheme="red"
+              onClick={deleteStory}
+              isLoading={isLoading}
+              loadingText="Deleting"
+            >
               Delete
             </Button>
           </ButtonGroup>
@@ -140,12 +145,15 @@ function Story({ storyContent, projectUsers, category }) {
   const [isEditing, setEditing] = useState(false);
   const queryClient = useQueryClient();
 
-  const { mutate } = useMutation(storyAPI.removeStory, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['stories', storyContent.project]);
-      onClose();
-    },
-  });
+  const { mutate, isLoading: deleteIsLoading } = useMutation(
+    storyAPI.removeStory,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['stories', storyContent.project]);
+        onClose();
+      },
+    }
+  );
 
   const handleDelete = () => {
     mutate({ projectId: storyContent.project, storyId: storyContent._id });
@@ -201,7 +209,10 @@ function Story({ storyContent, projectUsers, category }) {
               >
                 Edit
               </Button>
-              <DeleteButton deleteStory={handleDelete} />
+              <DeleteButton
+                deleteStory={handleDelete}
+                isLoading={deleteIsLoading}
+              />
             </Flex>
           </Flex>
         </ModalContent>

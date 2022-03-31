@@ -58,39 +58,39 @@ function ProjectsMenu({ user }) {
   });
 
   return (
-    <>
-      <Menu>
-        <MenuButton
-          as={Button}
-          display="flex"
-          variant="unstyled"
-          color="white"
-          fontWeight="500"
-          fontFamily="heading"
-          _hover={{
-            background: 'whiteAlpha.400',
-          }}
-          _active={{
-            background: 'whiteAlpha.400',
-          }}
-          rightIcon={<MdArrowDropDown />}
-          p={3}
-        >
-          Projects
-        </MenuButton>
-        <MenuList>
-          <ProjectsMenuList isLoading={isLoading} data={data} />
+    <Menu>
+      <MenuButton
+        as={Button}
+        display="flex"
+        variant="unstyled"
+        color="white"
+        fontSize={['sm', 'md']}
+        fontWeight="300"
+        fontFamily="heading"
+        _hover={{
+          background: 'whiteAlpha.400',
+        }}
+        _active={{
+          background: 'whiteAlpha.400',
+        }}
+        rightIcon={<MdArrowDropDown />}
+        p={3}
+      >
+        Projects
+      </MenuButton>
+      <MenuList>
+        <ProjectsMenuList isLoading={isLoading} data={data} />
 
-          <MenuDivider />
-          <Center>
-            <Button leftIcon={<MdAdd />} size="sm" onClick={onOpen}>
-              Create project
-            </Button>
-          </Center>
-        </MenuList>
-      </Menu>
+        <MenuDivider />
+        <Center>
+          <Button leftIcon={<MdAdd />} size="sm" onClick={onOpen}>
+            Create project
+          </Button>
+        </Center>
+      </MenuList>
+
       <ProjectCreateModal isOpen={isOpen} onClose={onClose} />
-    </>
+    </Menu>
   );
 }
 

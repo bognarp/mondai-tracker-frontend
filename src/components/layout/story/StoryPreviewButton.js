@@ -4,6 +4,21 @@ import { useMutation, useQueryClient } from 'react-query';
 import { useSelector } from 'react-redux';
 import storyAPI from '../../../util/storyAPI';
 
+const PreviewButton = ({ isLoading, onClick, children }) => {
+  return (
+    <Button
+      isLoading={isLoading}
+      loadingText={`${children}ing`}
+      colorScheme="teal"
+      size="xs"
+      variant="outline"
+      onClick={onClick}
+    >
+      {children}
+    </Button>
+  );
+};
+
 function StoryPreviewButton({ projectId, storyId, category, state }) {
   const userId = useSelector((state) => state.session.user.id);
   const queryClient = useQueryClient();
@@ -14,11 +29,14 @@ function StoryPreviewButton({ projectId, storyId, category, state }) {
     }
   };
 
-  const { mutate } = useMutation(storyAPI.updateStory, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['stories', projectId]);
-    },
-  });
+  const { mutate, isLoading: updateIsLoading } = useMutation(
+    storyAPI.updateStory,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['stories', projectId]);
+      },
+    }
+  );
 
   const handleButtonClick = (state) => (event) => {
     stopEventPropagation(event);
@@ -34,58 +52,48 @@ function StoryPreviewButton({ projectId, storyId, category, state }) {
       case 'UNSTARTED':
       case 'UNSCHEDULED':
         return (
-          <Button
-            colorScheme="teal"
-            size="xs"
-            variant="outline"
+          <PreviewButton
+            isLoading={updateIsLoading}
             onClick={handleButtonClick('STARTED')}
           >
             Start
-          </Button>
+          </PreviewButton>
         );
       case 'RESTARTED':
       case 'STARTED':
         return (
-          <Button
-            colorScheme="blue"
-            size="xs"
-            variant="outline"
+          <PreviewButton
+            isLoading={updateIsLoading}
             onClick={handleButtonClick('FINISHED')}
           >
             Finish
-          </Button>
+          </PreviewButton>
         );
       case 'FINISHED':
         return (
           <>
-            <Button
-              colorScheme="green"
-              size="xs"
-              variant="outline"
+            <PreviewButton
+              isLoading={updateIsLoading}
               onClick={handleButtonClick('ACCEPTED')}
             >
               Accept
-            </Button>
-            <Button
-              colorScheme="red"
-              size="xs"
-              variant="outline"
+            </PreviewButton>
+            <PreviewButton
+              isLoading={updateIsLoading}
               onClick={handleButtonClick('REJECTED')}
             >
               Reject
-            </Button>
+            </PreviewButton>
           </>
         );
       case 'REJECTED':
         return (
-          <Button
-            colorScheme="blue"
-            size="xs"
-            variant="outline"
+          <PreviewButton
+            isLoading={updateIsLoading}
             onClick={handleButtonClick('RESTARTED')}
           >
             Restart
-          </Button>
+          </PreviewButton>
         );
       default:
         return null;
