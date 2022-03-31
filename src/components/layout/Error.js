@@ -1,8 +1,9 @@
-import { Alert, AlertIcon, Center, List, ListItem } from '@chakra-ui/react';
+import { useToast, VisuallyHidden } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import { isObject } from 'lodash-es';
 
 function Error() {
+  const toast = useToast();
   const getErrors = useSelector((state) => {
     return state.errors;
   });
@@ -19,16 +20,16 @@ function Error() {
     }
 
     return (
-      <Center position="fixed" top={50} zIndex="1" w="100%">
-        <Alert status="error" borderRadius={8} boxShadow="md" w="45%">
-          <AlertIcon />
-          <List>
-            {message.map((msg) => (
-              <ListItem key={msg}>{msg}</ListItem>
-            ))}
-          </List>
-        </Alert>
-      </Center>
+      <VisuallyHidden>
+        {toast({
+          title: 'Error',
+          position: 'top',
+          description: message,
+          status: 'error',
+          duration: 8000,
+          isClosable: true,
+        })}
+      </VisuallyHidden>
     );
   }
 
