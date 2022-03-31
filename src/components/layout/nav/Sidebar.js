@@ -4,13 +4,16 @@ import {
   Divider,
   Flex,
   Heading,
+  Icon,
   IconButton,
   Image,
+  Link,
   useMediaQuery,
   VStack,
 } from '@chakra-ui/react';
 import { workspaceIconMap, workspaceMap } from '../../../util/workspaceHelpers';
 import { FaAngleDoubleLeft, FaAngleDoubleRight } from 'react-icons/fa';
+import { BsGithub } from 'react-icons/bs';
 import ProjectSettingsDrawer from '../project/ProjectSettingsDrawer';
 
 function Sidebar({ project, navigation, selectedWorkspaces }) {
@@ -75,7 +78,16 @@ function Sidebar({ project, navigation, selectedWorkspaces }) {
         {createButtons()}
       </VStack>
       <Divider />
-      <ProjectSettingsDrawer collapsed={collapsed} project={project} />
+      <Flex direction="column" justifyContent="space-between" h="100%" w="100%">
+        <ProjectSettingsDrawer collapsed={collapsed} project={project} />
+        <Link
+          href="https://github.com/bognarp/mondai-tracker-frontend"
+          alignSelf="center"
+          isExternal
+        >
+          <Icon as={BsGithub} m={3} w={5} h={5} />
+        </Link>
+      </Flex>
     </VStack>
   );
 }

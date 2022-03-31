@@ -1,6 +1,7 @@
 import {
   Button,
   Center,
+  Flex,
   Heading,
   HStack,
   Modal,
@@ -9,7 +10,6 @@ import {
   ModalOverlay,
   Spinner,
   useDisclosure,
-  VStack,
 } from '@chakra-ui/react';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -50,43 +50,51 @@ function Workspace({ project, category }) {
   if (isError) return <h3>{error.message}</h3>;
 
   return (
-    <>
-      <VStack spacing={0}>
-        <HStack
-          bg="gray.300"
-          w="100%"
-          justifyContent="center"
-          py={2}
-          borderTopRadius={5}
+    <Flex direction="column" maxHeight="calc((94vh - 1rem) / 2)">
+      <HStack
+        bg="gray.300"
+        w="100%"
+        justifyContent="center"
+        py={2}
+        borderTopRadius={5}
+      >
+        {workspaceIconMap[workspaceTitle]}
+        <Heading as="h3" fontSize="md">
+          {workspaceTitle}
+        </Heading>
+      </HStack>
+
+      <Flex
+        direction="column"
+        gap={2}
+        bg="gray.100"
+        py={3}
+        pl={3}
+        pr={2}
+        shadow="inner"
+        borderBottomRadius={5}
+        w="100%"
+        h="100%"
+        overflowY="auto"
+      >
+        <Flex
+          direction="column"
+          gap={1}
+          overflowY="auto"
+          css={{
+            '&::-webkit-scrollbar': {
+              width: '7px',
+            },
+            '&::-webkit-scrollbar-track': {
+              background: '#F7FAFC',
+              width: '8px',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              background: '#718096',
+              borderRadius: '24px',
+            },
+          }}
         >
-          {workspaceIconMap[workspaceTitle]}
-          <Heading as="h3" fontSize="md">
-            {workspaceTitle}
-          </Heading>
-        </HStack>
-        <VStack
-          bg="gray.100"
-          spacing={2}
-          p={3}
-          shadow="xl"
-          borderBottomRadius={5}
-        >
-          {/* <Box
-            overflowY="auto"
-            css={{
-              '&::-webkit-scrollbar': {
-                width: '10px',
-              },
-              '&::-webkit-scrollbar-track': {
-                background: 'white',
-                width: '10px',
-              },
-              '&::-webkit-scrollbar-thumb': {
-                background: 'black',
-                borderRadius: '24px',
-              },
-            }}
-          > */}
           {data.map((story) => (
             <Story
               key={story._id}
@@ -95,23 +103,23 @@ function Workspace({ project, category }) {
               category={category}
             />
           ))}
-          {/* </Box> */}
-          {(category === 'current' || category === 'backlog') && (
-            <Button
-              leftIcon={<MdAdd />}
-              size="sm"
-              onClick={onOpen}
-              variant="ghost"
-              colorScheme="gray"
-              _hover={{
-                background: 'gray.200',
-              }}
-            >
-              Add Story
-            </Button>
-          )}
-        </VStack>
-      </VStack>
+        </Flex>
+
+        {(category === 'current' || category === 'backlog') && (
+          <Button
+            leftIcon={<MdAdd />}
+            size="sm"
+            onClick={onOpen}
+            variant="ghost"
+            colorScheme="gray"
+            _hover={{
+              background: 'gray.200',
+            }}
+          >
+            Add Story
+          </Button>
+        )}
+      </Flex>
 
       <Modal isOpen={isOpen} onClose={onClose} trapFocus={false}>
         <ModalOverlay />
@@ -125,7 +133,7 @@ function Workspace({ project, category }) {
           />
         </ModalContent>
       </Modal>
-    </>
+    </Flex>
   );
 }
 
