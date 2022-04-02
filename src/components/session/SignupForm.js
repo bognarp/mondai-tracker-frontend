@@ -10,6 +10,7 @@ import {
   Input,
   Stack,
   Text,
+  useColorModeValue,
   VStack,
 } from '@chakra-ui/react';
 import React from 'react';
@@ -25,6 +26,9 @@ function SignupForm() {
   const navigate = useNavigate();
   const [input, handleInputChange] = useInputChange();
 
+  const formBg = useColorModeValue('gray.100', 'gray.800');
+  const inputBg = useColorModeValue('white', 'gray.700');
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -39,7 +43,7 @@ function SignupForm() {
 
   return (
     <Center w="100%" h="90%" flexDirection="column" gap={6}>
-      <Error />
+      {/* <Error /> */}
       <Stack spacing={5}>
         <Image src={logo} boxSize="130px" alignSelf="center" />
         <Stack spacing={{ base: '2', md: '3' }} textAlign="center">
@@ -47,7 +51,7 @@ function SignupForm() {
         </Stack>
       </Stack>
 
-      <VStack bg="gray.100" padding={8} borderRadius={8} boxShadow="lg">
+      <VStack bg={formBg} padding={8} borderRadius={8} boxShadow="lg">
         <form onSubmit={handleSubmit}>
           <VStack spacing={4}>
             <FormControl isRequired>
@@ -56,7 +60,7 @@ function SignupForm() {
                 id="username"
                 type="username"
                 onChange={handleInputChange}
-                bg="white"
+                bg={inputBg}
               />
             </FormControl>
             <FormControl isRequired>
@@ -65,7 +69,7 @@ function SignupForm() {
                 id="email"
                 type="email"
                 onChange={handleInputChange}
-                bg="white"
+                bg={inputBg}
               />
             </FormControl>
             <FormControl isRequired>
@@ -74,7 +78,7 @@ function SignupForm() {
                 id="password"
                 type="password"
                 onChange={handleInputChange}
-                bg="white"
+                bg={inputBg}
               />
               <FormHelperText>At least 5 characters long</FormHelperText>
             </FormControl>
@@ -84,7 +88,7 @@ function SignupForm() {
                 id="password2"
                 type="password"
                 onChange={handleInputChange}
-                bg="white"
+                bg={inputBg}
               />
             </FormControl>
             <Button colorScheme="blue" type="submit">

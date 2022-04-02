@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 import '@fontsource/inter';
 import '@fontsource/lato';
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import { QueryCache, QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 
@@ -55,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <Provider store={store}>
         <ChakraProvider theme={theme}>
           <BrowserRouter>
+            <ColorModeScript initialColorMode={theme.config.initialColorMode} />
             <App />
           </BrowserRouter>
         </ChakraProvider>

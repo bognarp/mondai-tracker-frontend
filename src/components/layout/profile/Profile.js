@@ -11,6 +11,7 @@ import {
   Input,
   Button,
   Divider,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
@@ -24,6 +25,14 @@ function Profile() {
   const [inputChange, handleInputChange] = useInputChange();
   const [isChanged, changedProps, initialValues, setInitialValues] =
     usePropertyUpdate(inputChange);
+
+  const containerHeaderBg = useColorModeValue(
+    'whiteAlpha.400',
+    'whiteAlpha.200'
+  );
+  const containerBg = useColorModeValue('whiteAlpha.600', 'whiteAlpha.300');
+  const inputBg = useColorModeValue('gray.100', 'gray.700');
+  const inputFocusBg = useColorModeValue('white', 'gray.600');
 
   const { data, isLoading, isError } = useQuery(
     'userInfo',
@@ -76,7 +85,7 @@ function Profile() {
 
   return (
     <>
-      <Center bg="whiteAlpha.400" h="160px">
+      <Center bg={containerHeaderBg} h="160px">
         <Stack direction="row" alignItems="center" spacing={4}>
           <Avatar name={name || username} bg="red.500" textColor="white" />
           {name && <Text fontSize="lg">{`${name}`}</Text>}
@@ -84,7 +93,7 @@ function Profile() {
         </Stack>
       </Center>
       <Center
-        bg="whiteAlpha.700"
+        bg={containerBg}
         h="100%"
         borderTop="1px"
         borderColor="gray.300"
@@ -104,10 +113,10 @@ function Profile() {
                 base: '100%',
                 md: '50%',
               }}
-              bg="gray.100"
+              bg={inputBg}
               border="1px"
               borderColor="gray.200"
-              _focus={{ bg: 'white' }}
+              _focus={{ bg: inputFocusBg }}
               onChange={handleInputChange}
             />
           </FormControl>
@@ -121,10 +130,10 @@ function Profile() {
                 base: '100%',
                 md: '50%',
               }}
-              bg="gray.100"
+              bg={inputBg}
               border="1px"
               borderColor="gray.200"
-              _focus={{ bg: 'white' }}
+              _focus={{ bg: inputFocusBg }}
               onChange={handleInputChange}
             />
           </FormControl>
@@ -141,10 +150,10 @@ function Profile() {
                 base: '100%',
                 md: '50%',
               }}
-              bg="gray.100"
+              bg={inputBg}
               border="1px"
               borderColor="gray.200"
-              _focus={{ bg: 'white' }}
+              _focus={{ bg: inputFocusBg }}
               onChange={handleInputChange}
             />
           </FormControl>

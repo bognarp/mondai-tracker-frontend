@@ -20,6 +20,7 @@ import {
   PopoverCloseButton,
   PopoverArrow,
   Flex,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { difficultyValues } from '../../../util/storyHelpers';
@@ -51,7 +52,7 @@ function StoryPreview({ open, storyContent, category }) {
       mr={1}
       borderRadius="lg"
       boxShadow="md"
-      bg="white"
+      bg={useColorModeValue('white', '#1c1c21')}
       onClick={open}
       cursor="pointer"
     >

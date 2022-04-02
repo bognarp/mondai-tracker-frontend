@@ -8,6 +8,7 @@ import {
   Spinner,
   Stack,
   Text,
+  useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
 import { useQuery } from 'react-query';
@@ -26,9 +27,13 @@ const ProjectCard = ({ project }) => {
         direction={['row', 'row', 'column']}
         p={4}
         gap={3}
-        bgGradient="linear(to-t, white 65%, gray.100 65%)"
+        bgGradient={useColorModeValue(
+          'linear(to-t, white 65%, gray.100 65%)',
+          'linear(to-t, gray.500 65%, gray.800 65%)'
+        )}
         rounded="md"
         boxShadow="xl"
+        minW="200px"
       >
         <Flex direction="column" gap={2}>
           <Image src={`/img/icon/${project.avatar}.svg`} boxSize="32px" />
@@ -97,10 +102,7 @@ function Dashboard() {
             Create project
           </Button>
         </Flex>
-        <Flex
-          direction={['column', 'column', 'row']}
-          gap={2}
-        >
+        <Flex direction={['column', 'column', 'row']} gap={2}>
           <ProjectList projects={data} />
         </Flex>
       </Stack>

@@ -8,6 +8,7 @@ import {
   IconButton,
   Image,
   Link,
+  useColorModeValue,
   useMediaQuery,
   VStack,
 } from '@chakra-ui/react';
@@ -50,7 +51,7 @@ function Sidebar({ project, navigation, selectedWorkspaces }) {
       px={2}
       h="100%"
       spacing={collapsed ? 14 : 5}
-      bg="white"
+      bg={useColorModeValue('white', '#1c1c21')}
       position="relative"
     >
       <IconButton

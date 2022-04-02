@@ -11,6 +11,7 @@ import {
   Text,
   Image,
   Flex,
+  useColorModeValue,
 } from '@chakra-ui/react';
 
 import { login } from '../../actions/sessionActions';
@@ -23,6 +24,9 @@ function LoginForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [input, handleInputChange] = useInputChange();
+
+  const formBg = useColorModeValue('gray.100', 'gray.800');
+  const inputBg = useColorModeValue('white', 'gray.700');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -43,7 +47,7 @@ function LoginForm() {
           <Heading size="md">Log in to your account</Heading>
         </Stack>
       </Stack>
-      <VStack bg="gray.100" padding={8} borderRadius={8} boxShadow="lg">
+      <VStack bg={formBg} padding={8} borderRadius={8} boxShadow="lg">
         <form onSubmit={handleSubmit}>
           <VStack spacing={4}>
             <FormControl>
@@ -52,7 +56,7 @@ function LoginForm() {
                 type="email"
                 placeholder="Enter email"
                 onChange={handleInputChange}
-                bg="white"
+                bg={inputBg}
               />
             </FormControl>
             <FormControl>
@@ -61,7 +65,7 @@ function LoginForm() {
                 type="password"
                 placeholder="Enter password"
                 onChange={handleInputChange}
-                bg="white"
+                bg={inputBg}
               />
             </FormControl>
             <Button colorScheme="blue" type="submit">

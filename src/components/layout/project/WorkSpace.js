@@ -9,6 +9,7 @@ import {
   ModalContent,
   ModalOverlay,
   Spinner,
+  useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
 import React from 'react';
@@ -25,6 +26,9 @@ function Workspace({ project, category }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const userId = useSelector((state) => state.session.user.id);
   const projectUsers = union(project.owners, project.members);
+
+  const workspaceTitleBg = useColorModeValue('gray.300', 'gray.600');
+  const workspaceBg = useColorModeValue('gray.100', 'gray.700');
 
   const { isLoading, data, isError, error } = useQuery(
     ['stories', project._id, category],
@@ -52,7 +56,7 @@ function Workspace({ project, category }) {
   return (
     <Flex direction="column" maxHeight="calc((94vh - 1rem) / 2)">
       <HStack
-        bg="gray.300"
+        bg={workspaceTitleBg}
         w="100%"
         justifyContent="center"
         py={2}
@@ -66,8 +70,9 @@ function Workspace({ project, category }) {
 
       <Flex
         direction="column"
+        alignItems="stretch"
         gap={2}
-        bg="gray.100"
+        bg={workspaceBg}
         py={3}
         pl={3}
         pr={2}
@@ -107,11 +112,13 @@ function Workspace({ project, category }) {
 
         {(category === 'current' || category === 'backlog') && (
           <Button
+            alignSelf="center"
             leftIcon={<MdAdd />}
             size="sm"
             onClick={onOpen}
             variant="ghost"
             colorScheme="gray"
+            // TODO: dark mode
             _hover={{
               background: 'gray.200',
             }}

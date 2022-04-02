@@ -27,6 +27,7 @@ import {
   PopoverHeader,
   PopoverTrigger,
   Textarea,
+  useColorModeValue,
   useDisclosure,
   useRadio,
   useRadioGroup,
@@ -205,6 +206,9 @@ function ProjectSettingsDrawer({ collapsed, project }) {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
+  const inputBg = useColorModeValue('gray.100', 'gray.700');
+  const inputFocusBg = useColorModeValue('white', 'gray.600');
+
   useEffect(() => {
     setInitialValues(project);
   }, [setInitialValues, project]);
@@ -306,10 +310,10 @@ function ProjectSettingsDrawer({ collapsed, project }) {
                     base: '100%',
                     md: '60%',
                   }}
-                  bg="gray.100"
+                  bg={inputBg}
                   border="1px"
                   borderColor="gray.200"
-                  _focus={{ bg: 'white' }}
+                  _focus={{ bg: inputFocusBg }}
                   onChange={handleInputChange}
                 />
               </FormControl>
@@ -322,10 +326,10 @@ function ProjectSettingsDrawer({ collapsed, project }) {
                     base: '100%',
                     md: '60%',
                   }}
-                  bg="gray.100"
+                  bg={inputBg}
                   border="1px"
                   borderColor="gray.200"
-                  _focus={{ bg: 'white' }}
+                  _focus={{ bg: inputFocusBg }}
                   onChange={handleInputChange}
                 />
               </FormControl>

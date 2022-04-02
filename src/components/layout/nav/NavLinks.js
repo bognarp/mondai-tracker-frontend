@@ -10,11 +10,14 @@ import {
   MenuItem,
   MenuList,
   Text,
+  useColorMode,
 } from '@chakra-ui/react';
 import {
   MdOutlineSpaceDashboard,
   MdLogout,
   MdOutlineAccountCircle,
+  MdOutlineDarkMode,
+  MdOutlineLightMode,
 } from 'react-icons/md';
 import { useQueryClient } from 'react-query';
 import { useDispatch } from 'react-redux';
@@ -26,6 +29,7 @@ function NavLinks({ session }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { colorMode, toggleColorMode } = useColorMode();
 
   const { isAuthenticated, user } = session;
 
@@ -68,6 +72,18 @@ function NavLinks({ session }) {
               </Link>
             </MenuGroup>
             <MenuDivider />
+            <MenuItem onClick={toggleColorMode}>
+              <HStack>
+                {colorMode === 'light' ? (
+                  <MdOutlineDarkMode />
+                ) : (
+                  <MdOutlineLightMode />
+                )}
+                <Text fontWeight="thin">
+                  {colorMode === 'light' ? 'Dark' : 'Light'}
+                </Text>
+              </HStack>
+            </MenuItem>
 
             <MenuItem onClick={handleLogout}>
               <HStack>
