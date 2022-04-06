@@ -10,8 +10,8 @@ import {
   FormLabel,
   Input,
   Button,
-  Divider,
   useColorModeValue,
+  Flex,
 } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
@@ -27,10 +27,10 @@ function Profile() {
     usePropertyUpdate(inputChange);
 
   const containerHeaderBg = useColorModeValue(
-    'whiteAlpha.400',
-    'whiteAlpha.200'
+    'blackAlpha.300',
+    'blackAlpha.700'
   );
-  const containerBg = useColorModeValue('whiteAlpha.600', 'whiteAlpha.300');
+  const containerBg = useColorModeValue('blackAlpha.200', 'blackAlpha.500');
   const inputBg = useColorModeValue('gray.100', 'gray.700');
   const inputFocusBg = useColorModeValue('white', 'gray.600');
 
@@ -84,96 +84,96 @@ function Profile() {
   };
 
   return (
-    <>
-      <Center bg={containerHeaderBg} h="160px">
+    <Flex direction="column" alignItems="center" bg={containerBg} minH='94vh'>
+      <Center
+        bg={containerHeaderBg}
+        maxH="160px"
+        minH="80px"
+        alignSelf="stretch"
+        borderBottom='1px'
+        borderColor='gray.400'
+      >
         <Stack direction="row" alignItems="center" spacing={4}>
           <Avatar name={name || username} bg="red.500" textColor="white" />
           {name && <Text fontSize="lg">{`${name}`}</Text>}
           <Text fontSize="sm">{`@${username}`}</Text>
         </Stack>
       </Center>
-      <Center
-        bg={containerBg}
-        h="100%"
-        borderTop="1px"
-        borderColor="gray.300"
-        flexDirection="column"
-      >
-        <Stack direction="column" w="60%" h="80%" spacing={5}>
-          <Heading size="lg" borderBottom="1px" borderColor="gray.200" pb={1}>
-            About
-          </Heading>
-          <FormControl>
-            <FormLabel htmlFor="name">Full name</FormLabel>
-            <Input
-              id="name"
-              defaultValue={initialValues.name}
-              type="text"
-              maxW={{
-                base: '100%',
-                md: '50%',
-              }}
-              bg={inputBg}
-              border="1px"
-              borderColor="gray.200"
-              _focus={{ bg: inputFocusBg }}
-              onChange={handleInputChange}
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel htmlFor="username">Username</FormLabel>
-            <Input
-              id="username"
-              defaultValue={initialValues.username}
-              type="text"
-              maxW={{
-                base: '100%',
-                md: '50%',
-              }}
-              bg={inputBg}
-              border="1px"
-              borderColor="gray.200"
-              _focus={{ bg: inputFocusBg }}
-              onChange={handleInputChange}
-            />
-          </FormControl>
-          <Heading size="md" borderBottom="1px" borderColor="gray.200" pb={1}>
-            Contact
-          </Heading>
-          <FormControl>
-            <FormLabel htmlFor="email">Email</FormLabel>
-            <Input
-              id="email"
-              defaultValue={initialValues.email}
-              type="email"
-              maxW={{
-                base: '100%',
-                md: '50%',
-              }}
-              bg={inputBg}
-              border="1px"
-              borderColor="gray.200"
-              _focus={{ bg: inputFocusBg }}
-              onChange={handleInputChange}
-            />
-          </FormControl>
-          <Divider borderColor="transparent" />
-          {isChanged && (
-            <Button
-              isLoading={mutationIsLoading}
-              loadingText="Saving"
-              type="submit"
-              colorScheme="green"
-              w="100px"
-              alignSelf="center"
-              onClick={updateProfile}
-            >
-              Save
-            </Button>
-          )}
-        </Stack>
-      </Center>
-    </>
+
+      <Stack direction="column" w="60%" spacing={5} m={8}>
+        <Heading size="lg" borderBottom="1px" borderColor="gray.200" pb={1}>
+          About
+        </Heading>
+        <FormControl>
+          <FormLabel htmlFor="name">Full name</FormLabel>
+          <Input
+            id="name"
+            defaultValue={initialValues.name}
+            type="text"
+            maxW={{
+              base: '100%',
+              md: '50%',
+            }}
+            bg={inputBg}
+            border="1px"
+            borderColor="gray.200"
+            _focus={{ bg: inputFocusBg }}
+            onChange={handleInputChange}
+          />
+        </FormControl>
+        <FormControl>
+          <FormLabel htmlFor="username">Username</FormLabel>
+          <Input
+            id="username"
+            defaultValue={initialValues.username}
+            type="text"
+            maxW={{
+              base: '100%',
+              md: '50%',
+            }}
+            bg={inputBg}
+            border="1px"
+            borderColor="gray.200"
+            _focus={{ bg: inputFocusBg }}
+            onChange={handleInputChange}
+          />
+        </FormControl>
+        <Heading size="md" borderBottom="1px" borderColor="gray.200" pb={1}>
+          Contact
+        </Heading>
+        <FormControl>
+          <FormLabel htmlFor="email">Email</FormLabel>
+          <Input
+            id="email"
+            defaultValue={initialValues.email}
+            type="email"
+            maxW={{
+              base: '100%',
+              md: '50%',
+            }}
+            bg={inputBg}
+            border="1px"
+            borderColor="gray.200"
+            _focus={{ bg: inputFocusBg }}
+            onChange={handleInputChange}
+          />
+        </FormControl>
+      </Stack>
+      {isChanged && (
+        <Button
+          isLoading={mutationIsLoading}
+          loadingText="Saving"
+          type="submit"
+          colorScheme="green"
+          w="100px"
+          alignSelf="center"
+          onClick={updateProfile}
+          my={7}
+        >
+          Save
+        </Button>
+      )}
+    </Flex>
   );
 }
 

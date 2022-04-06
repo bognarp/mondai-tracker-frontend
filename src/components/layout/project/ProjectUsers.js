@@ -32,14 +32,14 @@ const ProjectUser = ({ user, role }) => {
 
 function ProjectUsers({ members, owners }) {
   return (
-    <>
+    <Flex direction="column" gap={2}>
       {owners.map((owner) => (
         <ProjectUser key={owner._id} user={owner} role={'owner'} />
       ))}
       {members.map((member) => (
         <ProjectUser key={member._id} user={member} role={'member'} />
       ))}
-    </>
+    </Flex>
   );
 }
 

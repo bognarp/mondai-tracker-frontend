@@ -28,7 +28,7 @@ const ProjectCard = ({ project }) => {
         p={4}
         gap={3}
         bgGradient={useColorModeValue(
-          'linear(to-t, white 65%, gray.100 65%)',
+          'linear(to-t, white 65%, gray.200 65%)',
           'linear(to-t, gray.500 65%, gray.800 65%)'
         )}
         rounded="md"
@@ -75,7 +75,13 @@ function Dashboard() {
   }
 
   return (
-    <Flex direction="column" mt={12} alignItems="center">
+    <Flex
+      direction="column"
+      pt={12}
+      alignItems="center"
+      h="94vh"
+      bg="blackAlpha.200"
+    >
       <Stack direction="column" spacing={4} w="80%">
         <Flex
           direction="row"
@@ -84,12 +90,12 @@ function Dashboard() {
           justifyContent="space-between"
         >
           <Stack direction="row" alignItems="center">
-            <BsViewStacked />
-            <Heading as="h2" size="md">
+            <BsViewStacked color="white" />
+            <Heading as="h2" size="md" textColor="white">
               My Projects
             </Heading>
-            <Divider orientation="vertical" borderColor="black" h="18px" />
-            <Text>{data.length}</Text>
+            <Divider orientation="vertical" borderColor="white" h="18px" />
+            <Text textColor="white">{data.length}</Text>
           </Stack>
 
           <Button

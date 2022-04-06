@@ -42,7 +42,15 @@ function SignupForm() {
   };
 
   return (
-    <Center w="100%" h="90%" flexDirection="column" gap={6}>
+    <Flex
+      w="100%"
+      h="100vh"
+      flexDirection="column"
+      gap={6}
+      alignItems="center"
+      pt={6}
+      mb={3}
+    >
       {/* <Error /> */}
       <Stack spacing={5}>
         <Image src={logo} boxSize="130px" alignSelf="center" />
@@ -112,7 +120,7 @@ function SignupForm() {
           Log in
         </Button>
       </Flex>
-    </Center>
+    </Flex>
   );
 }
 

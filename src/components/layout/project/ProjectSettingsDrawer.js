@@ -16,9 +16,9 @@ import {
   FormControl,
   FormLabel,
   Heading,
-  Image,
   Input,
   Popover,
+  Image,
   PopoverArrow,
   PopoverBody,
   PopoverCloseButton,
@@ -32,16 +32,18 @@ import {
   useRadio,
   useRadioGroup,
 } from '@chakra-ui/react';
-import { MdOutlineSettings, MdDelete } from 'react-icons/md';
+import { MdOutlineSettings, MdDelete, MdPeopleAlt } from 'react-icons/md';
 import usePropertyUpdate from '../../../hooks/usePropertyChange';
 import { useInputChange } from '../../../hooks/useInputChange';
 import ProjectUsers from './ProjectUsers';
 import { useMutation, useQueryClient } from 'react-query';
 import projectAPI from '../../../util/projectAPI';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { alertUserError } from '../../../actions/errorActions';
 import { debounce } from 'lodash-es';
+import { selectSessionInfo } from '../../../reducers/selector';
+import ProjectUsersInvite from './ProjectUsersInvite';
 
 const RadioImage = (props) => {
   const { getInputProps, getCheckboxProps } = useRadio(props);
@@ -99,7 +101,7 @@ const IconRadioGroup = ({ close, changeIcon, iconpreview, setIconpreview }) => {
   );
 };
 
-const ProjectIconSelection = ({ defaultIcon, changeIcon }) => {
+const ProjectIconSelection = ({ defaultIcon, changeIcon, isOwner }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [iconpreview, setIconpreview] = useState(defaultIcon);
 
@@ -110,29 +112,33 @@ const ProjectIconSelection = ({ defaultIcon, changeIcon }) => {
         boxSize="64px"
         fit="contain"
       />
-      <Collapse in={!isOpen} animateOpacity>
-        <Button
-          size="xs"
-          variant="outline"
-          rounded="sm"
-          onClick={() => {
-            setIsOpen(!isOpen);
-          }}
-        >
-          Change icon
-        </Button>
-      </Collapse>
+      {isOwner && (
+        <>
+          <Collapse in={!isOpen} animateOpacity>
+            <Button
+              size="xs"
+              variant="outline"
+              rounded="sm"
+              onClick={() => {
+                setIsOpen(!isOpen);
+              }}
+            >
+              Change icon
+            </Button>
+          </Collapse>
 
-      <Collapse in={isOpen} animateOpacity>
-        <IconRadioGroup
-          close={() => {
-            setIsOpen(!isOpen);
-          }}
-          changeIcon={changeIcon}
-          iconpreview={iconpreview}
-          setIconpreview={setIconpreview}
-        />
-      </Collapse>
+          <Collapse in={isOpen} animateOpacity>
+            <IconRadioGroup
+              close={() => {
+                setIsOpen(!isOpen);
+              }}
+              changeIcon={changeIcon}
+              iconpreview={iconpreview}
+              setIconpreview={setIconpreview}
+            />
+          </Collapse>
+        </>
+      )}
     </Flex>
   );
 };
@@ -154,6 +160,7 @@ const ProjectDeleteButton = ({ deleteProject, isLoading }) => {
           onClick={() => setIsOpen(!isOpen)}
           size="sm"
           justifyContent="flex-start"
+          alignSelf="flex-end"
           borderRadius="sm"
           variant="link"
           w="120px"
@@ -198,6 +205,7 @@ const ProjectDeleteButton = ({ deleteProject, isLoading }) => {
 
 function ProjectSettingsDrawer({ collapsed, project }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const session = useSelector(selectSessionInfo);
   const dispatch = useDispatch();
   const btnRef = useRef();
   const [inputChange, handleInputChange] = useInputChange();
@@ -208,6 +216,8 @@ function ProjectSettingsDrawer({ collapsed, project }) {
 
   const inputBg = useColorModeValue('gray.100', 'gray.700');
   const inputFocusBg = useColorModeValue('white', 'gray.600');
+
+  const isOwner = project.owners.some((owner) => owner._id === session.user.id);
 
   useEffect(() => {
     setInitialValues(project);
@@ -236,6 +246,7 @@ function ProjectSettingsDrawer({ collapsed, project }) {
       },
     }
   );
+
   const handleDelete = () => removeProject(project._id);
 
   const handleUpdate = useMemo(() => {
@@ -289,6 +300,7 @@ function ProjectSettingsDrawer({ collapsed, project }) {
                   project={project}
                   defaultIcon={project.avatar}
                   changeIcon={handleInputChange}
+                  isOwner={isOwner}
                 />
               </Center>
               <Heading
@@ -315,6 +327,7 @@ function ProjectSettingsDrawer({ collapsed, project }) {
                   borderColor="gray.200"
                   _focus={{ bg: inputFocusBg }}
                   onChange={handleInputChange}
+                  isDisabled={!isOwner}
                 />
               </FormControl>
               <FormControl>
@@ -331,30 +344,38 @@ function ProjectSettingsDrawer({ collapsed, project }) {
                   borderColor="gray.200"
                   _focus={{ bg: inputFocusBg }}
                   onChange={handleInputChange}
+                  isDisabled={!isOwner}
                 />
               </FormControl>
-              <Heading
-                size="sm"
+
+              <Flex
                 borderBottom="1px"
                 borderColor="gray.200"
-                pb={1}
+                justifyContent="space-between"
               >
-                Access
-              </Heading>
+                <Heading size="sm" pb={1}>
+                  Access
+                </Heading>
+              </Flex>
+              {isOwner && <ProjectUsersInvite />}
+
               <ProjectUsers members={project.members} owners={project.owners} />
-              <Heading
-                size="sm"
-                borderBottom="1px"
-                borderColor="gray.200"
-                pb={1}
-              >
-                Other
-              </Heading>
-              {/* FIXME: show this section for the project owners only */}
-              <ProjectDeleteButton
-                deleteProject={handleDelete}
-                isLoading={deleteIsLoading}
-              />
+              {isOwner && (
+                <>
+                  <Heading
+                    size="sm"
+                    borderBottom="1px"
+                    borderColor="gray.200"
+                    pb={1}
+                  >
+                    Other
+                  </Heading>
+                  <ProjectDeleteButton
+                    deleteProject={handleDelete}
+                    isLoading={deleteIsLoading}
+                  />
+                </>
+              )}
             </Flex>
           </DrawerBody>
 

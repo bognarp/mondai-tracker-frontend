@@ -42,6 +42,7 @@ function Project() {
         navigation={toggleWorkspace}
         selectedWorkspaces={workspace}
       />
+
       <Grid
         templateRows="repeat(2, 1fr)"
         templateColumns="repeat(2, 1fr)"

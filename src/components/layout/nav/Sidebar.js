@@ -48,8 +48,10 @@ function Sidebar({ project, navigation, selectedWorkspaces }) {
 
   return (
     <VStack
+      // FIXME: make it column under md
       px={2}
       h="100%"
+      maxW="180px"
       spacing={collapsed ? 14 : 5}
       bg={useColorModeValue('white', '#1c1c21')}
       position="relative"
@@ -68,7 +70,12 @@ function Sidebar({ project, navigation, selectedWorkspaces }) {
       {!collapsed && (
         <Flex direction="column" alignItems="center" gap={2}>
           <Image src={`/img/icon/${project.avatar}.svg`} boxSize="32px" />
-          <Heading as="h2" fontSize="lg">
+          <Heading
+            as="h2"
+            fontSize="lg"
+            wordBreak="break-word"
+            textAlign="center"
+          >
             {project.title}
           </Heading>
           <Divider />

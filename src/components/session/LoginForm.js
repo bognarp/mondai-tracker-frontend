@@ -6,7 +6,6 @@ import {
   Button,
   Heading,
   VStack,
-  Center,
   Stack,
   Text,
   Image,
@@ -39,7 +38,7 @@ function LoginForm() {
   };
 
   return (
-    <Center w="100%" h="70%" flexDirection="column" gap={6}>
+    <Flex w="100%" h="100vh" flexDirection="column" gap={6} alignItems="center" pt={6}>
       <Error />
       <Stack spacing={5}>
         <Image src={logo} boxSize="130px" alignSelf="center" />
@@ -89,7 +88,7 @@ function LoginForm() {
           Sign up
         </Button>
       </Flex>
-    </Center>
+    </Flex>
   );
 }
 

@@ -1,6 +1,7 @@
-import { useToast, VisuallyHidden } from '@chakra-ui/react';
+import { List, ListItem, useToast, VisuallyHidden } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import { isObject } from 'lodash-es';
+import React from 'react';
 
 function Error() {
   const toast = useToast();
@@ -22,11 +23,16 @@ function Error() {
     return (
       <VisuallyHidden>
         {toast({
-          title: 'Error',
           position: 'top',
-          description: message,
+          description: (
+            <List>
+              {message.map((m) => (
+                <ListItem key={m}>{m}</ListItem>
+              ))}
+            </List>
+          ),
           status: 'error',
-          duration: 8000,
+          duration: 7000,
           isClosable: true,
         })}
       </VisuallyHidden>
