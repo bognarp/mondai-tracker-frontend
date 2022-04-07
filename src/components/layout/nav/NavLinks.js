@@ -2,6 +2,7 @@ import {
   Avatar,
   Button,
   Center,
+  Flex,
   HStack,
   Menu,
   MenuButton,
@@ -23,6 +24,7 @@ import { useQueryClient } from 'react-query';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../../../actions/sessionActions';
+import Notifications from './Notifications';
 import ProjectsMenu from './ProjectsMenu';
 
 function NavLinks({ session }) {
@@ -42,57 +44,60 @@ function NavLinks({ session }) {
     return (
       <Center as="nav" mr={0} justifyContent="space-between" w="100%">
         <ProjectsMenu user={user} />
-        <Menu isLazy>
-          <MenuButton>
-            <Avatar
-              name={user.name || user.username}
-              size="sm"
-              bg="red.500"
-              textColor="white"
-            />
-          </MenuButton>
-          <MenuList>
-            <MenuGroup title={`Signed in as ${user.username}`}>
+        <Flex gap={4}>
+          <Notifications />
+          <Menu isLazy>
+            <MenuButton>
+              <Avatar
+                name={user.name || user.username}
+                size="sm"
+                bg="red.500"
+                textColor="white"
+              />
+            </MenuButton>
+            <MenuList>
+              <MenuGroup title={`Signed in as ${user.username}`}>
+                <MenuDivider />
+                <Link to={'/dashboard'}>
+                  <MenuItem>
+                    <HStack>
+                      <MdOutlineSpaceDashboard />
+                      <Text>Dashboard</Text>
+                    </HStack>
+                  </MenuItem>
+                </Link>
+                <Link to={'/profile'}>
+                  <MenuItem>
+                    <HStack>
+                      <MdOutlineAccountCircle />
+                      <Text>Profile</Text>
+                    </HStack>
+                  </MenuItem>
+                </Link>
+              </MenuGroup>
               <MenuDivider />
-              <Link to={'/dashboard'}>
-                <MenuItem>
-                  <HStack>
-                    <MdOutlineSpaceDashboard />
-                    <Text>Dashboard</Text>
-                  </HStack>
-                </MenuItem>
-              </Link>
-              <Link to={'/profile'}>
-                <MenuItem>
-                  <HStack>
-                    <MdOutlineAccountCircle />
-                    <Text>Profile</Text>
-                  </HStack>
-                </MenuItem>
-              </Link>
-            </MenuGroup>
-            <MenuDivider />
-            <MenuItem onClick={toggleColorMode}>
-              <HStack>
-                {colorMode === 'light' ? (
-                  <MdOutlineDarkMode />
-                ) : (
-                  <MdOutlineLightMode />
-                )}
-                <Text fontWeight="thin">
-                  {colorMode === 'light' ? 'Dark' : 'Light'}
-                </Text>
-              </HStack>
-            </MenuItem>
+              <MenuItem onClick={toggleColorMode}>
+                <HStack>
+                  {colorMode === 'light' ? (
+                    <MdOutlineDarkMode />
+                  ) : (
+                    <MdOutlineLightMode />
+                  )}
+                  <Text fontWeight="thin">
+                    {colorMode === 'light' ? 'Dark' : 'Light'}
+                  </Text>
+                </HStack>
+              </MenuItem>
 
-            <MenuItem onClick={handleLogout}>
-              <HStack>
-                <MdLogout />
-                <Text fontWeight="thin">Log out</Text>
-              </HStack>
-            </MenuItem>
-          </MenuList>
-        </Menu>
+              <MenuItem onClick={handleLogout}>
+                <HStack>
+                  <MdLogout />
+                  <Text fontWeight="thin">Log out</Text>
+                </HStack>
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        </Flex>
       </Center>
     );
   } else {

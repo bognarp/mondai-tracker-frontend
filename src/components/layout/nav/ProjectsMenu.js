@@ -68,10 +68,10 @@ function ProjectsMenu({ user }) {
         fontWeight="300"
         fontFamily="heading"
         _hover={{
-          background: 'whiteAlpha.400',
+          background: 'blackAlpha.400',
         }}
         _active={{
-          background: 'whiteAlpha.400',
+          background: 'blackAlpha.400',
         }}
         rightIcon={<MdArrowDropDown />}
         p={3}
