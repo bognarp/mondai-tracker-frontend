@@ -219,10 +219,6 @@ function ProjectSettingsDrawer({ collapsed, project }) {
 
   const isOwner = project.owners.some((owner) => owner._id === session.user.id);
 
-  useEffect(() => {
-    setInitialValues(project);
-  }, [setInitialValues, project]);
-
   const { mutate: removeProject, isLoading: deleteIsLoading } = useMutation(
     projectAPI.removeProject,
     {
@@ -247,8 +243,6 @@ function ProjectSettingsDrawer({ collapsed, project }) {
     }
   );
 
-  const handleDelete = () => removeProject(project._id);
-
   const handleUpdate = useMemo(() => {
     return debounce(
       () => {
@@ -267,6 +261,16 @@ function ProjectSettingsDrawer({ collapsed, project }) {
       }
     );
   }, [changedProps, inputChange, updateProject, project._id]);
+
+  useEffect(() => {
+    setInitialValues(project);
+
+    return () => {
+      handleUpdate.cancel();
+    };
+  }, [setInitialValues, project, handleUpdate]);
+
+  const handleDelete = () => removeProject(project._id);
 
   return (
     <>

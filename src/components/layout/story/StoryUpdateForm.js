@@ -8,7 +8,7 @@ import {
   Text,
   Textarea,
 } from '@chakra-ui/react';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { difficultyValues, priorityValues } from '../../../util/storyHelpers';
 import { MdEditOff, MdSave } from 'react-icons/md';
 import { useMutation, useQueryClient } from 'react-query';
@@ -238,6 +238,12 @@ function StoryUpdateForm({
       }
     );
   }, [changedInput, changedProps, storyContent, mutate]);
+
+  useEffect(() => {
+    return () => {
+      updateStory.cancel();
+    };
+  }, [updateStory]);
 
   const {
     title,

@@ -8,7 +8,7 @@ import {
   Textarea,
   VStack,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { useInputChange } from '../../../hooks/useInputChange';
 import storyAPI from '../../../util/storyAPI';
@@ -57,6 +57,12 @@ function StoryCreateForm({ projectId, projectUsers, category, onClose }) {
       }
     );
   }, [category, input, projectId, mutate]);
+
+  useEffect(() => {
+    return () => {
+      createNewStory.cancel();
+    };
+  }, [createNewStory]);
 
   return (
     <Box display="flex" flexDirection="column" mt={6}>
