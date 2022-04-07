@@ -14,6 +14,7 @@ import { useQuery, useQueryClient } from 'react-query';
 import { MdPeopleAlt, MdSearch } from 'react-icons/md';
 import userAPI from '../../../util/userAPI';
 import { debounce } from 'lodash-es';
+import Users from './Users';
 
 const SearchUsers = () => {
   const queryClient = useQueryClient();
@@ -51,7 +52,7 @@ const SearchUsers = () => {
 
   return (
     <>
-      <InputGroup>
+      <InputGroup mb={4}>
         <InputLeftElement
           pointerEvents="none"
           children={<MdSearch color="gray.300" />}
@@ -78,20 +79,14 @@ const SearchUsers = () => {
         </InputRightElement>
       </InputGroup>
 
-      {isIdle ? (
-        'Not ready...'
-      ) : isLoading ? (
+      {isIdle ? null : isLoading ? (
         <span>Loading...</span>
       ) : isError ? (
         <span>Error: {error.message}</span>
       ) : data ? (
         <>
-          <ul>
-            {data.map((user) => (
-              <li key={user._id}>{user.username}</li>
-            ))}
-          </ul>
           <div>{isFetching ? 'Searching...' : null}</div>
+          <Users queryResults={data} />
         </>
       ) : (
         <>
@@ -121,7 +116,6 @@ function ProjectUsersInvite() {
       <Modal isOpen={isOpen} onClose={onClose} trapFocus={true}>
         <ModalOverlay />
         <ModalContent p={5}>
-          {/* <ModalCloseButton /> */}
           <SearchUsers />
         </ModalContent>
       </Modal>

@@ -22,11 +22,19 @@ const updateUser = async ({ userId, patchObj }) => {
   return res.data;
 };
 
+const inviteUser = async ({ userId, projectId }) => {
+  const res = await axios.post(`${baseUrl}/${userId}/invites`, {
+    project: projectId,
+  });
+  return res;
+};
+
 const userAPI = {
   fetchCurrentUser,
   queryUsers,
   fetchProjectsByUserId,
   updateUser,
+  inviteUser,
 };
 
 export default userAPI;
