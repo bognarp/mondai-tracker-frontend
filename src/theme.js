@@ -16,6 +16,7 @@ const theme = extendTheme({
           'linear(to-b, #182848 0%, #4b6cb7 100%)'
           // 'linear(to-t, #323232 0%, #3F3F3F 40%, #1C1C1C 150%)'
         )(props),
+        bg: mode('#f4f6ff', 'white')(props),
       },
       button: {
         fontFamily: 'heading',

@@ -1,6 +1,5 @@
 import {
   Button,
-  Center,
   Flex,
   FormControl,
   FormHelperText,
@@ -26,7 +25,7 @@ function SignupForm() {
   const navigate = useNavigate();
   const [input, handleInputChange] = useInputChange();
 
-  const formBg = useColorModeValue('gray.100', 'gray.800');
+  const formBg = useColorModeValue('gray.200', 'gray.800');
   const inputBg = useColorModeValue('white', 'gray.700');
 
   const handleSubmit = (e) => {

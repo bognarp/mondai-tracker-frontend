@@ -28,7 +28,7 @@ const ProjectCard = ({ project }) => {
         p={4}
         gap={3}
         bgGradient={useColorModeValue(
-          'linear(to-t, white 65%, gray.200 65%)',
+          'linear(to-t, white 65%, gray.400 65%)',
           'linear(to-t, gray.500 65%, gray.800 65%)'
         )}
         rounded="md"
@@ -80,7 +80,10 @@ function Dashboard() {
       pt={12}
       alignItems="center"
       h="94vh"
-      bg="blackAlpha.200"
+      bgGradient={'linear(to top, #30cfd0 0%, #330867 100%)'}
+      // background: linear-gradient(220.55deg, #24CFC5 0%, #001C63 100%);
+      // background: linear-gradient(220.55deg, #5EE2FF 0%, #00576A 100%);
+      // background-image: linear-gradient(to top, #30cfd0 0%, #330867 100%);
     >
       <Stack direction="column" spacing={4} w="80%">
         <Flex

@@ -24,7 +24,7 @@ function LoginForm() {
   const navigate = useNavigate();
   const [input, handleInputChange] = useInputChange();
 
-  const formBg = useColorModeValue('gray.100', 'gray.800');
+  const formBg = useColorModeValue('gray.200', 'gray.800');
   const inputBg = useColorModeValue('white', 'gray.700');
 
   const handleSubmit = (e) => {
@@ -38,7 +38,14 @@ function LoginForm() {
   };
 
   return (
-    <Flex w="100%" h="100vh" flexDirection="column" gap={6} alignItems="center" pt={6}>
+    <Flex
+      w="100%"
+      h="100vh"
+      flexDirection="column"
+      gap={6}
+      alignItems="center"
+      pt={6}
+    >
       <Error />
       <Stack spacing={5}>
         <Image src={logo} boxSize="130px" alignSelf="center" />

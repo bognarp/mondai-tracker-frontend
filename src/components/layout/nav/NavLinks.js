@@ -19,6 +19,7 @@ import {
   MdOutlineAccountCircle,
   MdOutlineDarkMode,
   MdOutlineLightMode,
+  MdLock,
 } from 'react-icons/md';
 import { useQueryClient } from 'react-query';
 import { useDispatch } from 'react-redux';
@@ -35,7 +36,7 @@ function NavLinks({ session }) {
 
   const { isAuthenticated, user } = session;
 
-  const handleLogout = (e) => {
+  const handleLogout = () => {
     queryClient.invalidateQueries();
     dispatch(logout());
   };
@@ -104,8 +105,9 @@ function NavLinks({ session }) {
     return (
       <HStack as="nav" spacing={4}>
         <Button
-          _hover={{ textDecoration: 'underline', textColor: 'blue.800' }}
-          color="blue.600"
+          leftIcon={<MdLock />}
+          _hover={{ textColor: 'gray.900', textDecoration: 'underline' }}
+          color="gray.700"
           size="sm"
           onClick={() => {
             navigate('/login');

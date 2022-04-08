@@ -1,7 +1,6 @@
 import {
   Button,
   Center,
-  Flex,
   Image,
   Menu,
   MenuButton,
@@ -63,15 +62,15 @@ function ProjectsMenu({ user }) {
         as={Button}
         display="flex"
         variant="unstyled"
-        color="white"
+        color="gray.100"
         fontSize={['sm', 'md']}
         fontWeight="300"
         fontFamily="heading"
         _hover={{
-          background: 'blackAlpha.400',
+          background: 'blackAlpha.100',
         }}
         _active={{
-          background: 'blackAlpha.400',
+          background: 'blackAlpha.100',
         }}
         rightIcon={<MdArrowDropDown />}
         p={3}

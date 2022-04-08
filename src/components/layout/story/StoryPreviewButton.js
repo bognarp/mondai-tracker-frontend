@@ -4,12 +4,12 @@ import { useMutation, useQueryClient } from 'react-query';
 import { useSelector } from 'react-redux';
 import storyAPI from '../../../util/storyAPI';
 
-const PreviewButton = ({ isLoading, onClick, children }) => {
+const PreviewButton = ({ isLoading, onClick, children, color }) => {
   return (
     <Button
       isLoading={isLoading}
       loadingText={`${children}ing`}
-      colorScheme="teal"
+      colorScheme={color}
       size="xs"
       variant="outline"
       onClick={onClick}
@@ -55,6 +55,7 @@ function StoryPreviewButton({ projectId, storyId, category, state }) {
           <PreviewButton
             isLoading={updateIsLoading}
             onClick={handleButtonClick('STARTED')}
+            color={'green'}
           >
             Start
           </PreviewButton>
@@ -65,6 +66,7 @@ function StoryPreviewButton({ projectId, storyId, category, state }) {
           <PreviewButton
             isLoading={updateIsLoading}
             onClick={handleButtonClick('FINISHED')}
+            color={'blue'}
           >
             Finish
           </PreviewButton>
@@ -75,12 +77,14 @@ function StoryPreviewButton({ projectId, storyId, category, state }) {
             <PreviewButton
               isLoading={updateIsLoading}
               onClick={handleButtonClick('ACCEPTED')}
+              color={'green'}
             >
               Accept
             </PreviewButton>
             <PreviewButton
               isLoading={updateIsLoading}
               onClick={handleButtonClick('REJECTED')}
+              color={'red'}
             >
               Reject
             </PreviewButton>
@@ -91,6 +95,7 @@ function StoryPreviewButton({ projectId, storyId, category, state }) {
           <PreviewButton
             isLoading={updateIsLoading}
             onClick={handleButtonClick('RESTARTED')}
+            color={'orange'}
           >
             Restart
           </PreviewButton>
