@@ -7,6 +7,13 @@ const fetchCurrentUser = async () => {
   return res.data;
 };
 
+const fetchUserById = async ({ userId, fields }) => {
+  const res = await axios.get(
+    `${baseUrl}/${userId}?fields=${fields.join(',')}`
+  );
+  return res.data;
+};
+
 const queryUsers = async (query) => {
   const res = await axios.get(`${baseUrl}?q=${query}`);
   return res.data;
@@ -31,6 +38,7 @@ const inviteUser = async ({ userId, projectId }) => {
 
 const userAPI = {
   fetchCurrentUser,
+  fetchUserById,
   queryUsers,
   fetchProjectsByUserId,
   updateUser,

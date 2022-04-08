@@ -22,11 +22,17 @@ const removeProject = async (projectId) => {
   return res.data;
 };
 
+const acceptInvite = async ({ projectId, userId }) => {
+  const res = await axios.post(`${baseUrl}/${projectId}/members/${userId}`);
+  return res.data;
+};
+
 const projectAPI = {
   fetchProject,
   createProject,
   updateProject,
   removeProject,
+  acceptInvite,
 };
 
 export default projectAPI;

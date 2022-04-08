@@ -1,40 +1,146 @@
-import { Box, Flex, IconButton, useColorModeValue } from '@chakra-ui/react';
-import { MdNotificationsNone, MdNotifications } from 'react-icons/md';
+import {
+  Button,
+  Center,
+  Container,
+  Flex,
+  Icon,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuList,
+  Text,
+  useColorModeValue,
+} from '@chakra-ui/react';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import {
+  MdNotificationsNone,
+  MdNotifications,
+} from 'react-icons/md';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectSessionInfo } from '../../../reducers/selector';
+import userAPI from '../../../util/userAPI';
+import projectAPI from '../../../util/projectAPI';
+import CounterBadge from './CounterBadge';
+import { useMemo } from 'react';
+import { debounce } from 'lodash-es';
+import { alertUserError } from '../../../actions/errorActions';
+
+const InviteNotification = ({ data, user }) => {
+  const { project, sender } = data;
+  const queryClient = useQueryClient();
+  const dispatch = useDispatch();
+
+  const { mutate, isLoading } = useMutation(projectAPI.acceptInvite, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('UserNotifications');
+      queryClient.invalidateQueries('projects');
+    },
+    onError: (error) => {
+      dispatch(alertUserError(error));
+    },
+  });
+
+  const acceptInvite = useMemo(() => {
+    return debounce(
+      () => {
+        mutate({ projectId: project._id, userId: user.id });
+      },
+      1000,
+      {
+        leading: true,
+        trailing: false,
+      }
+    );
+  }, [mutate, project, user.id]);
+
+  return (
+    <>
+      <Flex
+        justifyContent="space-between"
+        alignItems="center"
+        p={3}
+        boxShadow="xs"
+      >
+        <Flex alignItems="center">
+          <Icon as={MdNotifications} color="blue.500" boxSize={5} />
+          <Container lineHeight={1.3}>
+            <Text color={useColorModeValue('blue.500', 'blue.400')}>
+              @{sender.username} invited you
+            </Text>
+            <Text
+              color={useColorModeValue('gray.600', 'gray.200')}
+              fontSize="xs"
+            >
+              Join {project.title} project?
+            </Text>
+
+            <Flex gap={2} mt={1}>
+              <Button
+                size={'xs'}
+                colorScheme={'green'}
+                variant={'outline'}
+                isLoading={isLoading}
+                onClick={acceptInvite}
+              >
+                Accept
+              </Button>
+              <Button size={'xs'} colorScheme={'red'} variant={'outline'}>
+                Reject
+              </Button>
+            </Flex>
+          </Container>
+        </Flex>
+      </Flex>
+    </>
+  );
+};
 
 function Notifications() {
+  const { user } = useSelector(selectSessionInfo);
+
+  const { isLoading, data } = useQuery('UserNotifications', () => {
+    return userAPI.fetchUserById({ userId: user.id, fields: ['invites'] });
+  });
+
   return (
-    <IconButton
-      isRound
-      size="sm"
-      fontSize="2xl"
-      color="white"
-      bg="transparent"
-      _hover={{
-        background: 'blackAlpha.400',
-      }}
-      icon={
-        <>
-          <MdNotifications />
-          <Box
-            as="span"
-            pos="absolute"
-            top="5px"
-            right="3px"
-            px={1.5}
-            py={1}
-            fontSize="xs"
-            fontWeight="semibold"
-            lineHeight="none"
-            color="red.100"
-            transform="translate(50%,-50%)"
-            bg="red.500"
-            rounded="full"
-          >
-            9
-          </Box>
-        </>
-      }
-    />
+    <Menu isLazy>
+      <MenuButton
+        as={IconButton}
+        isRound
+        size="sm"
+        fontSize="2xl"
+        color="gray.100"
+        bg="transparent"
+        _hover={{
+          background: 'blackAlpha.100',
+        }}
+        _active={{
+          background: 'blackAlpha.100',
+        }}
+        icon={
+          data && data.invites.length > 0 ? (
+            <>
+              <MdNotifications />
+              <CounterBadge value={data.invites.length} />
+            </>
+          ) : (
+            <MdNotificationsNone />
+          )
+        }
+      />
+      <MenuList pb={0}>
+        <Center>
+          <Text fontSize="xs">Notifications</Text>
+        </Center>
+        <MenuDivider mb={0} />
+        {isLoading
+          ? 'Loading'
+          : data.invites.map((invite) => (
+              <InviteNotification key={invite._id} data={invite} user={user} />
+            ))}
+      </MenuList>
+    </Menu>
   );
 }
 
