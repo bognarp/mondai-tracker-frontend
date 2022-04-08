@@ -9,9 +9,7 @@ function Layout() {
     <Flex direction="column" minHeight="100vh" >
       <NavBar />
       <Error />
-
       {/* Dashboard | Project | Profile */}
-
       <Outlet />
     </Flex>
   );

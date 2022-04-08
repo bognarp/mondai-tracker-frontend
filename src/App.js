@@ -9,11 +9,12 @@ import LoginForm from './components/session/LoginForm';
 import SignupForm from './components/session/SignupForm';
 import { AuthRoute, ProtectedRoute } from './util/routeUtil';
 import Project from './components/layout/project/Project';
+import Home from './components/landing/Home';
 
 function App() {
   return (
     <Routes>
-      <Route index element={<Layout />} />
+      <Route index element={<Home />} />
       <Route path="/" element={<Layout />}>
         <Route
           path="dashboard"
