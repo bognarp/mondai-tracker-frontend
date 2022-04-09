@@ -13,10 +13,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import {
-  MdNotificationsNone,
-  MdNotifications,
-} from 'react-icons/md';
+import { MdNotificationsNone, MdNotifications } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectSessionInfo } from '../../../reducers/selector';
 import userAPI from '../../../util/userAPI';
@@ -31,20 +28,35 @@ const InviteNotification = ({ data, user }) => {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
 
-  const { mutate, isLoading } = useMutation(projectAPI.acceptInvite, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('UserNotifications');
-      queryClient.invalidateQueries('projects');
-    },
-    onError: (error) => {
-      dispatch(alertUserError(error));
-    },
-  });
+  const { mutate: mutateAccept, isLoading: acceptIsLoading } = useMutation(
+    projectAPI.acceptInvite,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('UserNotifications');
+        queryClient.invalidateQueries('projects');
+      },
+      onError: (error) => {
+        dispatch(alertUserError(error));
+      },
+    }
+  );
+
+  const { mutate: mutateReject, isLoading: rejectIsLoading } = useMutation(
+    userAPI.removeInvite,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('UserNotifications');
+      },
+      onError: (error) => {
+        dispatch(alertUserError(error));
+      },
+    }
+  );
 
   const acceptInvite = useMemo(() => {
     return debounce(
       () => {
-        mutate({ projectId: project._id, userId: user.id });
+        mutateAccept({ projectId: project._id, userId: user.id });
       },
       1000,
       {
@@ -52,7 +64,20 @@ const InviteNotification = ({ data, user }) => {
         trailing: false,
       }
     );
-  }, [mutate, project, user.id]);
+  }, [mutateAccept, project, user.id]);
+
+  const rejectInvite = useMemo(() => {
+    return debounce(
+      () => {
+        mutateReject({ userId: user.id, inviteId: data._id });
+      },
+      1000,
+      {
+        leading: true,
+        trailing: false,
+      }
+    );
+  }, [mutateReject, user.id, data._id]);
 
   return (
     <>
@@ -80,12 +105,18 @@ const InviteNotification = ({ data, user }) => {
                 size={'xs'}
                 colorScheme={'green'}
                 variant={'outline'}
-                isLoading={isLoading}
+                isLoading={acceptIsLoading}
                 onClick={acceptInvite}
               >
                 Accept
               </Button>
-              <Button size={'xs'} colorScheme={'red'} variant={'outline'}>
+              <Button
+                size={'xs'}
+                colorScheme={'red'}
+                variant={'outline'}
+                isLoading={rejectIsLoading}
+                onClick={rejectInvite}
+              >
                 Reject
               </Button>
             </Flex>

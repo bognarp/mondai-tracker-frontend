@@ -36,6 +36,11 @@ const inviteUser = async ({ userId, projectId }) => {
   return res;
 };
 
+const removeInvite = async ({ userId, inviteId }) => {
+  const res = await axios.delete(`${baseUrl}/${userId}/invites/${inviteId}`);
+  return res;
+};
+
 const userAPI = {
   fetchCurrentUser,
   fetchUserById,
@@ -43,6 +48,7 @@ const userAPI = {
   fetchProjectsByUserId,
   updateUser,
   inviteUser,
+  removeInvite,
 };
 
 export default userAPI;
