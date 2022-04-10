@@ -22,9 +22,9 @@ const UserResult = ({ user }) => {
     }
   );
 
-  const { mutate } = useMutation(userAPI.inviteUser, {
+  const { mutate, isLoading } = useMutation(userAPI.inviteUser, {
     onSuccess: () => {
-      queryClient.invalidateQueries('queryUsers');
+      queryClient.refetchQueries('queryUsers', { exact: true });
     },
     onError: (error) => {
       console.log(error);
@@ -73,6 +73,7 @@ const UserResult = ({ user }) => {
       </Flex>
       <Flex>
         <Button
+          isLoading={isLoading}
           disabled={isInvited || isMember}
           variant="solid"
           colorScheme="green"
@@ -90,7 +91,7 @@ function Users({ queryResults }) {
   return (
     <Flex direction="column" gap={2}>
       {queryResults.map((user) => (
-        <UserResult user={user} />
+        <UserResult key={user._id} user={user} />
       ))}
     </Flex>
   );

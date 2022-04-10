@@ -32,7 +32,7 @@ import {
   useRadio,
   useRadioGroup,
 } from '@chakra-ui/react';
-import { MdOutlineSettings, MdDelete, MdPeopleAlt } from 'react-icons/md';
+import { MdOutlineSettings, MdDelete, MdExitToApp } from 'react-icons/md';
 import usePropertyUpdate from '../../../hooks/usePropertyChange';
 import { useInputChange } from '../../../hooks/useInputChange';
 import ProjectUsers from './ProjectUsers';
@@ -143,8 +143,24 @@ const ProjectIconSelection = ({ defaultIcon, changeIcon, isOwner }) => {
   );
 };
 
-const ProjectDeleteButton = ({ deleteProject, isLoading }) => {
+const DeleteProjectButton = ({ projectId }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  const { mutate: removeProject, isLoading: deleteIsLoading } = useMutation(
+    projectAPI.removeProject,
+    {
+      onSuccess: () => {
+        navigate('/dashboard');
+        queryClient.invalidateQueries('project');
+        queryClient.invalidateQueries('projects');
+      },
+    }
+  );
+
+  // TODO: debounce!
+  const handleDelete = () => removeProject(projectId);
 
   return (
     <Popover
@@ -189,10 +205,10 @@ const ProjectDeleteButton = ({ deleteProject, isLoading }) => {
         >
           <ButtonGroup size="sm">
             <Button
-              isLoading={isLoading}
+              isLoading={deleteIsLoading}
               loadingText="Deleting"
               colorScheme="red"
-              onClick={deleteProject}
+              onClick={handleDelete}
             >
               Delete
             </Button>
@@ -200,6 +216,46 @@ const ProjectDeleteButton = ({ deleteProject, isLoading }) => {
         </PopoverFooter>
       </PopoverContent>
     </Popover>
+  );
+};
+
+const LeaveProjectButton = ({ projectId, userId }) => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  const { mutate: leaveProject, isLoading: leaveIsLoading } = useMutation(
+    projectAPI.removeUserFromProject,
+    {
+      onSuccess: () => {
+        navigate('/dashboard');
+        queryClient.invalidateQueries('project');
+        queryClient.invalidateQueries('projects');
+      },
+    }
+  );
+
+  // TODO: debounce!
+  const handleLeave = () => {
+    leaveProject({ projectId, userId });
+  };
+
+  return (
+    <>
+      <Button
+        onClick={handleLeave}
+        isLoading={leaveIsLoading}
+        size="sm"
+        justifyContent="flex-start"
+        alignSelf="flex-end"
+        borderRadius="sm"
+        variant="link"
+        w="120px"
+        textColor="red.600"
+        leftIcon={<MdExitToApp />}
+      >
+        Leave Project
+      </Button>
+    </>
   );
 };
 
@@ -212,23 +268,11 @@ function ProjectSettingsDrawer({ collapsed, project }) {
   const [isChanged, changedProps, _, setInitialValues] =
     usePropertyUpdate(inputChange);
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
 
   const inputBg = useColorModeValue('gray.100', 'gray.700');
   const inputFocusBg = useColorModeValue('white', 'gray.600');
 
   const isOwner = project.owners.some((owner) => owner._id === session.user.id);
-
-  const { mutate: removeProject, isLoading: deleteIsLoading } = useMutation(
-    projectAPI.removeProject,
-    {
-      onSuccess: () => {
-        navigate('/dashboard');
-        queryClient.invalidateQueries('project');
-        queryClient.invalidateQueries('projects');
-      },
-    }
-  );
 
   const { mutate: updateProject, isLoading: updateIsLoading } = useMutation(
     projectAPI.updateProject,
@@ -269,8 +313,6 @@ function ProjectSettingsDrawer({ collapsed, project }) {
       handleUpdate.cancel();
     };
   }, [setInitialValues, project, handleUpdate]);
-
-  const handleDelete = () => removeProject(project._id);
 
   return (
     <>
@@ -364,21 +406,22 @@ function ProjectSettingsDrawer({ collapsed, project }) {
               {isOwner && <ProjectUsersInvite />}
 
               <ProjectUsers members={project.members} owners={project.owners} />
-              {isOwner && (
-                <>
-                  <Heading
-                    size="sm"
-                    borderBottom="1px"
-                    borderColor="gray.200"
-                    pb={1}
-                  >
-                    Other
-                  </Heading>
-                  <ProjectDeleteButton
-                    deleteProject={handleDelete}
-                    isLoading={deleteIsLoading}
-                  />
-                </>
+
+              <Heading
+                size="sm"
+                borderBottom="1px"
+                borderColor="gray.200"
+                pb={1}
+              >
+                Other
+              </Heading>
+              {isOwner ? (
+                <DeleteProjectButton projectId={project._id} />
+              ) : (
+                <LeaveProjectButton
+                  projectId={project._id}
+                  userId={session.user.id}
+                />
               )}
             </Flex>
           </DrawerBody>
