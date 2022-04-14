@@ -84,14 +84,9 @@ const SearchUsers = () => {
       ) : isError ? (
         <span>Error: {error.message}</span>
       ) : data ? (
-        <>
-          <div>{isFetching ? 'Searching...' : null}</div>
-          <Users queryResults={data} />
-        </>
+        <Users queryResults={data} />
       ) : (
-        <>
-          <div>{isFetching ? 'Searching...' : null}</div>
-        </>
+        <div>{isFetching ? 'Searching...' : null}</div>
       )}
     </>
   );
