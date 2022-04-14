@@ -1,4 +1,5 @@
 import {
+  Badge,
   Box,
   Button,
   FormControl,
@@ -41,8 +42,8 @@ function StoryCreateForm({ projectId, projectUsers, category, onClose }) {
       () => {
         let state;
 
-        if (category === 'current') state = 'UNSTARTED';
-        if (category === 'backlog') state = 'UNSCHEDULED';
+        if (category === 'current') state = 'Unstarted';
+        if (category === 'backlog') state = 'Unscheduled';
 
         const newStory = { ...input, state };
 
@@ -113,9 +114,10 @@ function StoryCreateForm({ projectId, projectUsers, category, onClose }) {
         <Button
           isLoading={createIsLoading}
           loadingText="Saving"
+          colorScheme={'blue'}
           onClick={createNewStory}
         >
-          Save
+          Create
         </Button>
       </VStack>
     </Box>

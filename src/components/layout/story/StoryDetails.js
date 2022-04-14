@@ -1,8 +1,9 @@
 import { Box, Heading, HStack, Text } from '@chakra-ui/react';
 import React from 'react';
-import { difficultyValues, priorityValues } from '../../../util/storyHelpers';
+import { difficultyValues } from '../../../util/storyHelpers';
+import PriorityBadge from './PriorityBadge';
 
-function StoryDetails({ storyContent, toggleEditing }) {
+function StoryDetails({ storyContent }) {
   const {
     title,
     difficulty,
@@ -28,10 +29,9 @@ function StoryDetails({ storyContent, toggleEditing }) {
       <Text maxWidth="100%">{description || 'No description...'}</Text>
       <HStack mt={4} spacing={5}>
         <Text fontWeight="semibold">Priority</Text>
-        <Text fontWeight="normal" fontSize="sm">
-          {priorityValues[priority].content}
-        </Text>
+        <PriorityBadge value={priority} />
       </HStack>
+
       <HStack spacing={5}>
         <Text fontWeight="semibold">Difficulty</Text>
         <Text fontWeight="normal" fontSize="sm">
@@ -41,7 +41,7 @@ function StoryDetails({ storyContent, toggleEditing }) {
       <HStack spacing={5}>
         <Text fontWeight="semibold">State</Text>
         <Text fontWeight="normal" fontSize="sm">
-          {state.toLowerCase()}
+          {state}
         </Text>
       </HStack>
       <HStack spacing={5}>

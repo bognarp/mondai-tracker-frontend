@@ -123,7 +123,7 @@ const StoryFormState = ({ value }) => {
     <HStack spacing={5}>
       <Text fontWeight="semibold">State</Text>
       <Text fontWeight="normal" fontSize="sm">
-        {value.toLowerCase()}
+        {value}
       </Text>
     </HStack>
   );

@@ -42,59 +42,59 @@ function StoryPreviewButton({ projectId, storyId, category, state }) {
     stopEventPropagation(event);
     const patchObj = { state };
 
-    if (state === 'STARTED' || state === 'RESTARTED') patchObj.owner = userId;
+    if (state === 'Started' || state === 'Restarted') patchObj.owner = userId;
 
     mutate({ projectId, storyId, patchObj });
   };
 
   const buttonSwitch = () => {
     switch (state) {
-      case 'UNSTARTED':
-      case 'UNSCHEDULED':
+      case 'Unstarted':
+      case 'Unscheduled':
         return (
           <PreviewButton
             isLoading={updateIsLoading}
-            onClick={handleButtonClick('STARTED')}
+            onClick={handleButtonClick('Started')}
             color={'green'}
           >
             Start
           </PreviewButton>
         );
-      case 'RESTARTED':
-      case 'STARTED':
+      case 'Restarted':
+      case 'Started':
         return (
           <PreviewButton
             isLoading={updateIsLoading}
-            onClick={handleButtonClick('FINISHED')}
+            onClick={handleButtonClick('Finished')}
             color={'blue'}
           >
             Finish
           </PreviewButton>
         );
-      case 'FINISHED':
+      case 'Finished':
         return (
           <>
             <PreviewButton
               isLoading={updateIsLoading}
-              onClick={handleButtonClick('ACCEPTED')}
+              onClick={handleButtonClick('Accepted')}
               color={'green'}
             >
               Accept
             </PreviewButton>
             <PreviewButton
               isLoading={updateIsLoading}
-              onClick={handleButtonClick('REJECTED')}
+              onClick={handleButtonClick('Rejected')}
               color={'red'}
             >
               Reject
             </PreviewButton>
           </>
         );
-      case 'REJECTED':
+      case 'Rejected':
         return (
           <PreviewButton
             isLoading={updateIsLoading}
-            onClick={handleButtonClick('RESTARTED')}
+            onClick={handleButtonClick('Restarted')}
             color={'orange'}
           >
             Restart

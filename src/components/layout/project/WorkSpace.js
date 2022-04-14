@@ -123,7 +123,7 @@ function Workspace({ project, category }) {
               background: 'gray.200',
             }}
           >
-            Add Story
+            Create a story
           </Button>
         )}
       </Flex>
