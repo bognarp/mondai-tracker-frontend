@@ -10,5 +10,5 @@ export const alertUserError = (error) => (dispatch) => {
 
   setTimeout(() => {
     dispatch(clearErrors());
-  }, 5000);
+  }, 6000);
 };
