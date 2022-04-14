@@ -5,6 +5,7 @@ import {
   Flex,
   Icon,
   IconButton,
+  Image,
   Menu,
   MenuButton,
   MenuDivider,
@@ -22,6 +23,7 @@ import CounterBadge from './CounterBadge';
 import { useMemo } from 'react';
 import { debounce } from 'lodash-es';
 import { alertUserError } from '../../../actions/errorActions';
+import noNotifications from './chilling.svg';
 
 const InviteNotification = ({ data, user }) => {
   const { project, sender } = data;
@@ -165,11 +167,20 @@ function Notifications() {
           <Text fontSize="xs">Notifications</Text>
         </Center>
         <MenuDivider mb={0} />
-        {isLoading
-          ? 'Loading'
-          : data.invites.map((invite) => (
-              <InviteNotification key={invite._id} data={invite} user={user} />
-            ))}
+        {isLoading ? (
+          'Loading'
+        ) : data.invites.length > 0 ? (
+          data.invites.map((invite) => (
+            <InviteNotification key={invite._id} data={invite} user={user} />
+          ))
+        ) : (
+          <Center flexDirection={'column'}>
+            <Text mt={3} fontWeight={'600'}>
+              No unread notifications
+            </Text>
+            <Image src={noNotifications} boxSize={'140px'} />
+          </Center>
+        )}
       </MenuList>
     </Menu>
   );
