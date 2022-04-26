@@ -265,7 +265,7 @@ function ProjectSettingsDrawer({ collapsed, project }) {
   const dispatch = useDispatch();
   const btnRef = useRef();
   const [inputChange, handleInputChange] = useInputChange();
-  const [isChanged, changedProps, _, setInitialValues] =
+  const [isChanged, changedProps, setInitialValues] =
     usePropertyUpdate(inputChange);
   const queryClient = useQueryClient();
 

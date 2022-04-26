@@ -18,7 +18,7 @@ function usePropertyUpdate(changedInput, defaultValues = {}) {
     }
   }, [changedInput, initialValues]);
 
-  return [isChanged, changedProps, initialValues, setInitialValues];
+  return [isChanged, changedProps, setInitialValues, initialValues];
 }
 
 export default usePropertyUpdate;

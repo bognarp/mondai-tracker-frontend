@@ -17,7 +17,6 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { signup } from '../../actions/sessionActions';
 import { useInputChange } from '../../hooks/useInputChange';
-import Error from '../layout/Error';
 import logo from '../layout/nav/logowname.png';
 
 function SignupForm() {

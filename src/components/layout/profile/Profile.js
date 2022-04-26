@@ -23,7 +23,7 @@ function Profile() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const [inputChange, handleInputChange] = useInputChange();
-  const [isChanged, changedProps, initialValues, setInitialValues] =
+  const [isChanged, changedProps, setInitialValues, initialValues] =
     usePropertyUpdate(inputChange);
 
   const containerHeaderBg = useColorModeValue(
@@ -84,14 +84,14 @@ function Profile() {
   };
 
   return (
-    <Flex direction="column" alignItems="center" bg={containerBg} minH='94vh'>
+    <Flex direction="column" alignItems="center" bg={containerBg} minH="94vh">
       <Center
         bg={containerHeaderBg}
         maxH="160px"
         minH="80px"
         alignSelf="stretch"
-        borderBottom='1px'
-        borderColor='gray.400'
+        borderBottom="1px"
+        borderColor="gray.400"
       >
         <Stack direction="row" alignItems="center" spacing={4}>
           <Avatar name={name || username} bg="red.500" textColor="white" />
