@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = '/api/users';
+const baseUrl = `${process.env.REACT_APP_SERVER_URL}/api/users`;
 
 export const setAuthToken = (token) => {
   if (token) {

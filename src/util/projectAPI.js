@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = '/api/projects';
+const baseUrl = `${process.env.REACT_APP_SERVER_URL}/api/projects`;
 
 const fetchProject = async (projectId) => {
   const res = await axios.get(`${baseUrl}/${projectId}`);
