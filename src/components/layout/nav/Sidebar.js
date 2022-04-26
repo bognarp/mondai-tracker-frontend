@@ -69,7 +69,10 @@ function Sidebar({ project, navigation, selectedWorkspaces }) {
       />
       {!collapsed && (
         <Flex direction="column" alignItems="center" gap={2}>
-          <Image src={`/img/icon/${project.avatar}.svg`} boxSize="32px" />
+          <Image
+            src={`${process.env.REACT_APP_SERVER_URL}/img/icon/${project.avatar}.svg`}
+            boxSize="32px"
+          />
           <Heading
             as="h2"
             fontSize="lg"

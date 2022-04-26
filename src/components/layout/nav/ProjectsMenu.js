@@ -36,7 +36,7 @@ const ProjectsMenuList = ({ isLoading, data }) => {
               <Link to={`/projects/${project._id}`} key={project._id}>
                 <MenuItem gap={2}>
                   <Image
-                    src={`/img/icon/${project.avatar}.svg`}
+                    src={`${process.env.REACT_APP_SERVER_URL}/img/icon/${project.avatar}.svg`}
                     boxSize="26px"
                   />
                   {project.title}

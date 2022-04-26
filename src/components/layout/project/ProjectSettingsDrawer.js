@@ -55,7 +55,7 @@ const RadioImage = (props) => {
     <Box as="label">
       <input {...inputProps} />
       <Image
-        src={`/img/icon/${props.value}.svg`}
+        src={`${process.env.REACT_APP_SERVER_URL}/img/icon/${props.value}.svg`}
         boxSize="54px"
         fit="contain"
         cursor="pointer"
@@ -108,7 +108,7 @@ const ProjectIconSelection = ({ defaultIcon, changeIcon, isOwner }) => {
   return (
     <Flex direction="column" gap={2} alignItems="center" w="100%">
       <Image
-        src={`/img/icon/${iconpreview}.svg`}
+        src={`${process.env.REACT_APP_SERVER_URL}/img/icon/${iconpreview}.svg`}
         boxSize="64px"
         fit="contain"
       />

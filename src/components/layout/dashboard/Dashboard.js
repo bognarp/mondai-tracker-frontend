@@ -36,7 +36,10 @@ const ProjectCard = ({ project }) => {
         minW="200px"
       >
         <Flex direction="column" gap={2}>
-          <Image src={`/img/icon/${project.avatar}.svg`} boxSize="32px" />
+          <Image
+            src={`${process.env.REACT_APP_SERVER_URL}/img/icon/${project.avatar}.svg`}
+            boxSize="32px"
+          />
           <Heading size="sm" textAlign="center">
             {project.title}
           </Heading>
