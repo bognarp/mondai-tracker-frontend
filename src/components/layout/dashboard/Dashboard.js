@@ -29,7 +29,7 @@ const ProjectCard = ({ project }) => {
         gap={3}
         bgGradient={useColorModeValue(
           'linear(to-t, white 65%, gray.400 65%)',
-          'linear(to-t, gray.500 65%, gray.800 65%)'
+          'linear(to-t, gray.500 65%, black 65%)'
         )}
         rounded="md"
         boxShadow="xl"
@@ -62,6 +62,7 @@ const ProjectList = ({ projects }) => {
 function Dashboard() {
   const sessionInfo = useSelector(selectSessionInfo);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const separatorColor = useColorModeValue('gray.800', 'whiteAlpha.900');
 
   const { isLoading, data, isError } = useQuery('projects', () => {
     return userAPI.fetchProjectsByUserId(sessionInfo.user.id);
@@ -78,16 +79,7 @@ function Dashboard() {
   }
 
   return (
-    <Flex
-      direction="column"
-      pt={12}
-      alignItems="center"
-      h="94vh"
-      bgGradient={'linear(to top, #30cfd0 0%, #330867 100%)'}
-      // background: linear-gradient(220.55deg, #24CFC5 0%, #001C63 100%);
-      // background: linear-gradient(220.55deg, #5EE2FF 0%, #00576A 100%);
-      // background-image: linear-gradient(to top, #30cfd0 0%, #330867 100%);
-    >
+    <Flex direction="column" pt={12} alignItems="center" h="94vh">
       <Stack direction="column" spacing={4} w="80%">
         <Flex
           direction="row"
@@ -96,12 +88,16 @@ function Dashboard() {
           justifyContent="space-between"
         >
           <Stack direction="row" alignItems="center">
-            <BsViewStacked color="white" />
-            <Heading as="h2" size="md" textColor="white">
+            <BsViewStacked color="gray.800" />
+            <Heading as="h2" size="md">
               My Projects
             </Heading>
-            <Divider orientation="vertical" borderColor="white" h="18px" />
-            <Text textColor="white">{data.length}</Text>
+            <Divider
+              orientation="vertical"
+              borderColor={separatorColor}
+              h="18px"
+            />
+            <Text>{data.length}</Text>
           </Stack>
 
           <Button

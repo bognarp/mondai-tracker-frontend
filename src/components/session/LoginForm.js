@@ -37,6 +37,17 @@ function LoginForm() {
     dispatch(login(user));
   };
 
+  const handleDemoLogin = (e) => {
+    e.preventDefault();
+
+    let user = {
+      email: 'demo@mondai.com',
+      password: 'demo@mondai.com',
+    };
+
+    dispatch(login(user));
+  };
+
   return (
     <Flex
       w="100%"
@@ -76,6 +87,9 @@ function LoginForm() {
             </FormControl>
             <Button colorScheme="blue" type="submit">
               Log in
+            </Button>
+            <Button colorScheme="blue" onClick={handleDemoLogin}>
+              Demo Login
             </Button>
           </VStack>
         </form>

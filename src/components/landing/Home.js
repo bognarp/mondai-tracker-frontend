@@ -10,6 +10,9 @@ import { createIcon } from '@chakra-ui/icons';
 import { MdArrowForward } from 'react-icons/md';
 import NavBar from '../layout/nav/NavBar';
 import { Illustration } from './Illustration';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { login } from '../../actions/sessionActions';
 
 export const Arrow = createIcon({
   displayName: 'Arrow',
@@ -25,6 +28,21 @@ export const Arrow = createIcon({
 });
 
 function Home() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleDemoLogin = (e) => {
+    e.preventDefault();
+
+    let user = {
+      email: 'demo@mondai.com',
+      password: 'demo@mondai.com',
+    };
+
+    dispatch(login(user));
+    navigate('/dashboard');
+  };
+
   return (
     <Flex direction="column" minHeight="100vh">
       <NavBar />
@@ -33,7 +51,7 @@ function Home() {
         <Stack
           textAlign={'center'}
           align={'center'}
-          spacing={{ base: 8, md: 10 }}
+          spacing={{ base: 6, md: 8 }}
           py={{ base: 20, md: 28 }}
         >
           <Heading
@@ -47,11 +65,11 @@ function Home() {
             </Text>
           </Heading>
           <Text color={'gray.500'} maxW={'3xl'}>
-            With a shared view of team priorities, a process that fosters
-            collaboration, and dynamic tools to analyze progress, your team will
-            deliver more frequently and consistently.
+            Collaborate, manage projects, and reach new productivity peaks. Keep
+            your team on the rails. Mondai Tracker's shared backlog makes
+            priorities clear so the team can stay organized.
           </Text>
-          <Stack spacing={6} direction={'row'}>
+          <Stack spacing={3} direction={'column'}>
             <Button
               rightIcon={<MdArrowForward />}
               rounded={'full'}
@@ -59,10 +77,27 @@ function Home() {
               colorScheme={'blue'}
               bg={'blue.500'}
               _hover={{ bg: 'blue.600' }}
+              onClick={handleDemoLogin}
             >
-              Get started
+              Try a Demo Account
             </Button>
+            <Flex gap={3} wrap="wrap" justify="center">
+              <Text color={'gray.500'} textAlign="center" fontSize={'sm'}>
+                Already use Mondai?
+              </Text>
+              <Button
+                variant="link"
+                colorScheme="blue"
+                fontSize={'sm'}
+                onClick={() => {
+                  navigate('/login');
+                }}
+              >
+                Log in
+              </Button>
+            </Flex>
           </Stack>
+
           <Flex w={'full'}>
             <Illustration
               height={{ sm: '24rem', lg: '28rem' }}

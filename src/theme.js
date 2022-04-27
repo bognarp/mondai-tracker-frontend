@@ -7,16 +7,7 @@ const theme = extendTheme({
   styles: {
     global: (props) => ({
       'html, body, #root': {
-        // height: '100%',
-        // bgGradient: 'linear(to-b, #eef1f5, #e6e9f0)',
-        // bgGradient: 'linear(to-b, #ace0f9, #fff1eb)',
-        bgGradient: mode(
-          // 'linear(to-b, #ace0f9, #fff1eb )',
-          'linear(to-b, #4b6cb7 0%, #182848 100%)',
-          'linear(to-b, #182848 0%, #4b6cb7 100%)'
-          // 'linear(to-t, #323232 0%, #3F3F3F 40%, #1C1C1C 150%)'
-        )(props),
-        bg: mode('#f4f6ff', 'white')(props),
+        bg: mode('#f4f6ff', 'gray.700')(props),
       },
       button: {
         fontFamily: 'heading',
