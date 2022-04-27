@@ -4,6 +4,7 @@ import {
   Center,
   Flex,
   HStack,
+  Icon,
   Menu,
   MenuButton,
   MenuDivider,
@@ -12,6 +13,7 @@ import {
   MenuList,
   Text,
   useColorMode,
+  Link,
 } from '@chakra-ui/react';
 import {
   MdOutlineSpaceDashboard,
@@ -23,8 +25,9 @@ import {
 } from 'react-icons/md';
 import { useQueryClient } from 'react-query';
 import { useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import { logout } from '../../../actions/sessionActions';
+import { BsGithub } from 'react-icons/bs';
 import Notifications from './Notifications';
 import ProjectsMenu from './ProjectsMenu';
 
@@ -59,7 +62,7 @@ function NavLinks({ session }) {
             <MenuList>
               <MenuGroup title={`Signed in as ${user.username}`}>
                 <MenuDivider />
-                <Link to={'/dashboard'}>
+                <Link as={ReactRouterLink} to={'/dashboard'}>
                   <MenuItem>
                     <HStack>
                       <MdOutlineSpaceDashboard />
@@ -67,7 +70,7 @@ function NavLinks({ session }) {
                     </HStack>
                   </MenuItem>
                 </Link>
-                <Link to={'/profile'}>
+                <Link as={ReactRouterLink} to={'/profile'}>
                   <MenuItem>
                     <HStack>
                       <MdOutlineAccountCircle />
@@ -104,6 +107,13 @@ function NavLinks({ session }) {
   } else {
     return (
       <HStack as="nav" spacing={4}>
+        <Link
+          href="https://github.com/bognarp/mondai-tracker-frontend"
+          isExternal
+          display={'flex'}
+        >
+          <Icon as={BsGithub} m={3} w={5} h={5} />
+        </Link>
         <Button
           leftIcon={<MdLock />}
           _hover={{ textColor: 'gray.900', textDecoration: 'underline' }}
