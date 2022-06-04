@@ -14,13 +14,17 @@ Mondai tracker is project management tool that provides a platform for collabora
 
 ![Project View](./docs/projects.gif)
 
-![Project Settings View](./docs/settings.gif)
+<!-- ![Project Settings View](./docs/settings.gif) -->
 
 ## Technologies & Challenges
 
 Mondai Tracker is built with the MERN stack. The backend features a frontend agnostic REST API servicing the client side.
 
+Full documentation of the backend API can be found @ [Mondai Backend repository](https://github.com/bognarp/mondai-tracker-backend)
+
 ### Architecture
+
+![Architecture Overview](./docs/overview.png)
 
 **Client Side**: `React` / `Redux Toolkit` / `React Query` / `React Router` / `Lodash` / `Chakra UI` / `Axios`
 
